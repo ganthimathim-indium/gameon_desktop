@@ -1,0 +1,234 @@
+.signin-div {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+.signin-form, .signin-form:focus {
+  box-shadow: none;
+  border: none;
+  outline: none;
+}
+
+.signin-form:focus {
+  border-color: #4aba70;
+}
+
+.login-form {
+  width: 390px;
+  padding: 3px 0;
+}
+
+.registerotp-form {
+  width: 380px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+.signinnav {
+  margin-bottom: 32px;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+  color: #fff;
+  background-color: #6e6e6e;
+}
+
+.login-form form {
+  color: #434343;
+  background: #fff;
+  padding: 20px;
+}
+
+.login-form h4 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: bolder;
+}
+
+.login-form .form-group {
+  margin-bottom: 20px;
+}
+
+.login-form .signin-form, .login-form .btn {
+  min-height: 40px;
+  border-radius: 2px;
+  transition: all 0.5s;
+}
+
+.login-form .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.login-form .btn {
+  margin-top: 6%;
+  width: fit-content !important;
+  margin-left: auto;
+  margin-right: auto;
+  background: #436fb6;
+  border: none;
+  color: white;
+  width: 100%;
+  line-height: normal;
+}
+
+.login-form .btn:hover, .login-form .btn:focus {
+  background: #436fb6;
+}
+
+.login-form .checkbox-inline {
+  float: left;
+}
+
+.login-form input[type="checkbox"] {
+  margin-top: 2px;
+}
+
+.login-form .forgot-link {
+  float: right;
+}
+
+.login-form .small {
+  font-size: 13px;
+}
+
+.backgroundGraySignIn {
+  background-color: #b3b3b3;
+  color: #ffffff;
+  width: 50%;
+}
+
+.backgroundGraySignIn>.active {
+  background-color: #b3b3b3;
+}
+
+.navlink-signin {
+  color: #ffffff !important;
+}
+
+.otphr {
+  margin: 29px 0;
+  color: inherit;
+  background-color: currentColor;
+  border: 0;
+  opacity: 0.25;
+}
+
+.regotp-input {
+  margin-bottom: 10%;
+}
+
+.otptext {
+  text-align: center;
+  margin-bottom: 10%;
+}
+
+.registerotp-form form {
+  color: #434343;
+  border-radius: 1px;
+  margin-bottom: 15px;
+  background: #fff;
+  border: 1px solid #f3f3f3;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  padding: 30px;
+  margin-bottom: 90px;
+}
+
+.registerotp-form h4 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: bolder;
+}
+
+.registerotp-form .form-group {
+  margin-bottom: 20px;
+}
+
+.registerotp-form .signin-form, .login-form .btn {
+  min-height: 40px;
+  border-radius: 2px;
+  transition: all 0.5s;
+}
+
+.registerotp-form .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.registerotp-form .btn {
+  background: #436fb6;
+  border: none;
+  color: white;
+  width: 100%;
+  line-height: normal;
+}
+
+.registerotp-form .btn:hover, .login-form .btn:focus {
+  background: #436fb6;
+}
+
+.registerotp-form .checkbox-inline {
+  float: left;
+}
+
+.registerotp-form input[type="checkbox"] {
+  margin-top: 2px;
+}
+
+.registerotp-form .forgot-link {
+  float: right;
+}
+
+.registerotp-form .small {
+  font-size: 13px;
+}
+
+​​​ .errorMsgCont1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 8px;
+  background-color: #ffd2d2;
+  color: #d8000c;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+​​​ .registerotp-form a {
+  color: #436fb6;
+}
+
+.validCred {
+  font-size: 13px;
+  color: #d8000c;
+}
+
+.PhoneInput {
+  border: 1px solid #ced4da;
+  padding: 0px;
+  padding-left: 10px;
+  border-radius: 4px;
+}
+
+.PhoneInputInput {
+  border: none;
+  padding-left: 3px;
+}
+
+.PhoneInputCountryIcon {
+  color: #436fb6;
+  width: 90%;
+}
+
+.inputPhone {
+  pointer-events: none;
+  opacity: 0.4;
+}

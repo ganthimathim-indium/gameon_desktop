@@ -1,0 +1,321 @@
+package main
+
+import (
+	"bufio"
+	_ "embed"
+	"encoding/json"
+	"flag"
+	"fmt"
+	apidata "gameongo/api"
+	L "gameongo/lib"
+	"regexp"
+	"strconv"
+
+	"log"
+	"strings"
+
+	"github.com/wailsapp/wails"
+	adb "github.com/zach-klippenstein/goadb"
+)
+
+var js string
+var css string
+var devicename string
+var deviceserial string
+var leadingInt = regexp.MustCompile(`^[-+]?\d+`)
+
+type Appinfo struct {
+	Osname     string `json:"osname"`
+	Devicename string `json:"devicename"`
+	Applist    string `json:"applist"`
+}
+type Baseinfo struct {
+	Device_id string `json:"device_id"`
+	User_id   string `json:"user_id"`
+
+	Device_name     string `json:"device_name"`
+	Android_version string `json:"android_version"`
+	Start_time      string `json:"start_time"`
+	End_time        string `json:"end_time"`
+	Version_name    string `json:"version_name"`
+	App_name        string `json:"app_name"`
+	Record_duration string `json:"record_duration"`
+}
+
+//3 basic info
+func basic() string {
+
+	css = "./frontend/build/static/css/main.css"
+
+	js = "./frontend/build/static/js/main.js"
+
+	var clients []Appinfo
+
+	var info = append(clients, Appinfo{
+		Osname:     "android",
+		Devicename: deviceinfonew(),
+		Applist:    getlogin(),
+	})
+	out, err := json.Marshal(info)
+	if err != nil {
+		panic(err)
+
+	}
+	fmt.Println(string(out))
+	return string(out)
+}
+
+//1login api
+func mylogin(req string) (val string) {
+	sec := map[string]string{}
+	if err := json.Unmarshal([]byte(req), &sec); err != nil {
+		panic(err)
+	}
+	fmt.Println(apidata.Apihit(sec))
+	//checkdevice()
+	return (apidata.Apihit(sec))
+
+}
+
+//2check device
+func checkdevice() (val string) {
+	//fmt.Println(len(L.Appnamenew()))
+	if len(L.Appnamenew()) == 4 {
+		fmt.Println("No Device Attached")
+
+		return "No Device Attached"
+	} else {
+		fmt.Println("Device Attached")
+
+		return "Device Attached"
+
+	}
+
+}
+
+//4 open app
+func openapp(appnames string) (val string) {
+
+	return L.Appopen(appnames)
+}
+
+func basiconfo(appinfodata string) (val string) {
+
+	//var clients1 string
+	sec := map[string]string{}
+	if err := json.Unmarshal([]byte(appinfodata), &sec); err != nil {
+		panic(err)
+	}
+	fmt.Println(appinfodata)
+
+	fmt.Println(sec)
+
+	value := sec["id"]
+	appname := sec["appname"]
+	//token := sec["token"]
+
+	//clients1 = "{" + "device_id:" + deviceserial + ",user_id:" + value + ",device_name:" + deviceinfonew() + ",android_version:" + L.Appversion() + ",start_time:" + "t" + ",end_time:" + "t" + ",version_name:" + L.Androidversionapp() + ",app_name:" + appname + ",record_duration:" + "t" + "}"
+
+	// sec1 := map[string]string{}
+	// if err := json.Unmarshal([]byte(clients1), &sec1); err != nil {
+	// 	panic(err)
+	// }
+	//fmt.Println(clients1)
+
+	//var clientss []Baseinfo
+	p := Baseinfo{
+		Device_name:     devicename,
+		Device_id:       deviceserial,
+		User_id:         value,
+		Android_version: L.Appversion(),
+		Start_time:      "2018-08-20'T'13:20:10*633+0000",
+		End_time:        "2018-08-20'T'13:20:10*633+0000",
+		Version_name:    L.Androidversionapp(),
+		App_name:        appname,
+		Record_duration: "06:00",
+	}
+
+	// var info1 = append(clientss, Baseinfo{
+	// 	Device_id:       deviceserial,
+	// 	User_id:         value,
+	// 	Device_name:     deviceinfonew(),
+	// 	Android_version: L.Appversion(),
+	// 	Start_time:      "r",
+	// 	End_time:        "r",
+	// 	Version_name:    L.Androidversionapp(),
+	// 	App_name:        appname,
+	// 	Record_duration: "r",
+	// })
+	fmt.Println(p)
+	modifiedBytes, _ := json.Marshal(p)
+	fmt.Println(string(modifiedBytes))
+
+	// Unmarshal or Decode the JSON to the interface.
+
+	sec1 := map[string]string{}
+	if err := json.Unmarshal([]byte(string(modifiedBytes)), &sec1); err != nil {
+		panic(err)
+	}
+	fmt.Println(sec1)
+
+	// //	fmt.Println(reflect.TypeOf(info1).Kind())
+	apidata.Apihitinfo(sec1)
+	return apidata.Apihitinfo(sec1)
+
+}
+
+func cpumetric(appnamess string) (val string) {
+	L.Androidcpuuseage(appnamess)
+	res2 := L.Androidcpuuseage(appnamess)
+	lastByByte := res2[len(res2)-4:]
+	var valsss string
+	lastByByte1 := lastByByte[len(lastByByte)-1:]
+
+	// intVar, err := strconv.ParseInt(lastByByte, 0, 8)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// value, err := strconv.ParseInt(lastByByte, 0, 64)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// u := (value / 100)
+	// t := strconv.FormatInt(int64(u), 10)
+
+	valsss = "Total Cpu Useage : " + lastByByte1 + " %"
+
+	return valsss
+
+}
+
+func gpumetric(appnamess string) (val string) {
+	L.Androidgpuuseage(appnamess)
+	res2 := L.Androidgpuuseage(appnamess)
+	lastByByte := res2[len(res2)-4:]
+	var valsss string
+
+	valsss = "Total Gpu Useage : " + lastByByte + " MB"
+
+	return valsss
+
+}
+
+func memmetric(appnamess string) (val string) {
+	L.Androidmemoryuseage(appnamess)
+	res2 := L.Androidmemoryuseage(appnamess)
+	lastByByte := res2[len(res2)-4:]
+	var valsss string
+
+	valsss = "Total Memory Useage : " + lastByByte + " MB"
+
+	return valsss
+
+}
+
+func ParseLeadingInt(s string) (int64, error) {
+	s = leadingInt.FindString(s)
+	if s == "" { // add this if you don't want error on "xx" etc
+		return 0, nil
+	}
+	return strconv.ParseInt(s, 10, 64)
+}
+
+func deviceinfonew() (val string) {
+
+	var (
+		port = flag.Int("p", adb.AdbPort, "")
+
+		client *adb.Adb
+	)
+
+	flag.Parse()
+	var err error
+	client, err = adb.NewWithConfig(adb.ServerConfig{
+		Port: *port,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	client.StartServer()
+
+	// serverVersion, err := client.ServerVersion()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	devices, err := client.ListDevices()
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, device := range devices {
+		//	fmt.Printf("\t%+v\n", *device)
+		devicename = device.Model
+		deviceserial = device.Serial
+	}
+
+	return devicename
+
+}
+
+func getlogin() string {
+	css = "./frontend/build/static/css/main.css"
+
+	js = "./frontend/build/static/js/main.js"
+	//	fmt.Println(deviceinfonew())
+	var appnamelist []string
+	//fmt.Println(L.Appname())
+	scanner := bufio.NewScanner(strings.NewReader(L.Appname()))
+	for scanner.Scan() {
+		res2 := strings.ReplaceAll(scanner.Text(), "package:", "")
+
+		appnamelist = append(appnamelist, res2)
+	}
+
+	//	fmt.Println(appnamelist)
+	out, err := json.Marshal(appnamelist)
+	if err != nil {
+		panic(err)
+
+	}
+
+	return string(out)
+
+}
+
+func main() {
+
+	//values := map[string]string{"email": "gm@gmail.com", "password": "password"}
+
+	//fmt.Println(apidata.Apihit(values))
+	app := wails.CreateApp(&wails.AppConfig{
+		Width:  1024,
+		Height: 768,
+		Title:  "Gameon",
+		JS:     js,
+		CSS:    css,
+		Colour: "#131313",
+	})
+
+	app.Bind(basic)
+	app.Bind(getlogin)
+	app.Bind(mylogin)
+	app.Bind(checkdevice)
+	app.Bind(openapp)
+	app.Bind(basiconfo)
+	app.Bind(cpumetric)
+	app.Bind(gpumetric)
+	app.Bind(memmetric)
+
+	app.Run()
+
+	//fmt.Println(values1)
+
+	// fmt.Print(string(stdout1))
+	//run("shell", "cmd package list package")
+	//run("shell", "monkey -p com.google.android.play.games -c android.intent.category.LAUNCHER 1")
+	//run("shell", "monkey -p com.google.android.play.games -c android.intent.category.LAUNCHER 1")
+	//run("shell", "am force-stop com.google.android.play.games")
+	//run("shell", "dumpsys gfxinfo com.google.android.play.games")
+
+}

@@ -1,0 +1,69 @@
+#customers {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#customers td, #customers th {
+  border: 2px solid #ddd;
+  padding: 12px;
+}
+
+#customers tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#customers tr:hover {
+  background-color: #ddd;
+}
+table tbody {
+  display: block;
+  max-height: 350px;
+  overflow-y: scroll;
+}
+
+table thead, table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.blue-color{
+  color:#ddd;
+  margin-right: 10%;
+}
+@import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
+@import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left !important;
+  text-align: left !important;
+  background-color:#007bff;
+  color: white;
+  text-align: center;
+}
+.list-group-item.active {
+  z-index: 2;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 900;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.input-field {
+  float: right;
+  padding: 6px;
+  margin-top: 8px;
+  margin-right: 16px;
+  border: none;
+  font-size: 17px;
+}
+
+.next-button {
+  margin-left: 46% !important;
+  background-color: #0c8;
+  margin-top: 3% !important;
+  width: 8% !important;
+}
+

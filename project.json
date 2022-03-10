@@ -1,0 +1,25 @@
+{
+ "name": "testttt",
+ "description": "Enter your project description",
+ "author": {
+  "name": "wails –help",
+  "email": "Y"
+ },
+ "version": "0.1.0",
+ "binaryname": "test",
+ "frontend": {
+  "dir": "frontend",
+  "install": "npm install",
+  "build": "npm run build",
+  "bridge": "src",
+  "serve": "npm run serve"
+ },
+ "tags": "",
+ "WailsVersion": "",
+ "CrossCompile": false,
+ "Platform": "",
+ "Architecture": "",
+ "LdFlags": "",
+ "GoPath": "",
+ "UseFirebug": false
+}
