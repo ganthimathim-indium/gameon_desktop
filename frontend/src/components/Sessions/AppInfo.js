@@ -20,13 +20,13 @@ class AppData extends React.Component {
     }
 
     componentDidMount() {
-        // window.backend.gpumetric(this.props.location.state.value).then((result) => {
-        //     let results = result.substr(18);
-        //     console.log(results)
-        //     console.log(result)
+        window.backend.gpumetric(this.props.location.state.value).then((result) => {
+            let results = result.substr(18);
+            console.log(results)
+            console.log(result)
 
-        //     this.setState({ GpuUsage: results })
-        // })
+            this.setState({ GpuUsage: results })
+        })
         const basicData = JSON.stringify(this.state.basicInfo);
         window.backend.basiconfo(basicData).then((result) => {
             const data = JSON.parse(result)
@@ -94,7 +94,7 @@ class AppData extends React.Component {
                                                     <i className='fa fa-laptop Iconwhite3' ></i>
                                                 </div>
                                                 <div className="col-md-8">
-                                                    <h5 className="card-title"><b>31.6 MB</b></h5>
+                                                    <h5 className="card-title"><b>{this.state.GpuUsage && <p>{this.state.GpuUsage}</p>}</b></h5>
                                                     <p className="card-text"><strong>
                                                         Total GPU Usage
                                                     </strong></p>

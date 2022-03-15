@@ -46,6 +46,7 @@ func Apihit(val map[string]string) string {
 	//values := map[string]string{"username": "vv", "password": "v"}
 
 	jsonValue, _ := json.Marshal(val)
+	fmt.Println(bytes.NewBuffer(jsonValue))
 
 	req, err := http.NewRequest("POST", apiconfig.API("login"), bytes.NewBuffer(jsonValue))
 	if err != nil {

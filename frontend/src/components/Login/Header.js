@@ -51,7 +51,7 @@ class LoginHeader extends Component {
         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
           <li className="nav-item dropdown my-auto headerElement">
             <div className="d-flex justify-content-center">
-              <h5>Ganthimathi</h5> <span style={{marginLeft: "40%"}}>{profile}</span>
+              <h5>Ganthimathi</h5> <span style={{ marginLeft: "40%" }}>{profile}</span>
             </div>
           </li>
         </ul>
@@ -67,7 +67,7 @@ class LoginHeader extends Component {
                 to={{ pathname: "/" }}
               >
                 <div className="me-lg-4 aladdinLogoDiv">
-                  <img className="aladdinLogo" src={logo} />
+                  <img className="aladdinLogo" src={logo} alt="" />
                 </div>
               </Link>
               <button
