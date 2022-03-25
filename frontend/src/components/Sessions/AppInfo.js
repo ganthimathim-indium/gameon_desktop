@@ -15,7 +15,9 @@ class AppData extends React.Component {
             cpuUsage: "",
             appName: "",
             memoryUsage: "",
-            GpuUsage: ""
+            GpuUsage: "",
+            result:5,
+            loader:false
         };
     }
 
@@ -45,11 +47,35 @@ class AppData extends React.Component {
         })
     }
 
+    handleStartScan(){
+        console.log("scanning started")
+        console.log(this.state.result,"onStart")
+        window.backend.startscan("com.android.chrome", "true").then((result) => {
+            this.setState({result:result})
+            console.log(this.state.result,"onscanning")
+        });
+        this.setState({loader:true})
+
+
+
+    }
+
+    handleStopScan(){
+        console.log("scanning stopped")
+        window.backend.stopscan("com.android.chrome", "true").then((result) => this.setState({result:result}));
+        this.setState({loader:false})
+
+    }
+
     render() {
         console.log(this.props.location.state.value)
         return (
             <div>
                 <LoginHeader />
+                <button className="btn btn-primary" onClick={this.handleStartScan.bind(this)}>Start Scan</button>
+                <button className="btn btn-secondary" onClick={this.handleStopScan.bind(this)}>Stop Scan</button>
+              
+              {this.state.loader && <h3 >Scanning...</h3>}
                 <h1 style={{ textAlign: "center", marginTop: "-4%", fontSize: "27px" }}>Device Metrics</h1>
                 <div className="container">
                     <div className="row">
