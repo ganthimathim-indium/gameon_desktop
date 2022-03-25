@@ -15,6 +15,7 @@ function HelloWorld() {
 		//window.backend.gpumetric("com.android.chrome").then((result) => setResult(result));
 
 		window.backend.startscan("com.android.chrome", "true").then((result) => setResult(result));
+		window.backend.stopscan("com.android.chrome", "true").then((result) => setResult(result));
 
 
 		//window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
