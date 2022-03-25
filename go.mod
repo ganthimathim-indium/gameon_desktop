@@ -25,6 +25,7 @@ require (
 	github.com/pkg/browser v0.0.0-20180916011732-0a3d74bf9ce4 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/stretchr/testify v1.4.0 // indirect
 	github.com/syossan27/tebata v0.0.0-20180602121909-b283fe4bc5ba // indirect
 	golang.org/x/image v0.0.0-20200430140353-33d19683fad8 // indirect
 	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect

@@ -10,11 +10,13 @@ import (
 	L "gameongo/lib"
 	"regexp"
 	"strconv"
+	"time"
 
 	"log"
 	"strings"
 
 	"github.com/wailsapp/wails"
+
 	adb "github.com/zach-klippenstein/goadb"
 )
 
@@ -23,6 +25,7 @@ var css string
 var devicename string
 var deviceserial string
 var leadingInt = regexp.MustCompile(`^[-+]?\d+`)
+var ticker time.Ticker
 
 type Appinfo struct {
 	Osname     string `json:"osname"`
@@ -162,6 +165,108 @@ func basiconfo(appinfodata string) (val string) {
 	apidata.Apihitinfo(sec1)
 	return apidata.Apihitinfo(sec1)
 
+}
+
+// boolValue, err := strconv.ParseBool(valdata)
+// if err != nil {
+// 	log.Fatal(err)
+// }
+
+// if boolValue == true {
+// 	gocron.Every(60).Second().Do(startscan(appnamee_test, valdata))
+// 	<-gocron.Start()
+// 	return "yes"
+
+// } else {
+// 	// gocron.Every(6).Second().Do(startscan(appnamee_test, valdata))
+// 	// <-gocron.Stop()
+// 	return "No"
+
+// }
+//return  startscan(appnamee_test, valdata)
+
+type Responseinfo struct {
+	start_time      string `json:"start_time"`
+	app_name        string `json:"app_name"`
+	device_name     string `json:"device_name"`
+	version_name    string `json:"version_name"`
+	total_duration  string `json:"total_duration"`
+	device_id       string `json:"device_id"`
+	android_version string `json:"android_version"`
+
+	Data []results `json:"results"`
+}
+
+type results struct {
+	cpu_app_usage    string `json:"cpu_app_usage"`
+	avg_gpu_usage    string `json:"avg_gpu_usage"`
+	memory_deviation string `json:"memory_deviation"`
+	power_deviation  string `json:"power_deviation"`
+	time             string `json:"time"`
+	gpu_deviation    string `json:"gpu_deviation"`
+	avg_memory_usage string `json:"avg_memory_usage"`
+	avg_power_usage  string `json:"avg_power_usage"`
+	cpu_deviation    string `json:"cpu_deviation"`
+}
+
+func startscan(appnamee_test string, valdata string) (val string) {
+	boolValue, err := strconv.ParseBool(valdata)
+	if err != nil {
+		log.Fatal(err)
+	}
+	ticker := time.NewTicker(15 * time.Second)
+
+	//fmt.Printf("%s: %t\n", v, boolValue)
+	if boolValue == true {
+		//quit := make(chan struct{})
+		for {
+			select {
+			case <-ticker.C:
+
+				human2 := []results{results{cpu_app_usage: cpumetric(appnamee_test),
+					avg_gpu_usage:    gpumetric(appnamee_test),
+					memory_deviation: "",
+					power_deviation:  "",
+					gpu_deviation:    "",
+					avg_memory_usage: memmetric(appnamee_test), avg_power_usage: memmetric(appnamee_test), cpu_deviation: ""}}
+
+				human3 := Responseinfo{start_time: "r", app_name: "r", device_name: "r", version_name: "t", total_duration: "t", device_id: "t", android_version: "t", Data: human2}
+				fmt.Println(human3) // {"Name":"Bob","Age":10,"Active":true}
+
+				// u, err := json.Marshal(human3)
+				// if err != nil {
+				// 	panic(err)
+				// }
+				//fmt.Println(string(u)) // {"Name":"Bob","Age":10,"Active":true}
+				//fmt.Println()
+
+				// do stuff
+				// case <- quit:
+				// 	ticker.Stop()
+				//return string(human3.android_version)
+				// }
+
+			}
+		}
+
+	}
+
+	return "Yes"
+
+}
+
+func stopscan(appnamee_test string, valdata string) (val string) {
+	quit := make(chan struct{})
+
+	//do stuff
+	for {
+		select {
+		case <-quit:
+			ticker.Stop()
+			//return string(human3.android_version)
+			return ""
+		}
+	}
 }
 
 func cpumetric(appnamess string) (val string) {
@@ -306,6 +411,7 @@ func main() {
 	app.Bind(cpumetric)
 	app.Bind(gpumetric)
 	app.Bind(memmetric)
+	app.Bind(startscan)
 
 	app.Run()
 
