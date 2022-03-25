@@ -412,6 +412,7 @@ func main() {
 	app.Bind(gpumetric)
 	app.Bind(memmetric)
 	app.Bind(startscan)
+	app.Bind(stopscan)
 
 	app.Run()
 
