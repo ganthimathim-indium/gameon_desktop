@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Link, MemoryRouter as Router,Redirect, Route, Switch } from "react-router-dom";
+import { Link, MemoryRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import Home from './components/Home/Home'
 import SignIn from './components/Login/SignIn';
 import SelectPages from './components/SelectPages/SelectPages';
 import AppInfo from './components/Sessions/AppInfo'
 import "../node_modules/bootstrap/dist/css/bootstrap.css"
 import BasicInfo from './components/Home/BasicInfo';
+import Heloow from './components/HelloWorld'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         </Switch>
       </Router>
 
+      {/* <Heloow></Heloow> */}
     </div>
   )
 }

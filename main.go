@@ -8,6 +8,7 @@ import (
 	"fmt"
 	apidata "gameongo/api"
 	L "gameongo/lib"
+	"math"
 	"regexp"
 	"strconv"
 	"time"
@@ -26,6 +27,7 @@ var devicename string
 var deviceserial string
 var leadingInt = regexp.MustCompile(`^[-+]?\d+`)
 var ticker time.Ticker
+var timedata string
 
 type Appinfo struct {
 	Osname     string `json:"osname"`
@@ -33,16 +35,13 @@ type Appinfo struct {
 	Applist    string `json:"applist"`
 }
 type Baseinfo struct {
-	Device_id string `json:"device_id"`
-	User_id   string `json:"user_id"`
-
+	Start_time      string `json:"start_time"`
+	Record_duration string `json:"total_duration"`
+	Device_id       string `json:"device_id"`
 	Device_name     string `json:"device_name"`
 	Android_version string `json:"android_version"`
-	Start_time      string `json:"start_time"`
-	End_time        string `json:"end_time"`
 	Version_name    string `json:"version_name"`
 	App_name        string `json:"app_name"`
-	Record_duration string `json:"record_duration"`
 }
 
 //3 basic info
@@ -103,7 +102,7 @@ func openapp(appnames string) (val string) {
 }
 
 func basiconfo(appinfodata string) (val string) {
-
+	basic()
 	//var clients1 string
 	sec := map[string]string{}
 	if err := json.Unmarshal([]byte(appinfodata), &sec); err != nil {
@@ -111,11 +110,10 @@ func basiconfo(appinfodata string) (val string) {
 	}
 	fmt.Println(appinfodata)
 
-	fmt.Println(sec)
-
-	value := sec["id"]
+	//value := sec["id"]
 	appname := sec["appname"]
-	//token := sec["token"]
+	token := sec["token"]
+	fmt.Println(token)
 
 	//clients1 = "{" + "device_id:" + deviceserial + ",user_id:" + value + ",device_name:" + deviceinfonew() + ",android_version:" + L.Appversion() + ",start_time:" + "t" + ",end_time:" + "t" + ",version_name:" + L.Androidversionapp() + ",app_name:" + appname + ",record_duration:" + "t" + "}"
 
@@ -129,10 +127,8 @@ func basiconfo(appinfodata string) (val string) {
 	p := Baseinfo{
 		Device_name:     devicename,
 		Device_id:       deviceserial,
-		User_id:         value,
 		Android_version: L.Appversion(),
-		Start_time:      "2018-08-20'T'13:20:10*633+0000",
-		End_time:        "2018-08-20'T'13:20:10*633+0000",
+		Start_time:      "15:25:34",
 		Version_name:    L.Androidversionapp(),
 		App_name:        appname,
 		Record_duration: "06:00",
@@ -162,8 +158,8 @@ func basiconfo(appinfodata string) (val string) {
 	fmt.Println(sec1)
 
 	// //	fmt.Println(reflect.TypeOf(info1).Kind())
-	apidata.Apihitinfo(sec1)
-	return apidata.Apihitinfo(sec1)
+	apidata.Apihitinfo(sec1, token)
+	return apidata.Apihitinfo(sec1, token)
 
 }
 
@@ -222,15 +218,33 @@ func startscan(appnamee_test string, valdata string) (val string) {
 		for {
 			select {
 			case <-ticker.C:
+				currentTime := time.Now()
+				t1 := time.Date(1984, time.November, 3, 13, 0, 0, 0, time.UTC)
+				t2 := time.Date(1984, time.November, 3, 10, 23, 34, 0, time.UTC)
+
+				hs := t1.Sub(t2).Hours()
+
+				hs, mf := math.Modf(hs)
+				ms := mf * 60
+
+				ms, sf := math.Modf(ms)
+				ss := sf * 60
+
+				fmt.Println(hs, "hours", ms, "minutes", ss, "seconds")
+				s := strconv.FormatFloat(hs, 'E', -1, 64)
+				s1 := strconv.FormatFloat(ms, 'E', -1, 64)
+				s2 := strconv.FormatFloat(ss, 'E', -1, 64)
+
+				timedata = s + "hours" + s1 + "minutes" + s2 + "seconds"
 
 				human2 := []results{results{cpu_app_usage: cpumetric(appnamee_test),
 					avg_gpu_usage:    gpumetric(appnamee_test),
-					memory_deviation: "",
-					power_deviation:  "",
-					gpu_deviation:    "",
-					avg_memory_usage: memmetric(appnamee_test), avg_power_usage: memmetric(appnamee_test), cpu_deviation: ""}}
+					memory_deviation: "Mainactivity",
+					power_deviation:  "Mainactivity",
+					gpu_deviation:    "Mainactivity",
+					avg_memory_usage: memmetric(appnamee_test), avg_power_usage: memmetric(appnamee_test), cpu_deviation: "Mainactivity"}}
 
-				human3 := Responseinfo{start_time: "r", app_name: "r", device_name: "r", version_name: "t", total_duration: "t", device_id: "t", android_version: "t", Data: human2}
+				human3 := Responseinfo{start_time: currentTime.Format("3:4:5 pm"), app_name: appnamee_test, device_name: devicename, version_name: L.Androidversionapp(), total_duration: timedata, device_id: deviceserial, android_version: L.Appversion(), Data: human2}
 				fmt.Println(human3) // {"Name":"Bob","Age":10,"Active":true}
 
 				// u, err := json.Marshal(human3)
