@@ -13,6 +13,10 @@ import {
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
+import TextField from '@mui/material/TextField';
+import { grey } from "@mui/material/colors";
+
+
 const eye = <FontAwesomeIcon icon={faEye} />;
 const eyeslash = <FontAwesomeIcon icon={faEyeSlash} />;
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -156,30 +160,33 @@ class SignIn extends Component {
       }}/>
     }
     return (
-      <div style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', height: '100vh', backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
-        <div className="container">
-          <Box sx={{ flexGrow: 1 }}>
-            <StyledToolbar>
-              <Card elevation={20} style={paperStyle1}>
+      <div className="login">
+       <p>h </p>
+        <div className="containers">
+         
+         
+            
+              
+
+
+              <div className="left-side">
                 <Grid align="center">
-                  <Box
-                    component="img"
-                    sx={{
-                      height: "auto",
-                      width: 250,
-                      maxHeight: { xs: 450, md: 450 },
-                      maxWidth: { xs: 450, md: 450 },
-                    }}
-                    alt="GameOn"
-                    src={GameOn}
-                  />
-                  <Typography variant="h5">
-                    Ingenious way to test Digital Apps
-                  </Typography>
+              
+                <h5 className="left-top">GameOn</h5>
+                  <h5 className="left_bottom">  Smart way to test GameOn </h5>
+                   
+                  
                   {/* {this.state.result && <Link to="/select-page"></Link>} */}
+
+                 
                 </Grid>
-                  <div className="login-form">
+                </div>
+
+                <div className="right-side">
+                <div className="contents">
+                 
                     <form onSubmit={this.handleSubmit}>
+                    <h3 style={{textAlign: 'left'}}>Login</h3>
                       <div className="tab-content" id="pills-tabContent">
                         <div
                           className="tab-pane fade show active"
@@ -187,23 +194,19 @@ class SignIn extends Component {
                           role="tabpanel"
                           aria-labelledby="pills-home-tab"
                         >
-                          <div className="mb-2">
+                          <div >
                             <div
                               className={
                                 this.state.mobile && this.state.mobile.length > 0
-                                  ? "form-group signin-div mb-0 inputPhone"
-                                  : "form-group signin-div mb-0"
+                                  ? ""
+                                  : " mb-0"
                               }
                             >
-                              <i
-                                className="bi bi-envelope mx-1"
-                                style={{ fontSize: "26px", color: "#436fb6" }}
-                              ></i>
-                              <input
-                                type="text"
-                                className="form-control signin-form"
+                              
+                              <TextField id="standard-basic"   variant="standard"
                                 value={this.state.email}
                                 onChange={this.onEmailChange}
+                                style={{position: "absolute",width:"23%"}}
                                 placeholder='Enter Email'
                                 disabled={
                                   this.state.mobile && this.state.mobile.length > 0
@@ -211,6 +214,12 @@ class SignIn extends Component {
                                     : false
                                 }
                               />
+                              <i
+                                className="bi bi-envelope "
+                                
+                                style={{ fontSize: "26px", color: "black",
+                              position: "relative",marginLeft: "260px" }}
+                              ></i>
                             </div>
                             {(this.state.validEmail || this.state.isEmptyEmail) && (
                               <div className="validCred">*Enter a valid Email</div>
@@ -223,27 +232,30 @@ class SignIn extends Component {
                                 : "form-group"
                             }
                           >
-                          </div>
-                          <div className="form-group">
-                            <div className="input-group signin-div">
-                              <i
-                                className="fa fa-lock mx-1"
-                                style={{ fontSize: "34px", color: "#436fb6" }}
-                              ></i>
-                              <input
-                                type={this.state.types}
-                                className="form-control signin-form"
+                          </div >
+                          <div >
+                            <div>
+                           
+                             
+                              <TextField id="standard-basic"   variant="standard"
                                 value={this.state.password}
                                 onChange={this.onPasswordChange}
+                                style={{position: "absolute",width:"23%"}}
                                 placeholder="Enter Password"
+                              
                               />
-                              <div className="input-group-append">
-                                <span
-                                  className="input-group-text"
+                               
+                                <button
+                                  
                                   style={{
-                                    padding: "0.6rem 0.75rem",
+                                    background:"none",
                                     border: "none",
                                     cursor: "pointer",
+                                    postion:"relative",
+                                      marginTop:"-25px",
+                                    bottom:1500,
+                                    marginLeft:"265px",
+                                    display: "inline"
                                   }}
                                   onClick={this.pwdhandleClick}
                                 >
@@ -252,8 +264,9 @@ class SignIn extends Component {
                                   ) : (
                                     <i>{eyeslash}</i>
                                   )}
-                                </span>
-                              </div>
+                                </button>
+                             
+                              
                             </div>
                             {this.state.validPassword && (
                               <div className="validCred">*Password cannot be empty</div>
@@ -261,19 +274,25 @@ class SignIn extends Component {
                           </div>
                           <input
                             type="submit"
-                            className="btn btn-block btn-lg"
                             value="Login"
-                            style={{ marginTop: "6%" }}
+                            style={{ marginTop: "15%",background:"grey",
+                          borderRadius: "8px",width:"84%",padding: "3px"}}
                           />
                         </div>
                       </div>
                     </form>
                   </div>
+
+                  
+                </div>
+                  
                 <br></br>
-              </Card>
-            </StyledToolbar>
-          </Box>
+            
+           
+         
         </div>
+       
+        
       </div>
     );
   }

@@ -5,7 +5,7 @@
   align-items: center;
   width: 100%;
   height: 100vh;
-  background-image: linear-gradient(120deg,#f0b501,#8e44ad);
+  background: grey;
 }
 
 .App-logo {
@@ -20,7 +20,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: grey;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -43,6 +43,6 @@
   }
 }
 
-.MuiFormHelperText-root{
-  color:red !important;
+.MuiFormHelperText-root {
+  color: red !important;
 }

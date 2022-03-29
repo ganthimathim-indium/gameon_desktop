@@ -1,24 +1,94 @@
-.shadow-lg {
-    box-shadow: 6px 5px 5px 1px rgb(10 22 70 / 10%), 0px 0px 1px 0px rgb(10 22 70 / 6%) !important;
-}
-
 .borderCard {
-    border-radius: 1.25rem !important;
+  border-radius: 1.25rem !important;
 }
 
 .rounded {
-    border-radius: 1.25rem !important;
+  border-radius: 1.25rem !important;
 }
 
 .Iconwhite2 {
-    font-size: 50px;
-    color: #ff8c00;
+  font-size: 50px;
+  color: #ff8c00;
 }
 .Iconwhite1 {
-    font-size: 50px;
-    color: #f36;
+  font-size: 50px;
+  color: #f36;
 }
 .Iconwhite3 {
-    font-size: 50px;
-    color: #17a2b8;
+  font-size: 50px;
+  color: #17a2b8;
+}
+
+.containers {
+  display: flex;
+  justify-content: space-around;
+}
+.appInfo {
+  background: grey;
+  height: 100vh;
+}
+.info-card {
+  background: white;
+  border-radius: 20px;
+  padding: 15%;
+}
+.metric-usage {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  width: 50vh;
+  height: 40vh;
+  margin: 15px;
+  margin-top: -20%;
+}
+
+.right-container {
+  display: flex;
+  flex-direction: row;
+}
+.left {
+  width: 33%;
+  margin-left: -280px;
+}
+.right {
+  width: 65%;
+  margin-left: -180px;
+}
+
+/* Create a container using css properties */
+.contain {
+  text-align: center;
+  transform: translate(-50%, -50%);
+  margin-left: 95px;
+  margin-top: 65px;
+}
+
+/* Apply css properties to ui-widgets class */
+.ui-widgets {
+  display: inline-block;
+  width: 7rem;
+  height: 7rem;
+  border-radius: 9rem;
+
+  border: 8px solid rgb(167, 150, 150);
+
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Apply css properties to ui-widgets
+   class and ui-values class */
+.ui-widgets .ui-values {
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+/*  Apply css properties to ui-widgets 
+class and ui-labels class */
+.ui-widgets .ui-labels {
+  text-shadow: 0 0 4px grey;
+  color: black;
+  position: absolute;
+  width: 100%;
+  font-size: 16px;
 }

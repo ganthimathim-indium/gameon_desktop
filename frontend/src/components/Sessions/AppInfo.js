@@ -1,7 +1,20 @@
 import React from "react";
 import './AppInfo.css';
 import LoginHeader from '../Login/Header';
+import CircularProgress from '@mui/material/CircularProgress';
 
+var mapObj = {
+    "com":" ",
+    ".oneplus":" ",
+    ".qualcomm":" ",
+    ".android":" ",
+    ".display":" ",
+    ".google":" ",
+    ".tools":" ",
+    ".internal":" ",
+    ".emulation":" ",
+    ".network":" "
+ };
 
 class AppData extends React.Component {
     constructor(props) {
@@ -70,85 +83,112 @@ class AppData extends React.Component {
     render() {
         console.log(this.props.location.state.value)
         return (
-            <div>
+            <div className="appInfo">
                 <LoginHeader />
                 <button className="btn btn-primary" onClick={this.handleStartScan.bind(this)}>Start Scan</button>
                 <button className="btn btn-secondary" onClick={this.handleStopScan.bind(this)}>Stop Scan</button>
               
               {this.state.loader && <h3 >Scanning...</h3>}
-                <h1 style={{ textAlign: "center", marginTop: "-4%", fontSize: "27px" }}>Device Metrics</h1>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-12 mt-5">
-                            <div className="row">
-                                <div className="col-md-4 m-2 m-md-0">
-                                    <div className="card borderCard shadow-lg p-3 mb-5 bg-white">
-                                        <div className="card-body">
-                                            <div className="d-flex">
-                                                <div className="col-md-4" className="iconTradeBackground">
-                                                    <i className='fa fa-laptop Iconwhite1'></i>
-                                                </div>
-                                                <div className="col-md-8">
-                                                    <h5 className="card-title"><b>{this.state.cpuUsage && <p>{this.state.cpuUsage}</p>}</b></h5>
-                                                    <p className="card-text"><strong>Total CPU Usage</strong></p>
-                                                </div>
-                                            </div>
-                                        </div>
+                <h1 style={{ textAlign: "center", marginTop: "-10%", fontSize: "27px" }}>Device Metrics</h1>
+               
+                <div className="containers">
+
+
+
+                <div class="left">
+                    <div>
+                    <h3>{this.state.basicInfo.appname.replace(/com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi, function(matched){
+                return mapObj[matched];
+            })}</h3></div>
+                        <div class="row">
+                            <div >
+                                <div >
+                                    <div className="info-card">
+                                        <h5 class="card-title" style={{ fontWeight: "bold" }}>Device Info:</h5>
+                                        <p class="card-text"> <i class="fa fa-info-circle text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Version:</span><small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.versionName}</small>
+                                        </p> <p class="card-text"> <i class="fa fa-laptop text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Application Name:</span> <small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.appName} </small>
+                                        </p> <p class="card-text"> <i class="fa fa-android text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Android version:</span><small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.androidVersion} </small>
+                                        </p> <p class="card-text"> <i class="fa fa-desktop text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Device Model:</span><small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.deviceId} </small>
+                                        </p><p class="card-text"> <i class="fa fa-mobile text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Device Name:</span><small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.deviceName} </small>
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="col-md-4 m-2 m-md-0">
-                                    <div className="card borderCard shadow-lg p-3 mb-5 bg-white">
-                                        <div className="card-body">
-                                            <div className="d-flex">
-                                                <div className="col-md-4" className="iconTradeBackground">
-                                                    <i className='fa fa-laptop Iconwhite2'></i>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                <div className="right">
+                   
+                        <div className="right-container">
+
+                               
+                            
+                            
+                                   
+                                                
+                                                <div className="metric-usage">
+
+                                                            
+                                                    
+
+                                                    <div class="contain">
+                    
+                    
+                                                                    <div class="ui-widgets">
+                                                                        <div class="ui-values" style={{marginTop:"20px"}}>{this.state.cpuUsage && <p>{this.state.cpuUsage}</p>}</div>
+                                                                        
+                                                                    </div>
+                                                    </div>
+
+                                                    <p ><strong>Total CPU Usage</strong></p>
                                                 </div>
-                                                <div className="col-md-8">
-                                                    <h5 className="card-title"><b>{this.state.memoryUsage && <p>{this.state.memoryUsage}</p>}</b></h5>
+                               
+                                   
+                                                <div className="metric-usage">
+                                                    <h5 className="card-title"><b></b></h5>
+                                                    <div class="contain">
+                    
+                    
+                                                                    <div class="ui-widgets">
+                                                                        <div class="ui-values" style={{marginTop:"20px"}}>{this.state.memoryUsage && <p>{this.state.memoryUsage}</p>}</div>
+                                                                        
+                                                                    </div>
+                                                    </div>
                                                     <p className="card-text"><strong>Memory Usage
                                                     </strong></p>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-4 m-2 m-md-0">
-                                    <div className="card borderCard shadow-lg p-3 mb-5 bg-white">
-                                        <div className="card-body">
-                                            <div className="d-flex">
-                                                <div className="col-md-4" className="iconTradeBackground">
-                                                    <i className='fa fa-laptop Iconwhite3' ></i>
-                                                </div>
-                                                <div className="col-md-8">
-                                                    <h5 className="card-title"><b>{this.state.GpuUsage && <p>{this.state.GpuUsage}</p>}</b></h5>
+                                           
+                               
+                                   
+                                                <div className="metric-usage">
+                                                    <h5 className="card-title"><b></b></h5>
+                                                    <div class="contain">
+                    
+                    
+                                                                    <div class="ui-widgets">
+                                                                        <div class="ui-values" style={{marginTop:"20px"}}>{this.state.GpuUsage && <p>{this.state.GpuUsage}</p>}</div>
+                                                                        
+                                                                    </div>
+                                                    </div>
                                                     <p className="card-text"><strong>
                                                         Total GPU Usage
                                                     </strong></p>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <div class="card shadow-lg p-3 mb-5 bg-white">
-                                <div class="card-body">
-                                    <h5 class="card-title" style={{ fontWeight: "bold" }}>Device Info:</h5>
-                                    <p class="card-text"> <i class="fa fa-info-circle text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Version:</span><small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.versionName}</small>
-                                    </p> <p class="card-text"> <i class="fa fa-laptop text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Application Name:</span> <small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.appName} </small>
-                                    </p> <p class="card-text"> <i class="fa fa-android text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Android version:</span><small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.androidVersion} </small>
-                                    </p> <p class="card-text"> <i class="fa fa-desktop text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Device Model:</span><small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.deviceId} </small>
-                                    </p><p class="card-text"> <i class="fa fa-mobile text-info mx-2"></i><span style={{ fontWeight: "bold" }}>Device Name:</span><small style={{ marginLeft: "21px", fontSize: "90%", fontWeight: "500" }}>{this.state.deviceName} </small>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                                            
+                               
                     </div>
                 </div>
+               
+                   
+                   
+                </div>
+              
+              
+
             </div>
+            
         );
     }
 }

@@ -4,7 +4,80 @@
   margin-right: auto;
 }
 
-#customers td, #customers th {
+.big-container {
+  display: flex;
+}
+.device-info {
+  height: 70vh;
+  width: 30%;
+  background: white;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+h3 {
+  margin-top: -40vh;
+}
+
+.mini-card img {
+  height: 35px;
+  object-fit: contain;
+  margin-left: -30;
+}
+.mini_card p {
+  display: inline;
+}
+.mini-card p {
+  diplay: inline;
+}
+
+.device-info p {
+  padding-left: 20%;
+  padding-top: 15px;
+}
+img {
+  width: 100%;
+  margin: auto;
+  height: 80%;
+}
+button {
+  background: none;
+  border: none;
+  display: block;
+}
+
+.container {
+  display: flex;
+  margin-left: 15px;
+  width: 65vw;
+  flex-wrap: wrap;
+}
+
+.list {
+  margin-left: 15px;
+}
+
+.mini-card {
+  width: 18%;
+  height: 50px;
+  padding: none;
+  background: white;
+  border: 1px solid none;
+  border-radius: 5px;
+  margin: 7px;
+  display: flex;
+  flex-direction: row;
+}
+h3 {
+  text-align: center;
+}
+
+.mini-card > small {
+  font-size: 8px;
+}
+
+#customers td,
+#customers th {
   border: 2px solid #ddd;
   padding: 12px;
 }
@@ -22,13 +95,14 @@ table tbody {
   overflow-y: scroll;
 }
 
-table thead, table tbody tr {
+table thead,
+table tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed;
 }
-.blue-color{
-  color:#ddd;
+.blue-color {
+  color: #ddd;
   margin-right: 10%;
 }
 @import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
@@ -39,7 +113,7 @@ table thead, table tbody tr {
   padding-bottom: 12px;
   text-align: left !important;
   text-align: left !important;
-  background-color:#007bff;
+  background-color: #007bff;
   color: white;
   text-align: center;
 }
@@ -66,4 +140,3 @@ table thead, table tbody tr {
   margin-top: 3% !important;
   width: 8% !important;
 }
-

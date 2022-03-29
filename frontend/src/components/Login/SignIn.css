@@ -6,7 +6,49 @@
   border-radius: 5px;
 }
 
-.signin-form, .signin-form:focus {
+.contents {
+  padding: 15% 0 0 10%;
+}
+
+.containers {
+  align-items: center;
+  height: 60vh;
+  width: 60%;
+
+  margin-top: 15vh;
+  margin-left: 20%;
+  border-radius: 5%;
+}
+input {
+  background: none;
+  margin-bottom: 1px solid black;
+  width: 100%;
+}
+
+.left-side {
+  width: 50%;
+  float: left;
+  height: 100%;
+  background: lightgray;
+  border-radius: 15px 0 0 15px;
+}
+.left-top {
+  margin-top: 5px;
+}
+.left_bottom {
+  margin-top: 80%;
+}
+
+.right-side {
+  width: 50%;
+  height: 100%;
+  float: right;
+  background: white;
+  border-radius: 0 15px 15px 0;
+}
+
+.signin-form,
+.signin-form:focus {
   box-shadow: none;
   border: none;
   outline: none;
@@ -17,7 +59,6 @@
 }
 
 .login-form {
-  width: 390px;
   padding: 3px 0;
 }
 
@@ -31,7 +72,8 @@
   margin-bottom: 32px;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
   color: #fff;
   background-color: #6e6e6e;
 }
@@ -53,7 +95,8 @@
   margin-bottom: 20px;
 }
 
-.login-form .signin-form, .login-form .btn {
+.login-form .signin-form,
+.login-form .btn {
   min-height: 40px;
   border-radius: 2px;
   transition: all 0.5s;
@@ -77,7 +120,8 @@
   line-height: normal;
 }
 
-.login-form .btn:hover, .login-form .btn:focus {
+.login-form .btn:hover,
+.login-form .btn:focus {
   background: #436fb6;
 }
 
@@ -103,7 +147,7 @@
   width: 50%;
 }
 
-.backgroundGraySignIn>.active {
+.backgroundGraySignIn > .active {
   background-color: #b3b3b3;
 }
 
@@ -150,7 +194,8 @@
   margin-bottom: 20px;
 }
 
-.registerotp-form .signin-form, .login-form .btn {
+.registerotp-form .signin-form,
+.login-form .btn {
   min-height: 40px;
   border-radius: 2px;
   transition: all 0.5s;
@@ -170,7 +215,8 @@
   line-height: normal;
 }
 
-.registerotp-form .btn:hover, .login-form .btn:focus {
+.registerotp-form .btn:hover,
+.login-form .btn:focus {
   background: #436fb6;
 }
 
@@ -216,6 +262,10 @@
   padding: 0px;
   padding-left: 10px;
   border-radius: 4px;
+}
+.login {
+  background: grey;
+  height: 100vh;
 }
 
 .PhoneInputInput {

@@ -47,40 +47,25 @@ class LoginHeader extends Component {
 
     let data;
     data = (
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li className="nav-item dropdown my-auto headerElement">
-            <div className="d-flex justify-content-center">
-              <h5>Ganthimathi</h5> <span style={{ marginLeft: "40%" }}>{profile}</span>
-            </div>
-          </li>
-        </ul>
-      </div>)
+      <div>
+              <h5 style={{display: "inline"}}>Ganthimathi</h5> 
+              <span style={{ marginLeft: "55%" }}>{profile}</span>
+              </div>
+          
+      )
 
     return (
       <div>
         <header>
-          <nav className="navbar navbarX navbar-expand-lg navbar-light bg-white">
+          <nav className="navbar navbarX  navbar-light bg-grey">
             <div className="container-fluid col-10">
               <Link
                 style={{ textDecoration: "none" }}
                 to={{ pathname: "/" }}
               >
-                <div className="me-lg-4 aladdinLogoDiv">
-                  <img className="aladdinLogo" src={logo} alt="" />
-                </div>
+               
               </Link>
-              <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
+             
               {data}
             </div>
           </nav>
