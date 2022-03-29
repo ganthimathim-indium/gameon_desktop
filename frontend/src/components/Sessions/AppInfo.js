@@ -4,23 +4,23 @@ import LoginHeader from '../Login/Header';
 import CircularProgress from '@mui/material/CircularProgress';
 
 var mapObj = {
-    "com":" ",
-    ".oneplus":" ",
-    ".qualcomm":" ",
-    ".android":" ",
-    ".display":" ",
-    ".google":" ",
-    ".tools":" ",
-    ".internal":" ",
-    ".emulation":" ",
-    ".network":" "
- };
+    "com": " ",
+    ".oneplus": " ",
+    ".qualcomm": " ",
+    ".android": " ",
+    ".display": " ",
+    ".google": " ",
+    ".tools": " ",
+    ".internal": " ",
+    ".emulation": " ",
+    ".network": " "
+};
 
 class AppData extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            basicInfo: { "appname": this.props.location.state.value, "id": "1", "token": "ffjjifd" },
+            basicInfo: { "appname": this.props.location.state.value, "id": "24", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoicmFodWxAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjI0LCJpYXQiOjE2NDg1MzkzNDR9.FUmjwywXb9oqxvaeUk4rb2stsbmw4BVD0198C0JgXis" },
             deviceId: "",
             deviceName: "",
             androidVersion: "",
@@ -29,12 +29,28 @@ class AppData extends React.Component {
             appName: "",
             memoryUsage: "",
             GpuUsage: "",
-            result:5,
-            loader:false
+            result: 5,
+            loader: false
         };
     }
 
     componentDidMount() {
+        const basicData = JSON.stringify(this.state.basicInfo);
+        console.log(this.state.basicInfo)
+
+        console.log(basicData, "basidata")
+
+        window.backend.basiconfo(basicData).then((result) => {
+            console.log(result, "result")
+            const data = JSON.parse(result)
+
+
+            this.setState({ appName: this.props.location.state.value, deviceId: data.data.device_id, deviceName: data.data.device_name, androidVersion: data.data.android_version, versionName: data.data.version_name })
+
+        }).catch((err) => {
+            console.log(err, "error")
+        })
+
         window.backend.gpumetric(this.props.location.state.value).then((result) => {
             let results = result.substr(18);
             console.log(results)
@@ -42,13 +58,7 @@ class AppData extends React.Component {
 
             this.setState({ GpuUsage: results })
         })
-        const basicData = JSON.stringify(this.state.basicInfo);
-        window.backend.basiconfo(basicData).then((result) => {
-            const data = JSON.parse(result)
-            data.data.map((val) => {
-                this.setState({ appName: this.props.location.state.value, deviceId: val.device_id, deviceName: val.device_name, androidVersion: val.android_version, versionName: val.version_name })
-            })
-        })
+
         window.backend.memmetric(this.props.location.state.value).then((result) => {
             let results = result.substring(result.indexOf(":") + 1);
             this.setState({ memoryUsage: results })
@@ -60,23 +70,23 @@ class AppData extends React.Component {
         })
     }
 
-    handleStartScan(){
+    handleStartScan() {
         console.log("scanning started")
-        console.log(this.state.result,"onStart")
+        console.log(this.state.result, "onStart")
         window.backend.startscan("com.android.chrome", "true").then((result) => {
-            this.setState({result:result})
-            console.log(this.state.result,"onscanning")
+            this.setState({ result: result })
+            console.log(this.state.result, "onscanning")
         });
-        this.setState({loader:true})
+        this.setState({ loader: true })
 
 
 
     }
 
-    handleStopScan(){
+    handleStopScan() {
         console.log("scanning stopped")
-        window.backend.stopscan("com.android.chrome", "true").then((result) => this.setState({result:result}));
-        this.setState({loader:false})
+        window.backend.stopscan("com.android.chrome", "true").then((result) => this.setState({ result: result }));
+        this.setState({ loader: false })
 
     }
 
@@ -87,19 +97,19 @@ class AppData extends React.Component {
                 <LoginHeader />
                 <button className="btn btn-primary" onClick={this.handleStartScan.bind(this)}>Start Scan</button>
                 <button className="btn btn-secondary" onClick={this.handleStopScan.bind(this)}>Stop Scan</button>
-              
-              {this.state.loader && <h3 >Scanning...</h3>}
+
+                {this.state.loader && <h3 >Scanning...</h3>}
                 <h1 style={{ textAlign: "center", marginTop: "-10%", fontSize: "27px" }}>Device Metrics</h1>
-               
+
                 <div className="containers">
 
 
 
-                <div class="left">
-                    <div>
-                    <h3>{this.state.basicInfo.appname.replace(/com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi, function(matched){
-                return mapObj[matched];
-            })}</h3></div>
+                    <div class="left">
+                        <div>
+                            <h3>{this.state.basicInfo.appname.replace(/com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi, function (matched) {
+                                return mapObj[matched];
+                            })}</h3></div>
                         <div class="row">
                             <div >
                                 <div >
@@ -119,76 +129,76 @@ class AppData extends React.Component {
 
 
 
-                <div className="right">
-                   
+                    <div className="right">
+
                         <div className="right-container">
 
-                               
-                            
-                            
-                                   
-                                                
-                                                <div className="metric-usage">
 
-                                                            
-                                                    
 
-                                                    <div class="contain">
-                    
-                    
-                                                                    <div class="ui-widgets">
-                                                                        <div class="ui-values" style={{marginTop:"20px"}}>{this.state.cpuUsage && <p>{this.state.cpuUsage}</p>}</div>
-                                                                        
-                                                                    </div>
-                                                    </div>
 
-                                                    <p ><strong>Total CPU Usage</strong></p>
-                                                </div>
-                               
-                                   
-                                                <div className="metric-usage">
-                                                    <h5 className="card-title"><b></b></h5>
-                                                    <div class="contain">
-                    
-                    
-                                                                    <div class="ui-widgets">
-                                                                        <div class="ui-values" style={{marginTop:"20px"}}>{this.state.memoryUsage && <p>{this.state.memoryUsage}</p>}</div>
-                                                                        
-                                                                    </div>
-                                                    </div>
-                                                    <p className="card-text"><strong>Memory Usage
-                                                    </strong></p>
-                                                </div>
-                                           
-                               
-                                   
-                                                <div className="metric-usage">
-                                                    <h5 className="card-title"><b></b></h5>
-                                                    <div class="contain">
-                    
-                    
-                                                                    <div class="ui-widgets">
-                                                                        <div class="ui-values" style={{marginTop:"20px"}}>{this.state.GpuUsage && <p>{this.state.GpuUsage}</p>}</div>
-                                                                        
-                                                                    </div>
-                                                    </div>
-                                                    <p className="card-text"><strong>
-                                                        Total GPU Usage
-                                                    </strong></p>
-                                                </div>
-                                            
-                               
+
+
+                            <div className="metric-usage">
+
+
+
+
+                                <div class="contain">
+
+
+                                    <div class="ui-widgets">
+                                        <div class="ui-values" style={{ marginTop: "20px" }}>{this.state.cpuUsage && <p>{this.state.cpuUsage}</p>}</div>
+
+                                    </div>
+                                </div>
+
+                                <p ><strong>Total CPU Usage</strong></p>
+                            </div>
+
+
+                            <div className="metric-usage">
+                                <h5 className="card-title"><b></b></h5>
+                                <div class="contain">
+
+
+                                    <div class="ui-widgets">
+                                        <div class="ui-values" style={{ marginTop: "20px" }}>{this.state.memoryUsage && <p>{this.state.memoryUsage}</p>}</div>
+
+                                    </div>
+                                </div>
+                                <p className="card-text"><strong>Memory Usage
+                                </strong></p>
+                            </div>
+
+
+
+                            <div className="metric-usage">
+                                <h5 className="card-title"><b></b></h5>
+                                <div class="contain">
+
+
+                                    <div class="ui-widgets">
+                                        <div class="ui-values" style={{ marginTop: "20px" }}>{this.state.GpuUsage && <p>{this.state.GpuUsage}</p>}</div>
+
+                                    </div>
+                                </div>
+                                <p className="card-text"><strong>
+                                    Total GPU Usage
+                                </strong></p>
+                            </div>
+
+
+                        </div>
                     </div>
+
+
+
                 </div>
-               
-                   
-                   
-                </div>
-              
-              
+
+
 
             </div>
-            
+
         );
     }
 }

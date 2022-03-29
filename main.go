@@ -102,7 +102,7 @@ func openapp(appnames string) (val string) {
 }
 
 func basiconfo(appinfodata string) (val string) {
-	basic()
+	//basic()
 	//var clients1 string
 	sec := map[string]string{}
 	if err := json.Unmarshal([]byte(appinfodata), &sec); err != nil {
