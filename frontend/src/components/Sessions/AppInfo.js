@@ -85,7 +85,11 @@ class AppData extends React.Component {
 
     handleStopScan() {
         console.log("scanning stopped")
-        window.backend.stopscan("com.android.chrome", "true").then((result) => this.setState({ result: result }));
+        window.backend.stopscan("com.android.chrome", "fales").then((result) => {
+            this.setState({ result: result })
+            alert(result)
+        });
+
         this.setState({ loader: false })
 
     }

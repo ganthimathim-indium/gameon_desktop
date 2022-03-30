@@ -25,6 +25,8 @@ var js string
 var css string
 var devicename string
 var deviceserial string
+var human2 []results
+
 var leadingInt = regexp.MustCompile(`^[-+]?\d+`)
 var ticker time.Ticker
 var timedata string
@@ -205,82 +207,68 @@ type results struct {
 	cpu_deviation    string `json:"cpu_deviation"`
 }
 
-func startscan(appnamee_test string, valdata string) (val string) {
-	boolValue, err := strconv.ParseBool(valdata)
-	if err != nil {
-		log.Fatal(err)
+func heartBeat(appnamee_test string) {
+	for range time.Tick(time.Second * 20) {
+
+		result := results{cpu_app_usage: cpumetric(appnamee_test),
+			avg_gpu_usage:    "ttt",
+			memory_deviation: "Mainactivity",
+			power_deviation:  "Mainactivity",
+			gpu_deviation:    "Mainactivity",
+			avg_memory_usage: "ttt", avg_power_usage: "ttt", cpu_deviation: "Mainactivity"}
+
+		human2 = append(human2, result)
+		fmt.Println(human2) // {"Name":"Bob","Age":10,"Active":true}
+
 	}
-	ticker := time.NewTicker(15 * time.Second)
+}
+
+func startscan(appnamee_test string, valdata string) (val string) {
+	go heartBeat(appnamee_test)
+	time.Sleep(time.Second * 20)
 
 	//fmt.Printf("%s: %t\n", v, boolValue)
-	if boolValue == true {
-		//quit := make(chan struct{})
-		for {
-			select {
-			case <-ticker.C:
-				currentTime := time.Now()
-				t1 := time.Date(1984, time.November, 3, 13, 0, 0, 0, time.UTC)
-				t2 := time.Date(1984, time.November, 3, 10, 23, 34, 0, time.UTC)
 
-				hs := t1.Sub(t2).Hours()
-
-				hs, mf := math.Modf(hs)
-				ms := mf * 60
-
-				ms, sf := math.Modf(ms)
-				ss := sf * 60
-
-				fmt.Println(hs, "hours", ms, "minutes", ss, "seconds")
-				s := strconv.FormatFloat(hs, 'E', -1, 64)
-				s1 := strconv.FormatFloat(ms, 'E', -1, 64)
-				s2 := strconv.FormatFloat(ss, 'E', -1, 64)
-
-				timedata = s + "hours" + s1 + "minutes" + s2 + "seconds"
-
-				human2 := []results{results{cpu_app_usage: cpumetric(appnamee_test),
-					avg_gpu_usage:    gpumetric(appnamee_test),
-					memory_deviation: "Mainactivity",
-					power_deviation:  "Mainactivity",
-					gpu_deviation:    "Mainactivity",
-					avg_memory_usage: memmetric(appnamee_test), avg_power_usage: memmetric(appnamee_test), cpu_deviation: "Mainactivity"}}
-
-				human3 := Responseinfo{start_time: currentTime.Format("3:4:5 pm"), app_name: appnamee_test, device_name: devicename, version_name: L.Androidversionapp(), total_duration: timedata, device_id: deviceserial, android_version: L.Appversion(), Data: human2}
-				fmt.Println(human3) // {"Name":"Bob","Age":10,"Active":true}
-
-				// u, err := json.Marshal(human3)
-				// if err != nil {
-				// 	panic(err)
-				// }
-				//fmt.Println(string(u)) // {"Name":"Bob","Age":10,"Active":true}
-				//fmt.Println()
-
-				// do stuff
-				// case <- quit:
-				// 	ticker.Stop()
-				//return string(human3.android_version)
-				// }
-
-			}
-		}
-
-	}
-
-	return "Yes"
+	return "yes"
 
 }
 
 func stopscan(appnamee_test string, valdata string) (val string) {
-	quit := make(chan struct{})
+	currentTime := time.Now()
+	t1 := time.Date(1984, time.November, 3, 13, 0, 0, 0, time.UTC)
 
 	//do stuff
-	for {
-		select {
-		case <-quit:
-			ticker.Stop()
-			//return string(human3.android_version)
-			return ""
-		}
+
+	ticker.Stop()
+	t2 := time.Date(1984, time.November, 3, 10, 23, 34, 0, time.UTC)
+
+	hs := t1.Sub(t2).Hours()
+
+	hs, mf := math.Modf(hs)
+	ms := mf * 60
+
+	ms, sf := math.Modf(ms)
+	ss := sf * 60
+
+	fmt.Println(hs, "hours", ms, "minutes", ss, "seconds")
+	s := strconv.FormatFloat(hs, 'E', -1, 64)
+	s1 := strconv.FormatFloat(ms, 'E', -1, 64)
+	s2 := strconv.FormatFloat(ss, 'E', -1, 64)
+
+	timedata = s + "hours" + s1 + "minutes" + s2 + "seconds"
+
+	human3 := Responseinfo{start_time: currentTime.Format("3:4:5 pm"), app_name: appnamee_test, device_name: devicename, version_name: L.Androidversionapp(), total_duration: timedata, device_id: deviceserial, android_version: L.Appversion(), Data: human2}
+	fmt.Println(human3) // {"Name":"Bob","Age":10,"Active":true}
+
+	//return string(human3.android_version)
+
+	out, err := json.Marshal(human3)
+	if err != nil {
+		panic(err)
 	}
+
+	return string(out)
+
 }
 
 func cpumetric(appnamess string) (val string) {
