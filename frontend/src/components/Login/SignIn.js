@@ -218,7 +218,7 @@ class SignIn extends Component {
                                 className="bi bi-envelope "
                                 
                                 style={{ fontSize: "26px", color: "black",
-                              position: "relative",marginLeft: "260px" }}
+                              position: "relative",marginLeft: "75%" }}
                               ></i>
                             </div>
                             {(this.state.validEmail || this.state.isEmptyEmail) && (
@@ -252,9 +252,9 @@ class SignIn extends Component {
                                     border: "none",
                                     cursor: "pointer",
                                     postion:"relative",
-                                      marginTop:"-25px",
+                                      marginTop:"-2%",
                                     bottom:1500,
-                                    marginLeft:"265px",
+                                    marginLeft:"75%",
                                     display: "inline"
                                   }}
                                   onClick={this.pwdhandleClick}

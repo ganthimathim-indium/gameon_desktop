@@ -68,7 +68,7 @@ class Home extends Component {
                 <LoginHeader />
                 <h3>Device Information</h3>
 
-        <p className="list">No of applications:{this.state.applist.length+1}</p>
+        <p className="list">No of applications:{this.state.applist.length}</p>
 
      <div className="big-container">
         
