@@ -46,27 +46,26 @@ type Baseinfo struct {
 	App_name        string `json:"app_name"`
 }
 type Responseinfo struct {
-	start_time      string `json:"start_time"`
-	app_name        string `json:"app_name"`
-	device_name     string `json:"device_name"`
-	version_name    string `json:"version_name"`
-	total_duration  string `json:"total_duration"`
-	device_id       string `json:"device_id"`
-	android_version string `json:"android_version"`
-
-	//Data []results `json:"results"`
+	Start_time      string `json:"start_time"`
+	App_name        string `json:"app_name"`
+	Device_name     string `json:"device_name"`
+	Version_name    string `json:"version_name"`
+	Total_duration  string `json:"total_duration"`
+	Device_id       string `json:"device_id"`
+	Android_version string `json:"android_version"`
+	Dataval         string `json:"results"`
 }
 
 type results struct {
-	cpu_app_usage    string `json:"cpu_app_usage"`
-	avg_gpu_usage    string `json:"avg_gpu_usage"`
-	memory_deviation string `json:"memory_deviation"`
-	power_deviation  string `json:"power_deviation"`
-	time             string `json:"time"`
-	gpu_deviation    string `json:"gpu_deviation"`
-	avg_memory_usage string `json:"avg_memory_usage"`
-	avg_power_usage  string `json:"avg_power_usage"`
-	cpu_deviation    string `json:"cpu_deviation"`
+	Cpu_app_usage string `json:"cpu_app_usage"`
+	// avg_gpu_usage    string `json:"avg_gpu_usage"`
+	// memory_deviation string `json:"memory_deviation"`
+	// power_deviation  string `json:"power_deviation"`
+	Time string `json:"time"`
+	// gpu_deviation    string `json:"gpu_deviation"`
+	// avg_memory_usage string `json:"avg_memory_usage"`
+	// avg_power_usage  string `json:"avg_power_usage"`
+	Cpu_deviation string `json:"cpu_deviation"`
 }
 
 //3 basic info
@@ -206,26 +205,16 @@ func basiconfo(appinfodata string) (val string) {
 // }
 //return  startscan(appnamee_test, valdata)
 
-func heartBeat(appnamee_test string) {
-	ticker := time.NewTicker(20 * time.Second)
+// func heartBeat(appnamee_test string) {
+// 	ticker := time.NewTicker(20 * time.Second)
 
-	for range ticker.C {
+// 	for range ticker.C {
 
-		result := results{cpu_app_usage: cpumetric(appnamee_test),
-			avg_gpu_usage:    "ttt",
-			memory_deviation: "Mainactivity",
-			power_deviation:  "Mainactivity",
-			gpu_deviation:    "Mainactivity",
-			avg_memory_usage: "ttt", avg_power_usage: "ttt", cpu_deviation: "Mainactivity"}
-
-		human2 = append(human2, result)
-		fmt.Println(human2) // {"Name":"Bob","Age":10,"Active":true}
-
-	}
-}
+// 	}
+// }
 
 func startscan(appnamee_test string, valdata string) (val string) {
-	go heartBeat(appnamee_test)
+	//go heartBeat(appnamee_test)
 	time.Sleep(time.Second * 20)
 
 	//fmt.Printf("%s: %t\n", v, boolValue)
@@ -235,15 +224,15 @@ func startscan(appnamee_test string, valdata string) (val string) {
 }
 
 func stopscan(appinfodata string, valdata string) (val string) {
-	// sec := map[string]string{}
-	// if err := json.Unmarshal([]byte(appinfodata), &sec); err != nil {
-	// 	panic(err)
-	// }
+	sec := map[string]string{}
+	if err := json.Unmarshal([]byte(appinfodata), &sec); err != nil {
+		panic(err)
+	}
 	fmt.Println(appinfodata)
 
 	//value := sec["id"]
-	appname := appinfodata
-	//token := "gggg"
+	appname := sec["appname"]
+	//token := sec["token"]
 
 	currentTime := time.Now()
 	t1 := time.Date(1984, time.November, 3, 13, 0, 0, 0, time.UTC)
@@ -268,36 +257,49 @@ func stopscan(appinfodata string, valdata string) (val string) {
 
 	timedata = s + "hours" + s1 + "minutes" + s2 + "seconds"
 
-	human3 := Responseinfo{
-		start_time:      currentTime.Format("3:4:5 pm"),
-		app_name:        appname,
-		device_name:     devicename,
-		version_name:    L.Androidversionapp(),
-		total_duration:  timedata,
-		device_id:       deviceserial,
-		android_version: L.Appversion()}
+	//	human3 := &
 	//	human3 := Responseinfo{start_time: "ff", app_name: "ff", device_name: "ff", version_name: "ff", total_duration: "fff", device_id: "ff", android_version: "ff"}
 
-	fmt.Println(human3) // {"Name":"Bob","Age":10,"Active":true}
-	out5, err := json.Marshal(human3)
+	//fmt.Println(human3) // {"Name":"Bob","Age":10,"Active":true}
+	// resultt := results{Cpu_app_usage: "data", Time: currentTime.Format("3:4:5 pm"),
+	// 	Cpu_deviation: "Mainactivity"}
+	// human2 = append(human2, resultt)
+	fmt.Println(human2)
+	out7, err := json.Marshal(human2)
+	if err != nil {
+		panic(err)
+
+	}
+	fmt.Println("myvvv" + string(out7))
+
+	out5, err := json.Marshal(Responseinfo{
+		Start_time:      currentTime.Format("3:4:5 pm"),
+		App_name:        appname,
+		Device_name:     devicename,
+		Version_name:    L.Androidversionapp(),
+		Total_duration:  timedata,
+		Device_id:       deviceserial,
+		Android_version: L.Appversion(),
+		Dataval:         string(out7)})
+
 	if err != nil {
 		panic(err)
 
 	}
 
 	//	modifiedBytes, _ := json.Marshal(human3)
-	fmt.Println(string(out5))
+	fmt.Println("mtval" + string(out5))
 
 	// Unmarshal or Decode the JSON to the interface.
 
-	sec5 := map[string]string{}
-	if err := json.Unmarshal([]byte(string(out5)), &sec5); err != nil {
-		panic(err)
-	}
-	fmt.Println(sec5)
-	//apidata.Apihitinfo(sec1, token)
-
-	return ""
+	// sec5 := map[string]string{}
+	// if err := json.Unmarshal([]byte(string(out5)), &sec5); err != nil {
+	// 	panic(err)
+	// }
+	// fmt.Println(sec5)
+	//apidata.Apihitinfo(sec5, token)
+	human2 = nil
+	return string(out5)
 
 }
 
@@ -337,8 +339,24 @@ func cpumetric(appnamess string) (val string) {
 	res2 := L.AndroidCPUUsage(appnamess)
 	fmt.Println("tttt" + res2)
 	var valsss string
+	result := results{Cpu_app_usage: L.AndroidCPUUsage(appnamess), Time: "3",
+		Cpu_deviation: "Mainactivity"}
+
+	human2 = append(human2, result)
+	fmt.Println(human2) // {"Name":"Bob","Age":10,"Active":true}
 
 	valsss = "Total CPU Useage : " + res2 + " %"
+
+	return valsss
+
+}
+
+func powermetric(appnamess string) (val string) {
+	res2 := L.Battery(appnamess)
+	fmt.Println("tttt" + res2)
+	var valsss string
+
+	valsss = "Total Battery Useage : " + res2 + " %"
 
 	return valsss
 
@@ -470,6 +488,7 @@ func main() {
 	app.Bind(Uploaddata)
 	app.Bind(AndroidDownloadedData1)
 	app.Bind(AndroidCPUCores1)
+	app.Bind(powermetric)
 
 	app.Run()
 

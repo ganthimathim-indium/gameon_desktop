@@ -191,6 +191,18 @@ func AndroidCPUCores(names string) (val string) {
 
 }
 
+func Battery(names string) (val string) {
+	s := string(run("shell", "dumpsys battery "))
+	i := strings.Index(s, "Charge counter: ")
+	if i == -1 {
+		return ""
+	}
+	s = s[i:]
+	s = strings.Replace(s, "Charge counter: ", "", 1)
+	return strings.Split(s, "\n")[0]
+
+}
+
 func AndroidCPUUsage(names string) (val string) {
 
 	// "grep" for linux and "findstr" for windows
