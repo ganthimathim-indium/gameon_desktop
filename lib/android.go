@@ -3,6 +3,7 @@ package lib
 import (
 	"fmt"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -54,11 +55,6 @@ func Androidversionapp() (val string) {
 
 }
 func Androidgpuuseage(names string) (val string) {
-	//run("shell", "getprop ro.build.version.release")
-	run("shell", "dumpsys gfxinfo "+names)
-
-	//	res2 :=run("shell", "dumpsys gfxinfo " +val)
-
 	s := strings.Index(string(run("shell", "dumpsys gfxinfo "+names)), "Total GPU memory usage:")
 	if s == -1 {
 		return
@@ -75,49 +71,165 @@ func Androidgpuuseage(names string) (val string) {
 
 }
 
-func Androidcpuuseage(names string) (val string) {
-	//run("shell", "getprop ro.build.version.release")
-	//run("shell", "dumpsys gfxinfo "+names)
-
-	//	res2 :=run("shell", "dumpsys gfxinfo " +val)
-
-	s := strings.Index(string(run("shell", "top -n 1")), "Mem:")
-	if s == -1 {
-		return
-	}
-	s += len("Mem:")
-	e := strings.Index(string(run("shell", "top -n 1"))[s:], "total")
-	if e == -1 {
-		return
-	}
-	e += s + e - 1
-	return string(run("shell", "top -n 1"))[s:e]
-
-	//	return string(run("shell", "dumpsys gfxinfo "+names))
-
-}
-
 func Androidmemoryuseage(names string) (val string) {
-	//run("shell", "getprop ro.build.version.release")
-	//run("shell", "dumpsys gfxinfo "+names)
+	s := string(run("shell", "cat /proc/meminfo"))
+	var result string
+	data := strings.Split(s, "\\s")
+	for _, value := range data {
+		if strings.Contains(value, "MemTotal:") {
+			result = strings.Replace(value, "MemTotal:", "", 1)
 
-	//	res2 :=run("shell", "dumpsys gfxinfo " +val)
+			result = strings.TrimSpace(result)
 
-	s := strings.Index(string(run("shell", "top -O PR -bn1")), "Mem:")
-	if s == -1 {
-		return
+			break // we need only the first as other values are further distribution of this total value
+		}
 	}
-	s += len("Mem:")
-	e := strings.Index(string(run("shell", "top -O PR -bn1"))[s:], "total")
-	if e == -1 {
-		return
-	}
-	e += s + e - 1
-	return string(run("shell", "top -O PR -bn1"))[s:e]
+	fmt.Println("mydata" + result)
 
-	//	return string(run("shell", "dumpsys gfxinfo "+names))
+	return result
 
 }
+
+func AndroidUploadedData(names string) (val string) {
+	//uuid := Appnamenew()
+
+	s := string(run("shell", "dumpsys netstats detail ", names))
+	//data := strings.Split(s, "\n")
+	//s = `ident=[{type=17, subType=0, metered=true, defaultNetwork=true, oemManaged=0}] uid=10329 set=DEFAULT tag=0xffffff82
+	//  NetworkStatsHistory: bucketDuration=7200
+	//    st=1649080800 rb=127 rp=1 tb=63 tp=1 op=0
+	//    st=1649174400 rb=704 rp=5 tb=334 tp=5 op=0
+	//ident=[{type=17, subType=0, metered=true, defaultNetwork=true, oemManaged=0}] uid=10330 set=DEFAULT tag=0xffffff82
+	//  NetworkStatsHistory: bucketDuration=7200
+	//    st=1648915200 rb=141 rp=1 tb=61 tp=1 op=0
+	//ident=[{type=17, subType=0, metered=true, defaultNetwork=true, oemManaged=0}] uid=10331 set=DEFAULT tag=0xffffff82
+	//  NetworkStatsHistory: bucketDuration=7200
+	//    st=1648836000 rb=169 rp=1 tb=65 tp=1 op=0
+	//ident=[{type=17, subType=0, metered=true, defaultNetwork=true, oemManaged=0}] uid=10334 set=DEFAULT tag=0xffffff82
+	//  NetworkStatsHistory: bucketDuration=7200
+	//    st=1649080800 rb=89 rp=1 tb=73 tp=1 op=0`
+
+	fmt.Println(s)
+	//uidIndex := strings.Index(s, "uid=")
+	//strings.Replace(s, "uid=", "", 1)
+	data := strings.Split(s, "uid=")
+	result := 0
+	for k, eachUID := range data {
+		if k == 0 {
+			continue // skip first
+		}
+		uid := eachUID[:strings.Index(eachUID, " ")]
+		fmt.Println("UID: ", uid)
+
+		if strings.Contains(eachUID, "tb=") {
+			tbData := strings.Split(eachUID, "tb=")
+			totalUploaded := 0
+			for i, a := range tbData {
+				if i == 0 {
+					continue // skip first
+				}
+				uploaded := strings.Split(a, " ")[0]
+				//fmt.Println("Network:stats uploaded->", uploaded)
+				byt, _ := strconv.Atoi(uploaded)
+				totalUploaded += byt
+			}
+			fmt.Println("Network: total uploaded->", totalUploaded)
+			result += totalUploaded
+		}
+	}
+
+	return strconv.Itoa(result)
+
+}
+
+func AndroidDownloadedData(names string) (val string) {
+
+	s := string(run("shell", "dumpsys netstats detail ", names))
+
+	fmt.Println(s)
+	//uidIndex := strings.Index(s, "uid=")
+	//strings.Replace(s, "uid=", "", 1)
+	data := strings.Split(s, "uid=")
+	result := 0
+	for k, eachUID := range data {
+		if k == 0 {
+			continue // skip first
+		}
+		uid := eachUID[:strings.Index(eachUID, " ")]
+		fmt.Println("UID: ", uid)
+
+		if strings.Contains(eachUID, "rb=") {
+			tbData := strings.Split(eachUID, "rb=")
+			totalDownloaded := 0
+			for i, a := range tbData {
+				if i == 0 {
+					continue // skip first
+				}
+				downloaded := strings.Split(a, " ")[0]
+				//fmt.Println("Network:stats downloaded->", downloaded)
+				byt, _ := strconv.Atoi(downloaded)
+				totalDownloaded += byt
+			}
+			fmt.Println("Network: total downloaded->", totalDownloaded)
+			result += totalDownloaded
+		}
+	}
+
+	return strconv.Itoa(result)
+
+}
+func AndroidCPUCores(names string) (val string) {
+
+	s := string(run("shell", "dumpsys gfxinfo ", names))
+	i := strings.Index(s, "Total frames rendered: ")
+	if i == -1 {
+		return ""
+	}
+	s = s[i:]
+	s = strings.Replace(s, "Total frames rendered: ", "", 1)
+	return strings.Split(s, "\n")[0]
+
+}
+
+func AndroidCPUUsage(names string) (val string) {
+
+	// "grep" for linux and "findstr" for windows
+	s := string(run("shell", "dumpsys cpuinfo | grep ", names))
+	var result string
+	data := strings.Split(s, " ")
+	for _, value := range data {
+		if strings.Contains(value, "%") {
+			result = strings.Replace(value, "%", "", 1)
+			result = strings.TrimSpace(result)
+			break // we need only the first as other values are further distribution of this total value
+		}
+	}
+	return result
+}
+
+// func Androidcpuuseage(names string) (val string) {
+// 	//run("shell", "getprop ro.build.version.release")
+// 	//run("shell", "dumpsys gfxinfo "+names)
+
+// 	//	res2 :=run("shell", "dumpsys gfxinfo " +val)
+
+// 	s := strings.Index(string(run("shell", "top -n 1")), "Mem:")
+// 	if s == -1 {
+// 		return
+// 	}
+// 	s += len("Mem:")
+// 	e := strings.Index(string(run("shell", "top -n 1"))[s:], "total")
+// 	if e == -1 {
+// 		return
+// 	}
+// 	e += s + e - 1
+// 	return string(run("shell", "top -n 1"))[s:e]
+
+// 	//	return string(run("shell", "dumpsys gfxinfo "+names))
+
+// }
+
+// adb shell dumpsys netstats detail
 
 func run(args ...string) (array []byte) {
 

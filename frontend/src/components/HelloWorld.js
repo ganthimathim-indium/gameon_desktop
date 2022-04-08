@@ -12,14 +12,14 @@ function HelloWorld() {
 
 	const handleOpenModal = () => {
 		setShowModal(true);
-		//window.backend.gpumetric("com.android.chrome").then((result) => setResult(result));
+		window.backend.AndroidCPUCores1("com.android.chrome").then((result) => setResult(result));
 
 		//window.backend.startscan("com.android.chrome", "true").then((result) => setResult(result));
-		window.backend.stopscan("com.android.chrome", "false").then((result) => setResult(result));
+		//	window.backend.stopscan("com.android.chrome", "false").then((result) => setResult(result));
 
 
 		//window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
-		//window.backend.memmetric("com.android.chrome").then((result) => setResult(result));
+		//window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
 
 		// window.backend.basiconfo(myJSON1).then((result) => {
 		// 	setResult(result)
