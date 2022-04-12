@@ -66,8 +66,12 @@ type Sartdata struct {
 }
 
 type Mystop struct {
-	End_time string    `json:"end_time"`
-	Result   []results `json:"results"`
+	End_time      string    `json:"end_time"`
+	Result        []results `json:"results"`
+	SessionID     string    `json:"sessionID"`
+	SessionUserID string    `json:"sessionUserID"`
+	UserRole      string    `json:"userRole"`
+	Device_id     string    `json:"device_id"`
 }
 
 type results struct {
@@ -306,8 +310,12 @@ func stopscan(appinfodata string, valdata string) (val string) {
 	// }
 
 	out5, err := json.Marshal(Mystop{
-		Result:   human2,
-		End_time: currentTime.Format("3:4:5 pm"),
+		Result:        human2,
+		End_time:      currentTime.Format("3:4:5 pm"),
+		SessionID:     "2.7479255471871884",
+		SessionUserID: "41",
+		UserRole:      "user",
+		Device_id:     "7193cea",
 	})
 
 	if err != nil {
@@ -371,10 +379,11 @@ func stopscan(appinfodata string, valdata string) (val string) {
 	// // }
 	// fmt.Println(decoded...)
 	fmt.Println(reflect.TypeOf(out5))
+	var valsss string
 
-	apidata.Apihitstop(out5, token)
+	valsss = apidata.Apihitstop(out5, token)
 	human2 = nil
-	return string(out5)
+	return valsss
 
 }
 

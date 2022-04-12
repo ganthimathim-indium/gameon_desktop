@@ -15,14 +15,22 @@ function HelloWorld() {
 		//window.backend.powermetric("com.android.chrome").then((result) => setResult(result));
 
 		//window.backend.startscan("com.android.chrome", "true").then((result) => setResult(result));
-		//window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
-		window.backend.memmetric("com.android.chrome").then((result) => setResult(result));
-
-
+		//	window.backend.memmetric("com.android.chrome").then((result) => setResult(result));
 		// setTimeout(function () { //Start the timer
-		// 	window.backend.stopscan(myJSON1, "false").then((result) => setResult(result));
+		// 	window.backend.startscan(myJSON1, "false").then((result) => setResult(result));
 
-		// }.bind(this), 4000)
+		// }.bind(this), 6000)
+
+		setTimeout(function () { //Start the timer
+			window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
+			setTimeout(function () { //Start the timer
+				window.backend.stopscan(myJSON1, "false").then((result) => setResult(result));
+
+			}.bind(this), 4000)
+
+
+		}.bind(this), 40000)
+
 
 		// window.backend.basiconfo(myJSON1).then((result) => {
 		// 	setResult(result)
