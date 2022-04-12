@@ -12,7 +12,7 @@ import Heloow from './components/HelloWorld'
 function App() {
   return (
     <div>
-      <Router >
+      {/* <Router >
         <Switch>
           <Route exact path="/" component={SignIn} />
           <Route exact path="/select-page" component={SelectPages} />
@@ -20,9 +20,9 @@ function App() {
           <Route exact path="/basic-info" component={BasicInfo} />
           <Route exact path="/app-info" component={AppInfo} />
         </Switch>
-      </Router>
+      </Router> */}
 
-      {/* <Heloow></Heloow> */}
+      <Heloow></Heloow>
     </div>
   )
 }

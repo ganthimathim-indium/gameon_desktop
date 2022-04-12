@@ -305,6 +305,8 @@ func stopscan(appinfodata string, valdata string) (val string) {
 	currentTime := time.Now()
 	//currentTime.Format("3:4:5 pm")
 	token := sec["token"]
+	session_id := sec["session_id"]
+
 	// out7, err := json.Marshal(human2)
 	// if err != nil {
 	// 	panic(err)
@@ -313,7 +315,7 @@ func stopscan(appinfodata string, valdata string) (val string) {
 	out5, err := json.Marshal(Mystop{
 		Result:        human2,
 		End_time:      currentTime.Format("3:4:5 pm"),
-		SessionID:     "2.7479255471871884",
+		SessionID:     session_id,
 		SessionUserID: "41",
 		UserRole:      "user",
 		Device_id:     "7193cea",
@@ -355,6 +357,7 @@ func stopscan(appinfodata string, valdata string) (val string) {
 	// 	Cpu_deviation: "Mainactivity"}
 	// human2 = append(human2, resultt)
 	fmt.Println(out5)
+	human2 = nil
 
 	// out7, err := json.Marshal(human2)
 	// if err != nil {
@@ -383,7 +386,6 @@ func stopscan(appinfodata string, valdata string) (val string) {
 	var valsss string
 
 	valsss = apidata.Apihitstop(out5, token)
-	human2 = nil
 	return valsss
 
 }
