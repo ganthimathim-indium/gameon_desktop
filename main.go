@@ -8,6 +8,7 @@ import (
 	"fmt"
 	apidata "gameongo/api"
 	L "gameongo/lib"
+	"math"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -399,9 +400,7 @@ func cpumetric(appnamess string) (val string) {
 
 	human2 = append(human2, result)
 	fmt.Println(human2) // {"Name":"Bob","Age":10,"Active":true}
-
 	valsss = "Total CPU Useage : " + res2 + " %"
-
 	return valsss
 
 }
@@ -417,29 +416,26 @@ func memmetric(appnamess string) (val string) {
 	fmt.Println("rrrr" + lastByByte)
 	valss = strings.TrimSuffix(lastByByte, "kB")
 	intVar, err := strconv.Atoi(strings.TrimSpace(valss))
-
 	if err != nil {
 		fmt.Println(err)
-
 	}
 
 	fmt.Println(intVar)
-	valsss = "Total Memory Useage : " + valss + " kB"
+	valsss = fmt.Sprintf("Total Memory Usage : %v MB", kBToMB(intVar))
 
 	return valsss
 
 }
 
-//3.gpu metric
-func gpumetric(appnamess string) (val string) {
+// 3. gpuMetric
+func gpuMetric(appnamess string) (val string) {
 	L.Androidgpuuseage(appnamess)
 	res2 := L.Androidgpuuseage(appnamess)
-	lastByByte := res2[len(res2)-4:]
-	var valsss string
+	res2 = strings.Split(res2, ",")[1]
+	res2 = strings.TrimSpace(res2)
 
-	valsss = "Total Gpu Useage : " + lastByByte + " MB"
-
-	return valsss
+	value := "Total Gpu Usage : " + res2 + " MB"
+	return value
 
 }
 
@@ -448,8 +444,9 @@ func Uploaddata(appnames string) (val string) {
 	res2 := L.AndroidUploadedData(appnames)
 	fmt.Println("tttt" + res2)
 	var valsss string
+	intVar, _ := strconv.Atoi(res2)
 
-	valsss = "Total Dataupload : " + res2 + " Byte"
+	valsss = fmt.Sprintf("Total DataUploaded : %v MB", bytesToMB(intVar))
 
 	return valsss
 
@@ -460,8 +457,9 @@ func AndroidDownloadedData1(appnames string) (val string) {
 	res2 := L.AndroidDownloadedData(appnames)
 	fmt.Println("tttt" + res2)
 	var valsss string
+	intVar, _ := strconv.Atoi(res2)
 
-	valsss = "Total Download data : " + res2 + " Byte"
+	valsss = fmt.Sprintf("Total Download data : %v MB", bytesToMB(intVar))
 
 	return valsss
 
@@ -472,7 +470,6 @@ func AndroidCPUCores1(appnamess string) (val string) {
 	res2 := L.AndroidCPUCores(appnamess)
 	fmt.Println("tttt" + res2)
 	var valsss string
-
 	valsss = "cpu Cores : " + res2
 
 	return valsss
@@ -484,21 +481,18 @@ func powermetric(appnamess string) (val string) {
 	res2 := L.Battery(appnamess)
 	fmt.Println("tttt" + res2)
 	var valsss string
-
 	valsss = "Total Battery Useage : " + res2 + " %"
-
 	return valsss
 
 }
 
 //8 App power metric
 func Apppowermetric(appnamess string) (val string) {
+	L.AndroidAppPowerUsage(appnamess)
 	res2 := L.AndroidAppPowerUsage(appnamess)
-	fmt.Println("tttt" + res2)
+	fmt.Println("App usage" + res2)
 	var valsss string
-
-	valsss = "Total App Useage : " + res2 + " %"
-
+	valsss = "Total App Useage : " + res2 + " mAh"
 	return valsss
 
 }
@@ -508,7 +502,6 @@ func cpuarch(appnamess string) (val string) {
 	L.Androidcpuarch(appnamess)
 	res := L.Androidcpuarch(appnamess)
 	var valsss string
-
 	valsss = "CPU architecture : " + res
 
 	return valsss
@@ -542,15 +535,14 @@ func deviceinfonew() (val string) {
 
 	// serverVersion, err := client.ServerVersion()
 	// if err != nil {
-	// 	log.Fatal(err)
+	//     log.Fatal(err)
 	// }
-
 	devices, err := client.ListDevices()
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, device := range devices {
-		//	fmt.Printf("\t%+v\n", *device)
+		// fmt.Printf("\t%+v\n", *device)
 		devicename = device.Model
 		deviceserial = device.Serial
 	}
@@ -561,9 +553,8 @@ func deviceinfonew() (val string) {
 
 func getlogin() string {
 	css = "./frontend/build/static/css/main.css"
-
 	js = "./frontend/build/static/js/main.js"
-	//	fmt.Println(deviceinfonew())
+	// fmt.Println(deviceinfonew())
 	var appnamelist []string
 	//fmt.Println(L.Appname())
 	scanner := bufio.NewScanner(strings.NewReader(L.Appname()))
@@ -573,7 +564,7 @@ func getlogin() string {
 		appnamelist = append(appnamelist, res2)
 	}
 
-	//	fmt.Println(appnamelist)
+	// fmt.Println(appnamelist)
 	out, err := json.Marshal(appnamelist)
 	if err != nil {
 		panic(err)
@@ -582,6 +573,25 @@ func getlogin() string {
 
 	return string(out)
 
+}
+
+func kBToMB(kB int) float64 {
+
+	return toFixed(float64(kB)/1024, 2)
+}
+
+func bytesToMB(bytes int) float64 {
+
+	return toFixed(float64(bytes)/(1024*1024), 2)
+}
+
+func round(num float64) int {
+	return int(num + math.Copysign(0.5, num))
+}
+
+func toFixed(num float64, precision int) float64 {
+	output := math.Pow(10, float64(precision))
+	return float64(round(num*output)) / output
 }
 
 func main() {
@@ -605,7 +615,7 @@ func main() {
 	app.Bind(openapp)
 	app.Bind(basiconfo)
 	app.Bind(cpumetric)
-	app.Bind(gpumetric)
+	app.Bind(gpuMetric)
 	app.Bind(memmetric)
 	app.Bind(startscan)
 	app.Bind(stopscan)

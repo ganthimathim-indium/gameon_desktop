@@ -91,27 +91,29 @@ func Androidmemoryuseage(names string) (val string) {
 }
 func AndroidAppPowerUsage(names string) (val string) {
 
-	s := string(run("shell", "ps | grep ", names))
+	s := string(run("shell", "ps | findstr ", names))
 
-	fmt.Println(s)
+	if len(s) == 0 {
+		return "0"
+	}
 	uid := strings.Split(s, " ")[0]
 	if uid == "" {
-		return ""
+		return "0"
 	}
+	uid = strings.Replace(uid, "_", "", -1)
 
 	s = string(run("shell", "dumpsys batterystats ", names))
 
-	fmt.Println(s)
-	uidIndex := strings.Index(s, fmt.Sprintf("UID %s: ", uid))
+	// uidIndex := strings.Index(s, fmt.Sprintf("UID %s: ", uid))
+	// s = s[uidIndex:]
+	// s = strings.Replace(s, fmt.Sprintf("UID %s: ", uid), "", 1)
+	// return strings.Split(s, " ")[0]
+
+	uidIndex := strings.Index(s, fmt.Sprintf("Computed drain: "))
 	s = s[uidIndex:]
-	s = strings.Replace(s, fmt.Sprintf("UID %s: ", uid), "", 1)
-
-	fmt.Println(strings.Split(s, " ")[0])
-
-	return strings.Split(s, " ")[0]
-
+	s = strings.Replace(s, fmt.Sprintf("Computed drain: "), "", 1)
+	return strings.Split(s, ", ")[0]
 }
-
 func Androidcpuarch(names string) (val string) {
 
 	return string(run("shell", "getprop ro.product.cpu.abi"))
