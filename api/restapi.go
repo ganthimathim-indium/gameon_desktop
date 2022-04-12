@@ -166,10 +166,7 @@ type Stopresponce struct {
 	Data   average_values `json:"average_values"`
 }
 type average_values struct {
-	Cpu_usage    string `json:"cpu_usage"`
-	Memory_usage string `json:"memory_usage"`
-	Power_usage  string `json:"power_usage"`
-	Gpu_usage    string `json:"gpu_usage"`
+	Cpu_usage string `json:"cpu_usage"`
 }
 
 func Apihitstart(val map[string]string, token string) string {
@@ -271,7 +268,7 @@ func Apihitstop(val []uint8, token string) string {
 	if err := json.Unmarshal(bodyBytes, &responseObject); err != nil {
 		panic(err)
 	}
-	//	fmt.Printf("%+v\n", responseObject.Status)
+	fmt.Printf("%+v\n", responseObject.Status)
 
 	//fmt.Println(responseObject.Status)
 	out, err := json.Marshal(responseObject)

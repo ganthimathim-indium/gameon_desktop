@@ -29,7 +29,7 @@ function HelloWorld() {
 					window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
 
 					setTimeout(function () { //Start the timer
-						window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
+						//window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
 						// setTimeout(function () { //Start the timer
 						window.backend.stopscan(myJSON1, "false").then((result) => setResult(result));
 
