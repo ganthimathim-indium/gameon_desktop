@@ -89,7 +89,34 @@ func Androidmemoryuseage(names string) (val string) {
 	return result
 
 }
+func AndroidAppPowerUsage(names string) (val string) {
 
+	s := string(run("shell", "ps | grep ", names))
+
+	fmt.Println(s)
+	uid := strings.Split(s, " ")[0]
+	if uid == "" {
+		return ""
+	}
+
+	s = string(run("shell", "dumpsys batterystats ", names))
+
+	fmt.Println(s)
+	uidIndex := strings.Index(s, fmt.Sprintf("UID %s: ", uid))
+	s = s[uidIndex:]
+	s = strings.Replace(s, fmt.Sprintf("UID %s: ", uid), "", 1)
+
+	fmt.Println(strings.Split(s, " ")[0])
+
+	return strings.Split(s, " ")[0]
+
+}
+
+func Androidcpuarch(names string) (val string) {
+
+	return string(run("shell", "getprop ro.product.cpu.abi"))
+
+}
 func AndroidUploadedData(names string) (val string) {
 	//uuid := Appnamenew()
 

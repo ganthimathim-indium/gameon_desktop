@@ -8,7 +8,7 @@ import (
 	"fmt"
 	apidata "gameongo/api"
 	L "gameongo/lib"
-	"math"
+	"reflect"
 	"regexp"
 	"strconv"
 	"time"
@@ -54,6 +54,20 @@ type Responseinfo struct {
 	Device_id       string `json:"device_id"`
 	Android_version string `json:"android_version"`
 	Dataval         string `json:"results"`
+}
+
+type Sartdata struct {
+	Start_time      string `json:"start_time"`
+	App_name        string `json:"app_name"`
+	Device_name     string `json:"device_name"`
+	Version_name    string `json:"version_name"`
+	Device_id       string `json:"device_id"`
+	Android_version string `json:"android_version"`
+}
+
+type Mystop struct {
+	End_time string    `json:"end_time"`
+	Result   []results `json:"results"`
 }
 
 type results struct {
@@ -125,6 +139,7 @@ func openapp(appnames string) (val string) {
 	return L.Appopen(appnames)
 }
 
+//basic information
 func basiconfo(appinfodata string) (val string) {
 	//basic()
 	//var clients1 string
@@ -212,58 +227,26 @@ func basiconfo(appinfodata string) (val string) {
 
 // 	}
 // }
-
+//start scan
 func startscan(appnamee_test string, valdata string) (val string) {
 	//go heartBeat(appnamee_test)
-	time.Sleep(time.Second * 20)
 
 	//fmt.Printf("%s: %t\n", v, boolValue)
 
-	return "yes"
-
-}
-
-func stopscan(appinfodata string, valdata string) (val string) {
 	sec := map[string]string{}
-	if err := json.Unmarshal([]byte(appinfodata), &sec); err != nil {
+	if err := json.Unmarshal([]byte(appnamee_test), &sec); err != nil {
 		panic(err)
 	}
-	fmt.Println(appinfodata)
+	fmt.Println(appnamee_test)
 
 	//value := sec["id"]
 	appname := sec["appname"]
-	//token := sec["token"]
+	token := sec["token"]
 
 	currentTime := time.Now()
-	t1 := time.Date(1984, time.November, 3, 13, 0, 0, 0, time.UTC)
 
 	//do stuff
 
-	ticker.Stop()
-	t2 := time.Date(1984, time.November, 3, 10, 23, 34, 0, time.UTC)
-
-	hs := t1.Sub(t2).Hours()
-
-	hs, mf := math.Modf(hs)
-	ms := mf * 60
-
-	ms, sf := math.Modf(ms)
-	ss := sf * 60
-
-	fmt.Println(hs, "hours", ms, "minutes", ss, "seconds")
-	s := strconv.FormatFloat(hs, 'E', -1, 64)
-	s1 := strconv.FormatFloat(ms, 'E', -1, 64)
-	s2 := strconv.FormatFloat(ss, 'E', -1, 64)
-
-	timedata = s + "hours" + s1 + "minutes" + s2 + "seconds"
-
-	//	human3 := &
-	//	human3 := Responseinfo{start_time: "ff", app_name: "ff", device_name: "ff", version_name: "ff", total_duration: "fff", device_id: "ff", android_version: "ff"}
-
-	//fmt.Println(human3) // {"Name":"Bob","Age":10,"Active":true}
-	// resultt := results{Cpu_app_usage: "data", Time: currentTime.Format("3:4:5 pm"),
-	// 	Cpu_deviation: "Mainactivity"}
-	// human2 = append(human2, resultt)
 	fmt.Println(human2)
 	out7, err := json.Marshal(human2)
 	if err != nil {
@@ -272,15 +255,14 @@ func stopscan(appinfodata string, valdata string) (val string) {
 	}
 	fmt.Println("myvvv" + string(out7))
 
-	out5, err := json.Marshal(Responseinfo{
+	out5, err := json.Marshal(Sartdata{
 		Start_time:      currentTime.Format("3:4:5 pm"),
 		App_name:        appname,
-		Device_name:     devicename,
 		Version_name:    L.Androidversionapp(),
-		Total_duration:  timedata,
-		Device_id:       deviceserial,
+		Device_name:     "Redmi_Y3",
+		Device_id:       "7193cea",
 		Android_version: L.Appversion(),
-		Dataval:         string(out7)})
+	})
 
 	if err != nil {
 		panic(err)
@@ -292,54 +274,118 @@ func stopscan(appinfodata string, valdata string) (val string) {
 
 	// Unmarshal or Decode the JSON to the interface.
 
-	// sec5 := map[string]string{}
-	// if err := json.Unmarshal([]byte(string(out5)), &sec5); err != nil {
+	sec5 := map[string]string{}
+	if err := json.Unmarshal([]byte(string(out5)), &sec5); err != nil {
+		panic(err)
+	}
+	fmt.Println(sec5)
+
+	//human2 = nil
+	return apidata.Apihitstart(sec5, token)
+
+	//return string(out5)
+
+}
+
+//STOP SCAN
+func stopscan(appinfodata string, valdata string) (val string) {
+	sec := map[string]string{}
+	if err := json.Unmarshal([]byte(appinfodata), &sec); err != nil {
+		panic(err)
+	}
+	fmt.Println(appinfodata)
+
+	//value := sec["id"]
+	//appname := sec["appname"]
+	currentTime := time.Now()
+	//currentTime.Format("3:4:5 pm")
+	token := sec["token"]
+	// out7, err := json.Marshal(human2)
+	// if err != nil {
 	// 	panic(err)
 	// }
-	// fmt.Println(sec5)
-	//apidata.Apihitinfo(sec5, token)
+
+	out5, err := json.Marshal(Mystop{
+		Result:   human2,
+		End_time: currentTime.Format("3:4:5 pm"),
+	})
+
+	if err != nil {
+		panic(err)
+
+	}
+
+	//currentTime := time.Now()
+	// t1 := time.Date(1984, time.November, 3, 13, 0, 0, 0, time.UTC)
+
+	// //do stuff
+
+	// ticker.Stop()
+	// t2 := time.Date(1984, time.November, 3, 10, 23, 34, 0, time.UTC)
+
+	// hs := t1.Sub(t2).Hours()
+
+	// hs, mf := math.Modf(hs)
+	// ms := mf * 60
+
+	// ms, sf := math.Modf(ms)
+	// ss := sf * 60
+
+	// fmt.Println(hs, "hours", ms, "minutes", ss, "seconds")
+	// s := strconv.FormatFloat(hs, 'E', -1, 64)
+	// s1 := strconv.FormatFloat(ms, 'E', -1, 64)
+	// s2 := strconv.FormatFloat(ss, 'E', -1, 64)
+
+	// timedata = s + "hours" + s1 + "minutes" + s2 + "seconds"
+
+	//	human3 := &
+	//	human3 := Responseinfo{start_time: "ff", app_name: "ff", device_name: "ff", version_name: "ff", total_duration: "fff", device_id: "ff", android_version: "ff"}
+
+	//fmt.Println(human3) // {"Name":"Bob","Age":10,"Active":true}
+	// resultt := results{Cpu_app_usage: "data", Time: currentTime.Format("3:4:5 pm"),
+	// 	Cpu_deviation: "Mainactivity"}
+	// human2 = append(human2, resultt)
+	fmt.Println(out5)
+
+	// out7, err := json.Marshal(human2)
+	// if err != nil {
+	// 	panic(err)
+
+	// }
+	fmt.Println("myvvv" + string(out5))
+
+	//	modifiedBytes, _ := json.Marshal(human3)
+
+	// Unmarshal or Decode the JSON to the interface.
+	// bodyBytes, err := ioutil.ReadAll()
+	// if err != nil {
+	// 	fmt.Print(err.Error())
+	// }
+
+	//	sec5 := map[string]string{}
+	// var decoded []interface{}
+	// err = json.Unmarshal([]byte(string(out5)), &decoded)
+
+	// // if err := json.Unmarshal([]byte(string(out5)), &sec5); err != nil {
+	// // 	panic(err)
+	// // }
+	// fmt.Println(decoded...)
+	fmt.Println(reflect.TypeOf(out5))
+
+	apidata.Apihitstop(out5, token)
 	human2 = nil
 	return string(out5)
 
 }
 
-func Uploaddata(appnames string) (val string) {
-	res2 := L.AndroidUploadedData(appnames)
-	fmt.Println("tttt" + res2)
-	var valsss string
-
-	valsss = "Total Dataupload : " + res2 + " Byte"
-
-	return valsss
-
-}
-
-func AndroidDownloadedData1(appnames string) (val string) {
-	res2 := L.AndroidDownloadedData(appnames)
-	fmt.Println("tttt" + res2)
-	var valsss string
-
-	valsss = "Total Download data : " + res2 + " Byte"
-
-	return valsss
-
-}
-func AndroidCPUCores1(appnamess string) (val string) {
-	res2 := L.AndroidCPUCores(appnamess)
-	fmt.Println("tttt" + res2)
-	var valsss string
-
-	valsss = "cpu Cores : " + res2
-
-	return valsss
-
-}
-
+//1.cpu metric
 func cpumetric(appnamess string) (val string) {
 	res2 := L.AndroidCPUUsage(appnamess)
 	fmt.Println("tttt" + res2)
 	var valsss string
-	result := results{Cpu_app_usage: L.AndroidCPUUsage(appnamess), Time: "3",
+	currentTime := time.Now()
+
+	result := results{Cpu_app_usage: L.AndroidCPUUsage(appnamess), Time: currentTime.Format("3:4:5 pm"),
 		Cpu_deviation: "Mainactivity"}
 
 	human2 = append(human2, result)
@@ -351,17 +397,31 @@ func cpumetric(appnamess string) (val string) {
 
 }
 
-func powermetric(appnamess string) (val string) {
-	res2 := L.Battery(appnamess)
-	fmt.Println("tttt" + res2)
-	var valsss string
+//2.menory metric
+func memmetric(appnamess string) (val string) {
+	res2 := L.Androidmemoryuseage(appnamess)
 
-	valsss = "Total Battery Useage : " + res2 + " %"
+	lastByByte := res2[0:10]
+
+	var valsss string
+	var valss string
+	fmt.Println("rrrr" + lastByByte)
+	valss = strings.TrimSuffix(lastByByte, "kB")
+	intVar, err := strconv.Atoi(strings.TrimSpace(valss))
+
+	if err != nil {
+		fmt.Println(err)
+
+	}
+
+	fmt.Println(intVar)
+	valsss = "Total Memory Useage : " + valss + " kB"
 
 	return valsss
 
 }
 
+//3.gpu metric
 func gpumetric(appnamess string) (val string) {
 	L.Androidgpuuseage(appnamess)
 	res2 := L.Androidgpuuseage(appnamess)
@@ -374,20 +434,75 @@ func gpumetric(appnamess string) (val string) {
 
 }
 
-func memmetric(appnamess string) (val string) {
-	res2 := L.Androidmemoryuseage(appnamess)
-
-	lastByByte := res2[0:10]
-
+//4.upload data
+func Uploaddata(appnames string) (val string) {
+	res2 := L.AndroidUploadedData(appnames)
+	fmt.Println("tttt" + res2)
 	var valsss string
-	var valss string
-	fmt.Println("rrrr" + lastByByte)
-	valss = strings.TrimSuffix(lastByByte, "kB")
 
-	valsss = "Total Memory Useage : " + valss + " kB"
+	valsss = "Total Dataupload : " + res2 + " Byte"
 
 	return valsss
 
+}
+
+//5.download data
+func AndroidDownloadedData1(appnames string) (val string) {
+	res2 := L.AndroidDownloadedData(appnames)
+	fmt.Println("tttt" + res2)
+	var valsss string
+
+	valsss = "Total Download data : " + res2 + " Byte"
+
+	return valsss
+
+}
+
+//6.cpu cores
+func AndroidCPUCores1(appnamess string) (val string) {
+	res2 := L.AndroidCPUCores(appnamess)
+	fmt.Println("tttt" + res2)
+	var valsss string
+
+	valsss = "cpu Cores : " + res2
+
+	return valsss
+
+}
+
+//7.power useage
+func powermetric(appnamess string) (val string) {
+	res2 := L.Battery(appnamess)
+	fmt.Println("tttt" + res2)
+	var valsss string
+
+	valsss = "Total Battery Useage : " + res2 + " %"
+
+	return valsss
+
+}
+
+//8 App power metric
+func Apppowermetric(appnamess string) (val string) {
+	res2 := L.AndroidAppPowerUsage(appnamess)
+	fmt.Println("tttt" + res2)
+	var valsss string
+
+	valsss = "Total App Useage : " + res2 + " %"
+
+	return valsss
+
+}
+
+//9.CPU architecture
+func cpuarch(appnamess string) (val string) {
+	L.Androidcpuarch(appnamess)
+	res := L.Androidcpuarch(appnamess)
+	var valsss string
+
+	valsss = "CPU architecture : " + res
+
+	return valsss
 }
 
 func ParseLeadingInt(s string) (int64, error) {
@@ -489,16 +604,9 @@ func main() {
 	app.Bind(AndroidDownloadedData1)
 	app.Bind(AndroidCPUCores1)
 	app.Bind(powermetric)
+	app.Bind(Apppowermetric)
+	app.Bind(cpuarch)
 
 	app.Run()
-
-	//fmt.Println(values1)
-
-	// fmt.Print(string(stdout1))
-	//run("shell", "cmd package list package")
-	//run("shell", "monkey -p com.google.android.play.games -c android.intent.category.LAUNCHER 1")
-	//run("shell", "monkey -p com.google.android.play.games -c android.intent.category.LAUNCHER 1")
-	//run("shell", "am force-stop com.google.android.play.games")
-	//run("shell", "dumpsys gfxinfo com.google.android.play.games")
 
 }

@@ -154,3 +154,136 @@ func Apihitinfo(val map[string]string, token string) string {
 	// }
 
 }
+
+type Startresponce struct {
+	Message string `json:"message"`
+	Status  string `json:"status"`
+	Data    data   `json:"data"`
+}
+
+type Stopresponce struct {
+	Message string `json:"message"`
+	Status  string `json:"status"`
+	Data    string `json:"data"`
+}
+
+func Apihitstart(val map[string]string, token string) string {
+	//(response Response)
+	fmt.Println("Calling API...")
+	client := &http.Client{}
+	//values := map[string]string{"username": "vv", "password": "v"}
+
+	jsonValue, _ := json.Marshal(val)
+
+	req, err := http.NewRequest("POST", apiconfig.API("report/basic_info"), bytes.NewBuffer(jsonValue))
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("token", "Bearer "+token)
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+	defer resp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+
+	fmt.Println(resp.StatusCode)
+	//	var ddd string
+	//	json.Unmarshal(bodyBytes, &ddd)
+	// if err := json.Unmarshal(bodyBytes, &ddd); err != nil {
+	// 	panic(err)
+	// }
+	// fmt.Printf("%+v\n", ddd) // fmt.Printf("%+v\n", responseObject.Status)
+
+	var responseObject Startresponce
+
+	if err := json.Unmarshal(bodyBytes, &responseObject); err != nil {
+		panic(err)
+	}
+	fmt.Printf("%+v\n", responseObject.Status)
+
+	fmt.Println(responseObject.Status)
+	out, err := json.Marshal(responseObject)
+	if err != nil {
+		panic(err)
+
+	}
+
+	return string(out)
+
+	// //return responseObject
+	// if err := json.Unmarshal(bodyBytes, &responseObject); err != nil {
+	// 	panic(err)
+
+	// } else {
+	// 	fmt.Printf("API Response as struct %+v\n", string(bodyBytes))
+
+	// }
+
+}
+func Apihitstop(val []uint8, token string) string {
+	//(response Response)
+	fmt.Println("Calling API...")
+
+	client := &http.Client{}
+	//values := map[string]string{"username": "vv", "password": "v"}
+
+	//	jsonValue, _ := json.Marshal(val)
+	fmt.Println(string(val))
+
+	req, err := http.NewRequest("POST", apiconfig.API("report/cpu_detail"), bytes.NewBuffer(val))
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("token", "Bearer "+token)
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+	defer resp.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+
+	fmt.Println(resp.StatusCode)
+	//	var ddd string
+	//	json.Unmarshal(bodyBytes, &ddd)
+	// if err := json.Unmarshal(bodyBytes, &ddd); err != nil {
+	// 	panic(err)
+	// }
+	// fmt.Printf("%+v\n", ddd) // fmt.Printf("%+v\n", responseObject.Status)
+
+	var responseObject Stopresponce
+
+	if err := json.Unmarshal(bodyBytes, &responseObject); err != nil {
+		panic(err)
+	}
+	fmt.Printf("%+v\n", responseObject.Status)
+
+	fmt.Println(responseObject.Status)
+	out, err := json.Marshal(responseObject)
+	if err != nil {
+		panic(err)
+
+	}
+
+	return string(out)
+
+	// //return responseObject
+	// if err := json.Unmarshal(bodyBytes, &responseObject); err != nil {
+	// 	panic(err)
+
+	// } else {
+	// 	fmt.Printf("API Response as struct %+v\n", string(bodyBytes))
+
+	// }
+
+}
