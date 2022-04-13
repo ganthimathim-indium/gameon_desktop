@@ -38,6 +38,16 @@ type data struct {
 	Start_time      string `json:"start_time"`
 	User_id         int    `json:"user_id"`
 }
+type Stopresponce struct {
+	// Message string `json:"message"`
+
+	Status string `json:"status"`
+	//Message string         `json:"message"`
+	Data average_values `json:"average_values"`
+}
+type average_values struct {
+	Cpu_usage string `json:"cpu_usage"`
+}
 
 func Apihit(val map[string]string) string {
 	//(response Response)
@@ -159,14 +169,6 @@ type Startresponce struct {
 	Message string `json:"message"`
 	Status  string `json:"status"`
 	Data    data   `json:"data"`
-}
-
-type Stopresponce struct {
-	Status string         `json:"status"`
-	Data   average_values `json:"average_values"`
-}
-type average_values struct {
-	Cpu_usage string `json:"cpu_usage"`
 }
 
 func Apihitstart(val map[string]string, token string) string {

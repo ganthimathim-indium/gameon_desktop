@@ -286,6 +286,8 @@ func startscan(appnamee_test string, valdata string) (val string) {
 	fmt.Println(sec5)
 
 	//human2 = nil
+	human2 = nil
+
 	return apidata.Apihitstart(sec5, token)
 
 	//return string(out5)
@@ -357,7 +359,6 @@ func stopscan(appinfodata string, valdata string) (val string) {
 	// 	Cpu_deviation: "Mainactivity"}
 	// human2 = append(human2, resultt)
 	fmt.Println(out5)
-	human2 = nil
 
 	// out7, err := json.Marshal(human2)
 	// if err != nil {

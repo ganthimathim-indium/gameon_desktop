@@ -21,33 +21,42 @@ function HelloWorld() {
 		//window.backend.powermetric("com.android.chrome").then((result) => setResult(result));
 		//window.backend.Apppowermetric("com.android.chrome").then((result) => setResult(result));
 		//window.backend.cpuarch("com.android.chrome").then((result) => setResult(result));
+		//window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
 
 
-		//window.backend.startscan("com.android.chrome", "true").then((result) => setResult(result));
-		// setTimeout(function () { //Start the timer
-		// 	window.backend.startscan(myJSON, "false").then((result) => {
-		// 		const data = JSON.parse(result)
-		// 		//setdeviceId(data.data.session_id)
-		// 		const persons1 = { "appname": "com.google.android.play.games", "id": "1", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidmluYXlAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjIzLCJpYXQiOjE2NDk3MDk3NDl9.ZsLXUGiTpUqQRUvYEcRzDsh5iWl4pVmoNSWm1HvWN3E", "session_id": data.data.session_id }
-		// 		const myJSON1 = JSON.stringify(persons1);
+		setTimeout(function () {
+			window.backend.startscan(myJSON, "false").then((result) => {
+				const data = JSON.parse(result)
+				//setdeviceId(data.data.session_id)
 
-		// 		setResult(myJSON1)
-		// 		setTimeout(function () { //Start the timer
-		// 			window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
+				const persons1 = { "appname": "com.google.android.play.games", "id": "1", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidmluYXlAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjIzLCJpYXQiOjE2NDk3MDk3NDl9.ZsLXUGiTpUqQRUvYEcRzDsh5iWl4pVmoNSWm1HvWN3E", "session_id": data.data.session_id }
+				const myJSON1 = JSON.stringify(persons1);
 
-		// 			setTimeout(function () { //Start the timer
-		// 				//window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
-		// 				// setTimeout(function () { //Start the timer
-		// 				window.backend.stopscan(myJSON1, "false").then((result) => setResult(result));
+				setResult(myJSON1)
+				setTimeout(function () {
+					window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
+
+					setTimeout(function () {
+
+						window.backend.stopscan(myJSON1, "false").then((result) => setResult(result));
 
 
-		// 			}.bind(this), 4000)
-		// 		}.bind(this), 4000)
 
-		// 		// data.data.map((e) => {
-		// 	console.log(e.session_id)
+					}.bind(this), 4000)
 
-		// })
+
+
+
+
+				}.bind(this), 4000)
+
+
+			})
+
+
+
+		}.bind(this), 4000)
+
 
 
 
