@@ -15,6 +15,8 @@ import Card from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import TextField from '@mui/material/TextField';
 import { grey } from "@mui/material/colors";
+// import {useDispatch} from "react-redux";
+// import {login} from "../../features/loginAuth/loginAuthSlice.js"
 
 
 const eye = <FontAwesomeIcon icon={faEye} />;
@@ -33,6 +35,8 @@ const paperStyle1 = {
   margin: "70px auto",
 };
 
+// const dispatch=useDispatch();
+
 class SignIn extends Component {
   constructor(props) {
     super(props);
@@ -40,6 +44,8 @@ class SignIn extends Component {
       email: "",
       mobile: "",
       password: "",
+      token:"",
+      id:null,
       validEmail: false,
       isEmptyEmail: false,
       validPassword: false,   
@@ -50,6 +56,7 @@ class SignIn extends Component {
       name: ""
     };
   }
+  
 
   componentDidMount() {
     window.scrollTo({
@@ -109,6 +116,8 @@ class SignIn extends Component {
       this.setState({ password: e.target.value, validPassword: false });
     }
   };
+  
+  
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -125,8 +134,22 @@ class SignIn extends Component {
           var data = [];
           data.push(userObj)
           if (data.length > 0) {
-            this.setState({result: true, name: userObj.name})
-          }
+            this.setState({result: true,name:userObj.name,id:userObj.id,token:userObj.token})
+            // dispatch(
+            //   login({
+            //     name:this.state.name,
+            //     id:this.state.id,
+            //     token:this.state.token,
+            //   })
+            // )
+            this.props.parentCallback({
+              id:this.state.id,
+              token:this.state.token,
+            });
+
+             
+            
+            }
           else {
             alert("login failed");
           }
@@ -140,6 +163,8 @@ class SignIn extends Component {
           this.setState({ validPassword: "true" });
         }
       }
+
+      
   };
 
   handleClick = () =>

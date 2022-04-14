@@ -437,7 +437,7 @@ func gpuMetric(appnamess string) (val string) {
 	res2 = strings.Split(res2, ",")[1]
 	res2 = strings.TrimSpace(res2)
 
-	value := "Total Gpu Usage : " + res2 + " MB"
+	value := "Total Gpu Usage : " + res2
 	return value
 
 }

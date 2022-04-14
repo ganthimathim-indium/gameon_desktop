@@ -6,11 +6,17 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import * as Wails from '@wailsapp/runtime';
+// import {store} from "./app/store"
+// import {Provider} from "react-redux"
+
 
 Wails.Init(() => {
   ReactDOM.render(
     <React.StrictMode>
-      <App />
+      
+        <App />
+
+    
     </React.StrictMode>,
     document.getElementById("app")
   );
