@@ -12,6 +12,7 @@
     "material-ui-colors": "^1.0.0",
     "react-loading": "^2.0.3",
     "react-loading-screen": "^0.0.17",
+    "react-plotly.js": "^2.5.1",
     "react-router-dom": "^6.2.1",
     "react-spinners": "^0.11.0",
     "styled-components": "^5.3.3"
