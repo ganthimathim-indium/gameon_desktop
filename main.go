@@ -510,6 +510,19 @@ func cpuarch(appnamess string) (val string) {
 	return valsss
 }
 
+// 10 Avg. Median FPS Usage
+
+func AvgMedianFPS(appnames string) (val string) {
+
+	res2 := L.AndroidMedianFPS(appnames)
+
+	var valsss string
+
+	valsss = "Avg. Median FPS Usage : " + res2
+
+	return valsss
+
+}
 func ParseLeadingInt(s string) (int64, error) {
 	s = leadingInt.FindString(s)
 	if s == "" { // add this if you don't want error on "xx" etc
@@ -628,6 +641,7 @@ func main() {
 	app.Bind(powermetric)
 	app.Bind(Apppowermetric)
 	app.Bind(cpuarch)
+	app.Bind(AvgMedianFPS)
 
 	app.Run()
 

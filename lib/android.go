@@ -248,6 +248,30 @@ func AndroidCPUUsage(names string) (val string) {
 	return result
 }
 
+// Avg. Median FPS Usage
+
+func AndroidMedianFPS(names string) (val string) {
+
+	var result string
+
+	s := string(run("shell", "dumpsys display ", names))
+
+	i := strings.Index(s, "fps=")
+
+	a := s[i:]
+
+	data := strings.Split(a, " ")[0]
+
+	s1 := strings.Replace(data, "fps=", "", 1)
+
+	result = strings.Replace(s1, "}],", "", 1)
+
+	fmt.Println("Avg. Median FPS Usage Data ", result)
+
+	return result
+
+}
+
 // func Androidcpuuseage(names string) (val string) {
 // 	//run("shell", "getprop ro.build.version.release")
 // 	//run("shell", "dumpsys gfxinfo "+names)
