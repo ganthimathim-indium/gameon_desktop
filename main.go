@@ -264,8 +264,8 @@ func startscan(appnamee_test string, valdata string) (val string) {
 		Start_time:      currentTime.Format("3:4:5 pm"),
 		App_name:        appname,
 		Version_name:    L.Androidversionapp(),
-		Device_name:     "Redmi_Y3",
-		Device_id:       "7193cea",
+		Device_name:     devicename,
+		Device_id:       deviceserial,
 		Android_version: L.Appversion(),
 	})
 
@@ -307,6 +307,10 @@ func stopscan(appinfodata string, valdata string) (val string) {
 	currentTime := time.Now()
 	//currentTime.Format("3:4:5 pm")
 	token := sec["token"]
+	id := sec["id"]
+
+	userRole := sec["userRole"]
+
 	session_id := sec["session_id"]
 
 	// out7, err := json.Marshal(human2)
@@ -318,9 +322,9 @@ func stopscan(appinfodata string, valdata string) (val string) {
 		Result:        human2,
 		End_time:      currentTime.Format("3:4:5 pm"),
 		SessionID:     session_id,
-		SessionUserID: "41",
-		UserRole:      "user",
-		Device_id:     "7193cea",
+		SessionUserID: id,
+		UserRole:      userRole,
+		Device_id:     deviceserial,
 	})
 
 	if err != nil {

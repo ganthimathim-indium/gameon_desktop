@@ -33,7 +33,6 @@ var mapObj = {
 // "id": props.userInfo.id , "token": props.userInfo.token
 
 const AppInf = (props) => {
-  console.log("work");
   console.log(props);
   const timescaleRef = useRef([]);
   const [state, setMetric] = useState({
@@ -99,14 +98,14 @@ const AppInf = (props) => {
   function handleCpuStart() {
     if (start) {
       var timer = setInterval(() => {
-        // window.backend.cpumetric(props.location.state.value).then((result) => {
-        //   let results = result.substr(18);
-        //   console.log(results, "cpuresults");
-        //   setMetric((ps) => {
-        //     return { ...ps, cpuUsage: results };
-        //   });
-        //   console.log(state.cpuUsage, "cpu");
-        // });
+        window.backend.cpumetric(props.location.state.value).then((result) => {
+          let results = result.substr(18);
+          console.log(results, "cpuresults");
+          setMetric((ps) => {
+            return { ...ps, cpuUsage: results };
+          });
+          console.log(state.cpuUsage, "cpu");
+        });
 
         window.backend.gpumetric(props.location.state.value).then((result) => {
           let results = Number(result.substr(18));
@@ -173,43 +172,43 @@ const AppInf = (props) => {
           console.log(timescaleRef.current, "timeValues");
         });
 
-        // window.backend.memmetric(props.location.state.value).then((result) => {
-        //   let results = result.substring(result.indexOf(":") + 1);
-        //   setMetric((ps) => {
-        //     return { ...ps, memoryUsage: results };
-        //   });
-        //   console.log(state.memoryUsage, "memory");
-        // });
-        // window.backend.Uploaddata(props.location.state.value).then((result) => {
-        //   console.log(result);
-        //   let results = result.substring(result.indexOf(":") + 1);
-        //   setMetric((ps) => {
-        //     return { ...ps, Uploaddata: results };
-        //   });
-        //   console.log(state.Uploaddata);
-        // });
+        window.backend.memmetric(props.location.state.value).then((result) => {
+          let results = result.substring(result.indexOf(":") + 1);
+          setMetric((ps) => {
+            return { ...ps, memoryUsage: results };
+          });
+          console.log(state.memoryUsage, "memory");
+        });
+        window.backend.Uploaddata(props.location.state.value).then((result) => {
+          console.log(result);
+          let results = result.substring(result.indexOf(":") + 1);
+          setMetric((ps) => {
+            return { ...ps, Uploaddata: results };
+          });
+          console.log(state.Uploaddata);
+        });
 
-        // window.backend
-        //   .AndroidDownloadedData1(props.location.state.value)
-        //   .then((result) => {
-        //     console.log(result);
-        //     let results = result.substring(result.indexOf(":") + 1);
-        //     setMetric((ps) => {
-        //       return { ...ps, DownloadData: results };
-        //     });
-        //     console.log(state.DownloadData);
-        //   });
+        window.backend
+          .AndroidDownloadedData1(props.location.state.value)
+          .then((result) => {
+            console.log(result);
+            let results = result.substring(result.indexOf(":") + 1);
+            setMetric((ps) => {
+              return { ...ps, DownloadData: results };
+            });
+            console.log(state.DownloadData);
+          });
 
-        // window.backend
-        //   .AndroidCPUCores1(props.location.state.value)
-        //   .then((result) => {
-        //     console.log(result);
-        //     let results = result.substring(result.indexOf(":") + 1);
-        //     setMetric((ps) => {
-        //       return { ...ps, cpuCores: results };
-        //     });
-        //     console.log(state.cpuCores);
-        //   });
+        window.backend
+          .AndroidCPUCores1(props.location.state.value)
+          .then((result) => {
+            console.log(result);
+            let results = result.substring(result.indexOf(":") + 1);
+            setMetric((ps) => {
+              return { ...ps, cpuCores: results };
+            });
+            console.log(state.cpuCores);
+          });
       }, 1000);
     }
   }
@@ -434,7 +433,44 @@ const AppInf = (props) => {
       {console.log(timeSeconds, "finallllllllmksbdkbjvzkbj")}
       {console.log(timescaleRef.current, "time scale laaaaaaaast")}
 
-      <MetricGraph metValues={gpuValues} metTime={timescaleRef.current} />
+      <div class="graphs">
+        <Plot
+          data={[
+            {
+              x: timescaleRef.current,
+              y: state.gpuValues,
+              type: "scatter",
+              mode: "line",
+
+              marker: { enabled: false },
+              line: { shape: "spline", smoothing: 1.06 },
+              marker: { color: "#87CEEB", size: "0" },
+            },
+          ]}
+          layout={{
+            width: 1150,
+            height: 300,
+            margin: { l: 40 },
+            padding: {
+              t: 0,
+              r: 0,
+              b: 0,
+              l: 0,
+              pad: -20,
+            },
+            text: this.state.GpuUsage,
+            borderRadius: "15px",
+            xaxis: {
+              autorange: true,
+              rangeslider: {
+                range: ["00:00:00", "00:01:60"],
+              },
+            },
+            plot_bgcolor: "#F5F5F5",
+            plot_height: 300,
+          }}
+        />
+      </div>
     </div>
   );
 };

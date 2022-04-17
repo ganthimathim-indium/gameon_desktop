@@ -24,8 +24,6 @@ var mapObj = {
   ".network": " ",
 };
 
-// const user=useSelector(selectUser)
-
 // console.log(user.name,"username")
 // console.log(user.id,"id")
 // console.log(user.token,"userToken")
@@ -35,12 +33,13 @@ var mapObj = {
 class AppData extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       basicInfo: {
         appname: this.props.location.state.value,
-        id: "24",
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoicmFodWxAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjI0LCJpYXQiOjE2NDg1MzkzNDR9.FUmjwywXb9oqxvaeUk4rb2stsbmw4BVD0198C0JgXis",
+        id: this.props.location.state.user.id.toString(),
+        token: this.props.location.state.user.token,
+        // userRole: this.props.location.state.user.userRole,
       },
       deviceId: "",
       deviceName: "",
@@ -65,11 +64,8 @@ class AppData extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.state, "state value");
-
-    // console.log(this.props.user);
+    console.log(this.props);
     // console.log(this.props.usersValue)
-    console.log(this.state.userData);
     const basicData = JSON.stringify(this.state.basicInfo);
     console.log(this.state.basicInfo);
 
@@ -101,7 +97,19 @@ class AppData extends React.Component {
 
   handleCpuStart() {
     if (this.state.cpuStart) {
-      setInterval(() => {
+      const myJson = JSON.stringify(this.state.basicInfo);
+
+      window.backend.startscan(myJson, "false").then((result) => {
+        const data = JSON.parse(result);
+        console.log(data, "start data result");
+        this.session_id = data.data.session_id;
+      });
+      //setdeviceId(data.data.session_id)
+
+      // const persons1 = { "appname": "com.google.android.play.games", "id": "1", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidmluYXlAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjIzLCJpYXQiOjE2NDk3MDk3NDl9.ZsLXUGiTpUqQRUvYEcRzDsh5iWl4pVmoNSWm1HvWN3E", "session_id": data.data.session_id }
+      // const myJSON1 = JSON.stringify(persons1);
+
+      this.timer = setInterval(() => {
         window.backend
           .cpumetric(this.props.location.state.value)
           .then((result) => {
@@ -109,7 +117,6 @@ class AppData extends React.Component {
             this.setState({ cpuUsage: results });
             console.log(this.state.cpuUsage, "cpu");
           });
-
         window.backend
           .gpuMetric(this.props.location.state.value)
           .then((result) => {
@@ -124,7 +131,6 @@ class AppData extends React.Component {
               .toISOString()
               .substr(14, 5);
             console.log(this.state.GpuUsage, "gpu");
-
             if (this.state.gpuValues.length < 8) {
               this.setState({
                 gpuValues: [...this.state.gpuValues, results],
@@ -139,11 +145,9 @@ class AppData extends React.Component {
                 timeValues: [...this.state.timeValues, time],
               });
             }
-
             console.log(this.state.gpuValues, "gpuValues");
             console.log(this.state.timeValues, "timeValues");
           });
-
         window.backend
           .memmetric(this.props.location.state.value)
           .then((result) => {
@@ -159,7 +163,6 @@ class AppData extends React.Component {
             this.setState({ Uploaddata: results });
             console.log(this.state.Uploaddata);
           });
-
         window.backend
           .AndroidDownloadedData1(this.props.location.state.value)
           .then((result) => {
@@ -168,7 +171,6 @@ class AppData extends React.Component {
             this.setState({ DownloadData: results });
             console.log(this.state.DownloadData);
           });
-
         window.backend
           .AndroidCPUCores1(this.props.location.state.value)
           .then((result) => {
@@ -179,6 +181,24 @@ class AppData extends React.Component {
           });
       }, 1000);
     }
+  }
+
+  handleCpuStop() {
+    this.setState({ cpuStart: false });
+    clearInterval(this.timer);
+    let stopData = {
+      appname: this.props.location.state.value,
+      id: this.props.location.state.user.id.toString(),
+      token: this.props.location.state.user.token,
+      session_id: this.session_id,
+      userRole: "user",
+    };
+
+    let stopJSON = JSON.stringify(stopData);
+    window.backend.stopscan(stopJSON, "false").then((result) => {
+      const data = result;
+      console.log(data, "stop session");
+    });
   }
 
   handleStartScan() {
@@ -226,6 +246,13 @@ class AppData extends React.Component {
             >
               Start Scan
             </button>
+            <button
+              className="btn btn-secondary"
+              onClick={this.handleCpuStop.bind(this)}
+              style={{ align: "center " }}
+            >
+              Stop Scan
+            </button>
             <br />
             <br />
 
@@ -263,12 +290,14 @@ class AppData extends React.Component {
                           fontWeight: "500",
                         }}
                       >
-                        {this.state.basicInfo.appname.replace(
-                          /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi,
-                          function (matched) {
-                            return mapObj[matched];
-                          }
-                        )}{" "}
+                        {this.state.basicInfo.appname
+                          .replace(
+                            /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi,
+                            function (matched) {
+                              return mapObj[matched];
+                            }
+                          )
+                          .slice(1)}{" "}
                       </small>
                     </p>{" "}
                     <p class="card-text">

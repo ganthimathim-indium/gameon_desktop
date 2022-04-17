@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import "./Home.css";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/loginAuth/loginAuthSlice";
 
 var mapObj = {
   com: " ",
@@ -24,14 +26,17 @@ var mapObj = {
 };
 
 const BasicInfo = () => {
-  const [state, setState] = {
+  const user = useSelector(selectUser);
+  console.log(user, "redux user");
+
+  const [state, setState] = useState({
     osname: "",
     deviceid: "",
     applist: [],
     appname: "",
     SelectedList: "",
     openStatus: false,
-  };
+  });
   useEffect(() => {
     window.backend.basic().then((result) => {
       var num2x;
@@ -39,17 +44,22 @@ const BasicInfo = () => {
       num2x = data.map((n) => {
         const parsing = JSON.parse(n.applist);
         parsing.map((n) => {});
-        setState({
-          osname: n.osname,
-          deviceid: n.devicename,
-          applist: parsing,
+        setState((ps) => {
+          return {
+            ...ps,
+            osname: n.osname,
+            deviceid: n.devicename,
+            applist: parsing,
+          };
         });
       });
     });
   });
 
   const openApp = (list) => {
-    setState({ SelectedList: list, openStatus: true });
+    setState((ps) => {
+      return { ...ps, SelectedList: list, openStatus: true };
+    });
     window.backend.openapp(list).then((result) => {});
   };
 
@@ -59,7 +69,7 @@ const BasicInfo = () => {
       <Redirect
         to={{
           pathname: "/app-info",
-          state: { value: state.SelectedList },
+          state: { user: user, value: state.SelectedList },
         }}
       />
     );

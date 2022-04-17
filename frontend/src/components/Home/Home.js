@@ -26,7 +26,7 @@ var mapObj = {
 class Home extends Component {
   constructor(props) {
     super(props);
-
+    console.log(this.props, "entry");
     this.state = {
       osname: "",
       deviceid: "",
@@ -37,7 +37,9 @@ class Home extends Component {
     };
   }
   componentDidMount() {
-    console.log(this.props.state);
+    console.log("hell0");
+
+    console.log(this.props, "this.");
     window.backend.basic().then((result) => {
       var num2x;
       const data = JSON.parse(result);
