@@ -5,6 +5,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import MetricGraph from "../../Graph/MetricGraph.js";
+import PulseLoader from "react-spinners/PulseLoader";
 
 // import { useSelector } from "react-redux";
 // import{ selectUser} from "../../features/loginAuth/loginAuthSlice"
@@ -60,6 +61,10 @@ class AppData extends React.Component {
       timeSeconds: 0,
       timeValues: [],
       userInfo: null,
+      power: 0,
+      appPower: 0,
+      cpuArch: 0,
+      avgMedianFPS: 0,
     };
   }
 
@@ -98,6 +103,7 @@ class AppData extends React.Component {
   handleCpuStart() {
     if (this.state.cpuStart) {
       const myJson = JSON.stringify(this.state.basicInfo);
+      this.setState({ loader: true });
 
       window.backend.startscan(myJson, "false").then((result) => {
         const data = JSON.parse(result);
@@ -179,12 +185,49 @@ class AppData extends React.Component {
             this.setState({ cpuCores: results });
             console.log(this.state.cpuCores);
           });
+
+        window.backend
+          .powermetric(this.props.location.state.value)
+          .then((result) => {
+            console.log(result);
+            let results = result.substring(result.indexOf(":") + 1);
+            this.setState({ power: results });
+            console.log(this.state.power);
+          });
+
+        window.backend
+          .Apppowermetric(this.props.location.state.value)
+          .then((result) => {
+            console.log(result);
+            let results = result.substring(result.indexOf(":") + 1);
+            this.setState({ appPower: results });
+            console.log(this.state.appPower);
+          });
+
+        window.backend
+          .cpuarch(this.props.location.state.value)
+          .then((result) => {
+            console.log(result);
+            let results = result.substring(result.indexOf(":") + 1);
+            this.setState({ cpuArch: results });
+            console.log(this.state.cpuArch);
+          });
+
+        window.backend
+          .AvgMedianFPS(this.props.location.state.value)
+          .then((result) => {
+            console.log(result);
+            let results = result.substring(result.indexOf(":") + 1);
+            this.setState({ avgMedianFPS: results });
+            console.log(this.state.cpuCores);
+          });
       }, 1000);
     }
   }
 
   handleCpuStop() {
     this.setState({ cpuStart: false });
+    this.setState({ loader: false });
     clearInterval(this.timer);
     let stopData = {
       appname: this.props.location.state.value,
@@ -230,32 +273,43 @@ class AppData extends React.Component {
         {/* <button className="btn btn-primary" onClick={this.handleStartScan.bind(this)}>Start Scan</button>
 <button className="btn btn-secondary" onClick={this.handleStopScan.bind(this)}>Stop Scan</button> */}
 
-        {this.state.loader && <h3>Scanning...</h3>}
         <h1
-          style={{ textAlign: "center", marginTop: "-10%", fontSize: "27px" }}
+          style={{ textAlign: "center", marginTop: "-10%", fontSize: "40px" }}
         >
           Device Metrics
         </h1>
 
+        <div className="buttonStyle">
+          <button
+            className="btn btn-primary"
+            onClick={this.handleCpuStart.bind(this)}
+            style={{ align: "center " }}
+          >
+            Start Scan
+          </button>
+
+          {this.state.loader && (
+            <h3>
+              Scanning
+              <PulseLoader
+                size={10}
+                color={"#123abc"}
+                loading={this.state.loader}
+              />
+            </h3>
+          )}
+
+          <button
+            className="btn btn-secondary"
+            onClick={this.handleCpuStop.bind(this)}
+            style={{ align: "center " }}
+          >
+            Stop Scan
+          </button>
+        </div>
+
         <div className="container">
           <div class="left">
-            <button
-              className="btn btn-primary"
-              onClick={this.handleCpuStart.bind(this)}
-              style={{ align: "center " }}
-            >
-              Start Scan
-            </button>
-            <button
-              className="btn btn-secondary"
-              onClick={this.handleCpuStop.bind(this)}
-              style={{ align: "center " }}
-            >
-              Stop Scan
-            </button>
-            <br />
-            <br />
-
             <div class="row">
               <div>
                 <div>
@@ -297,7 +351,7 @@ class AppData extends React.Component {
                               return mapObj[matched];
                             }
                           )
-                          .slice(1)}{" "}
+                          .split(".")}
                       </small>
                     </p>{" "}
                     <p class="card-text">
@@ -353,12 +407,9 @@ class AppData extends React.Component {
           <div className="right">
             <div className="right-container">
               <div className="metric-usage">
-                <h5 className="card-title">
-                  <b></b>
-                </h5>
                 <div class="contain">
                   <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "20px" }}>
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
                       {this.state.cpuUsage && (
                         <p className="font">{this.state.cpuUsage}</p>
                       )}
@@ -366,18 +417,15 @@ class AppData extends React.Component {
                   </div>
                 </div>
 
-                <p>
+                <p className="card-text">
                   <strong>Total CPU Usage</strong>
                 </p>
               </div>
 
               <div className="metric-usage">
-                <h5 className="card-title">
-                  <b></b>
-                </h5>
                 <div class="contain">
                   <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "20px" }}>
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
                       {this.state.memoryUsage && (
                         <p className="font">{this.state.memoryUsage}</p>
                       )}
@@ -390,12 +438,9 @@ class AppData extends React.Component {
               </div>
 
               <div className="metric-usage">
-                <h5 className="card-title">
-                  <b></b>
-                </h5>
                 <div class="contain">
                   <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "20px" }}>
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
                       {this.state.GpuUsage && (
                         <p className="font">{this.state.GpuUsage} MB</p>
                       )}
@@ -408,12 +453,9 @@ class AppData extends React.Component {
               </div>
 
               <div className="metric-usage">
-                <h5 className="card-title">
-                  <b></b>
-                </h5>
                 <div class="contain">
                   <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "20px" }}>
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
                       {this.state.Uploaddata && (
                         <p className="font">{this.state.Uploaddata}</p>
                       )}
@@ -426,12 +468,9 @@ class AppData extends React.Component {
               </div>
 
               <div className="metric-usage">
-                <h5 className="card-title">
-                  <b></b>
-                </h5>
                 <div class="contain">
                   <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "20px" }}>
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
                       {this.state.DownloadData && (
                         <p className="font">{this.state.DownloadData}</p>
                       )}
@@ -444,12 +483,9 @@ class AppData extends React.Component {
               </div>
 
               <div className="metric-usage">
-                <h5 className="card-title">
-                  <b></b>
-                </h5>
                 <div class="contain">
                   <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "20px" }}>
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
                       {this.state.cpuCores && (
                         <p className="font">{this.state.cpuCores}</p>
                       )}
@@ -457,7 +493,67 @@ class AppData extends React.Component {
                   </div>
                 </div>
                 <p className="card-text">
-                  <strong>Cpu Cores</strong>
+                  <strong>CPU Cores</strong>
+                </p>
+              </div>
+
+              <div className="metric-usage">
+                <div class="contain">
+                  <div class="ui-widgets">
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
+                      {this.state.power && (
+                        <p className="font">{this.state.power}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <p className="card-text">
+                  <strong>Power</strong>
+                </p>
+              </div>
+
+              <div className="metric-usage">
+                <div class="contain">
+                  <div class="ui-widgets">
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
+                      {this.state.appPower && (
+                        <p className="font">{this.state.appPower}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <p className="card-text">
+                  <strong>App Power</strong>
+                </p>
+              </div>
+
+              <div className="metric-usage">
+                <div class="contain">
+                  <div class="ui-widgets">
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
+                      {this.state.cpuArch && (
+                        <p className="font">{this.state.cpuArch}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <p className="card-text">
+                  <strong>CPU Arch</strong>
+                </p>
+              </div>
+
+              <div className="metric-usage">
+                <div class="contain">
+                  <div class="ui-widgets">
+                    <div class="ui-values" style={{ marginTop: "32px" }}>
+                      {this.state.avgMedianFPS && (
+                        <p className="font">{this.state.avgMedianFPS}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <p className="card-text">
+                  <strong>Avg Median FPS</strong>
                 </p>
               </div>
             </div>
@@ -475,14 +571,15 @@ class AppData extends React.Component {
                 mode: "line",
 
                 marker: { enabled: false },
-                line: { shape: "spline", smoothing: 1.06 },
+                line: { shape: "spline", smoothing: 0.8 },
                 marker: { color: "#87CEEB", size: "0" },
               },
             ]}
             layout={{
+              title: "Total GPU Usage",
               width: 1150,
               height: 300,
-              margin: { l: 40 },
+              margin: { l: 60 },
               padding: {
                 t: 0,
                 r: 0,
@@ -490,8 +587,9 @@ class AppData extends React.Component {
                 l: 0,
                 pad: -20,
               },
+
               text: this.state.GpuUsage,
-              borderRadius: "15px",
+              borderRadius: 20,
               xaxis: {
                 autorange: true,
                 rangeslider: {

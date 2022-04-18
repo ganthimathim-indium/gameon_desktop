@@ -165,7 +165,7 @@ func basiconfo(appinfodata string) (val string) {
 	// if err := json.Unmarshal([]byte(clients1), &sec1); err != nil {
 	// 	panic(err)
 	// }
-	//fmt.Println(clients1)
+	fmt.Println("app:" + L.Appversion())
 
 	//var clientss []Baseinfo
 	p := Baseinfo{

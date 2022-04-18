@@ -77,31 +77,33 @@ const BasicInfo = () => {
   return (
     <div>
       <LoginHeader />
-      <h3>Device Information</h3>
+      <h3 style={{ alignItems: "center" }}>Device Information</h3>
 
-      <p className="list">No of applications:{state.applist.length}</p>
+      <div className="nolist">
+        <p className="list">No of applications:{state.applist.length}</p>
+      </div>
 
       <div className="big-container">
         <div className="container">
           {state.applist.map((list) => (
             <div className="mini-card">
-              <div>
+              {/* <div>
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aEE0AUQIbPgaoWSwIl-fTVQA8tIfTcFkow&usqp=CAU"
                   alt=""
                 />
-              </div>
+              </div> */}
               <div>
-                <small>
+                <p>
                   {list.replace(
                     /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi,
                     function (matched) {
                       return mapObj[matched];
                     }
                   )}
-                </small>
-                <button onClick={() => openApp(list)}>
-                  <p>Open App</p>
+                </p>
+                <button className="basicButton" onClick={() => openApp(list)}>
+                  Open App
                 </button>
               </div>
             </div>
