@@ -36,13 +36,22 @@ func Appopen(appnames string) (val string) {
 
 }
 
-func Appversion() (val string) {
-	run("shell", "getprop ro.build.version.sdk")
+func Appversion(pack string) (val string) {
 
+	s := string(run("shell", "dumpsys package "+pack+" | grep versionName"))
+
+	i := strings.Split(s, "versionName=")[1]
+	// if i == -1 {
+	// 	return ""
+	// }
+	// s = s[i:]
+	// s = strings.Replace(s, "level: ", "", 1)
+	// return strings.Split(s, "\n")[0]
+	return i
 	//result1 := string(run("shell", "getprop ro.build.version.sdk"))
-	res2 := strings.ReplaceAll(string(run("shell", "getprop ro.build.version.sdk")), "\r\n", "")
+	// res2 := strings.ReplaceAll(string(run("shell", "dumpsys package "+pack+" | findstr versionName")), "\r\n", "")
 
-	return res2
+	// return res2
 
 }
 
@@ -222,12 +231,12 @@ func AndroidCPUCores(names string) (val string) {
 
 func Battery(names string) (val string) {
 	s := string(run("shell", "dumpsys battery "))
-	i := strings.Index(s, "Charge counter: ")
+	i := strings.Index(s, "level: ")
 	if i == -1 {
 		return ""
 	}
 	s = s[i:]
-	s = strings.Replace(s, "Charge counter: ", "", 1)
+	s = strings.Replace(s, "level: ", "", 1)
 	return strings.Split(s, "\n")[0]
 
 }
@@ -253,6 +262,7 @@ func AndroidCPUUsage(names string) (val string) {
 func AndroidMedianFPS(names string) (val string) {
 
 	var result string
+	var result1 string
 
 	s := string(run("shell", "dumpsys display ", names))
 
@@ -264,7 +274,8 @@ func AndroidMedianFPS(names string) (val string) {
 
 	s1 := strings.Replace(data, "fps=", "", 1)
 
-	result = strings.Replace(s1, "}],", "", 1)
+	result1 = strings.Replace(s1, "}]", "", -1)
+	result = strings.Replace(result1, ",", "", -1)
 
 	fmt.Println("Avg. Median FPS Usage Data ", result)
 

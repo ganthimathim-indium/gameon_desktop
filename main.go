@@ -165,13 +165,13 @@ func basiconfo(appinfodata string) (val string) {
 	// if err := json.Unmarshal([]byte(clients1), &sec1); err != nil {
 	// 	panic(err)
 	// }
-	fmt.Println("app:" + L.Appversion())
+	fmt.Println("app:" + L.Appversion(appname))
 
 	//var clientss []Baseinfo
 	p := Baseinfo{
 		Device_name:     devicename,
 		Device_id:       deviceserial,
-		Android_version: L.Appversion(),
+		Android_version: L.Appversion(appname),
 		Start_time:      "15:25:34",
 		Version_name:    L.Androidversionapp(),
 		App_name:        appname,
@@ -266,7 +266,7 @@ func startscan(appnamee_test string, valdata string) (val string) {
 		Version_name:    L.Androidversionapp(),
 		Device_name:     devicename,
 		Device_id:       deviceserial,
-		Android_version: L.Appversion(),
+		Android_version: L.Appversion(appname),
 	})
 
 	if err != nil {
