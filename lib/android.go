@@ -79,18 +79,18 @@ func Androidgpuuseage(names string) (val string) {
 	//	return string(run("shell", "dumpsys gfxinfo "+names))
 
 }
-
-func Androidmemoryuseage(names string) (val string) {
-	s := string(run("shell", "cat /proc/meminfo"))
+func AndroidMemoryUsage(names string) (val string) {
+	s := string(run("shell", "dumpsys meminfo ", names))
 	var result string
-	data := strings.Split(s, "\\s")
+	v := strings.Index(s, "TOTAL")
+	s = s[v:]
+	s = strings.Replace(s, "TOTAL", "", -1)
+	data := strings.Split(s, " ")
 	for _, value := range data {
-		if strings.Contains(value, "MemTotal:") {
-			result = strings.Replace(value, "MemTotal:", "", 1)
 
-			result = strings.TrimSpace(result)
-
-			break // we need only the first as other values are further distribution of this total value
+		if len(value) != 0 && value != " " {
+			result = value
+			break
 		}
 	}
 	fmt.Println("mydata" + result)
@@ -100,7 +100,7 @@ func Androidmemoryuseage(names string) (val string) {
 }
 func AndroidAppPowerUsage(names string) (val string) {
 
-	s := string(run("shell", "ps | findstr ", names))
+	s := string(run("shell", "ps | grep ", names))
 
 	if len(s) == 0 {
 		return "0"
@@ -113,15 +113,18 @@ func AndroidAppPowerUsage(names string) (val string) {
 
 	s = string(run("shell", "dumpsys batterystats ", names))
 
-	// uidIndex := strings.Index(s, fmt.Sprintf("UID %s: ", uid))
-	// s = s[uidIndex:]
-	// s = strings.Replace(s, fmt.Sprintf("UID %s: ", uid), "", 1)
-	// return strings.Split(s, " ")[0]
-
-	uidIndex := strings.Index(s, fmt.Sprintf("Computed drain: "))
+	uidIndex := strings.Index(s, fmt.Sprintf("UID %s: ", uid))
+	if uidIndex == -1 {
+		return "0"
+	}
 	s = s[uidIndex:]
-	s = strings.Replace(s, fmt.Sprintf("Computed drain: "), "", 1)
-	return strings.Split(s, ", ")[0]
+	s = strings.Replace(s, fmt.Sprintf("UID %s: ", uid), "", 1)
+	return strings.Split(s, " ")[0]
+
+	//uidIndex := strings.Index(s, fmt.Sprintf("Computed drain: "))
+	//s = s[uidIndex:]
+	//s = strings.Replace(s, fmt.Sprintf("Computed drain: "), "", 1)
+	//return strings.Split(s, ", ")[0]
 }
 func Androidcpuarch(names string) (val string) {
 
