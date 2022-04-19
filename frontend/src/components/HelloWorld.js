@@ -14,18 +14,25 @@ function HelloWorld() {
 		setShowModal(true);
 		//window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
 		//window.backend.memmetric("com.android.chrome").then((result) => setResult(result));
-		//	window.backend.gpuMetric("com.android.chrome").then((result) => setResult(result));
-		//	window.backend.Uploaddata("com.android.chrome").then((result) => setResult(result));
+		//window.backend.gpuMetric("com.android.chrome").then((result) => setResult(result));
+		//window.backend.Uploaddata("com.android.chrome").then((result) => setResult(result));
 		//window.backend.AndroidDownloadedData1("com.android.chrome").then((result) => setResult(result));
 		//window.backend.AndroidCPUCores1("com.android.chrome").then((result) => setResult(result));
 		//window.backend.powermetric("com.android.chrome").then((result) => setResult(result));
-		//	window.backend.Apppowermetric("com.android.chrome").then((result) => setResult(result));
+		//window.backend.Apppowermetric("com.android.chrome").then((result) => setResult(result));
 		//window.backend.cpuarch("com.android.chrome").then((result) => setResult(result));
-		//window.backend.AvgMedianFPS("com.android.chrome").then((result) => setResult(result));
-		//window.backend.checkdevice().then((result) => setResult(result));
-		window.backend.openapp("com.android.chrome").then((result) => setResult(result));
+		//	window.backend.AvgMedianFPS("com.android.chrome").then((result) => setResult(result));
+		window.backend.checkdevice().then((result) => setResult(result));
+		//window.backend.openapp("com.android.chrome").then((result) => setResult(result));
 
+		// setTimeout(function () {
+		// 	window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
+		// 	setTimeout(function () {
+		// 		window.backend.AvgMedianFPS("com.android.chrome").then((result) => setResult(result));
 
+		// 	}.bind(this), 4000)
+
+		// }.bind(this), 4000)
 		// //start
 		// 		setTimeout(function () {
 		// 			window.backend.startscan(myJSON, "false").then((result) => {

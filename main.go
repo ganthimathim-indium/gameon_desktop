@@ -32,6 +32,14 @@ var leadingInt = regexp.MustCompile(`^[-+]?\d+`)
 var ticker time.Ticker
 var timedata string
 
+var cpu_useage string
+var cpu_deviations string
+var cpu_time string
+
+var Memory_useage string
+var Memory_deviations string
+var Memory_time string
+
 type Appinfo struct {
 	Osname     string `json:"osname"`
 	Devicename string `json:"devicename"`
@@ -80,7 +88,7 @@ type results struct {
 	// avg_gpu_usage    string `json:"avg_gpu_usage"`
 	// memory_deviation string `json:"memory_deviation"`
 	// power_deviation  string `json:"power_deviation"`
-	Time string `json:"time"`
+	Cpu_time_val string `json:"time"`
 	// gpu_deviation    string `json:"gpu_deviation"`
 	// avg_memory_usage string `json:"avg_memory_usage"`
 	// avg_power_usage  string `json:"avg_power_usage"`
@@ -401,12 +409,13 @@ func cpumetric(appnamess string) (val string) {
 	fmt.Println("tttt" + res2)
 	var valsss string
 	currentTime := time.Now()
+	cpu_useage = ""
+	cpu_deviations = ""
+	cpu_time = ""
+	cpu_useage = L.AndroidCPUUsage(appnamess)
+	cpu_deviations = "Mainactivity"
+	cpu_time = currentTime.Format("3:4:5 pm")
 
-	result := results{Cpu_app_usage: L.AndroidCPUUsage(appnamess), Time: currentTime.Format("3:4:5 pm"),
-		Cpu_deviation: "Mainactivity"}
-
-	human2 = append(human2, result)
-	fmt.Println(human2) // {"Name":"Bob","Age":10,"Active":true}
 	valsss = "Total CPU Useage : " + res2 + " %"
 	return valsss
 
@@ -521,6 +530,12 @@ func AvgMedianFPS(appnames string) (val string) {
 	res2 := L.AndroidMedianFPS(appnames)
 
 	var valsss string
+
+	result := results{Cpu_app_usage: cpu_useage, Cpu_time_val: cpu_time,
+		Cpu_deviation: cpu_deviations}
+
+	human2 = append(human2, result)
+	fmt.Println(human2) // {"Name":"Bob","Age":10,"Active":true}
 
 	valsss = "Avg. Median FPS Usage : " + res2
 
