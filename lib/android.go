@@ -219,17 +219,29 @@ func AndroidDownloadedData(names string) (val string) {
 	return strconv.Itoa(result)
 
 }
+
 func AndroidCPUCores(names string) (val string) {
 
-	s := string(run("shell", "dumpsys gfxinfo ", names))
-	i := strings.Index(s, "Total frames rendered: ")
+	// shell command to get all processor information
+	s := string(run("shell", "cat /proc/cpuinfo"))
+
+	// this can also provide the count of cpu processors
+	// but to be sure we need below calculation
+	i := strings.Count(s, "processor")
 	if i == -1 {
 		return ""
 	}
-	s = s[i:]
-	s = strings.Replace(s, "Total frames rendered: ", "", 1)
-	return strings.Split(s, "\n")[0]
+	s = strings.Replace(s, "processor", "", i-1)
+	in := strings.Index(s, "processor")
+	s = s[in:]
+	s = strings.Replace(s, "processor", "", -1)
+	s = strings.Replace(s, ":", "", -1)
+	s = strings.TrimSpace(s)
 
+	// last processor number gives the count
+	data := strings.Split(s, "\n")[0]
+	count, _ := strconv.Atoi(data)
+	return strconv.Itoa(count + 1) // as processors use 0-based index +1 for total count
 }
 
 func Battery(names string) (val string) {
