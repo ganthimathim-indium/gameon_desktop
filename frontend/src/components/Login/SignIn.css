@@ -1,23 +1,20 @@
-.signin-div {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ddd;
-  padding-left: 10px;
-  border-radius: 5px;
+.login_image {
+  width: 275px;
+  height: 225px;
+  margin-top: 5%;
 }
 
 .contents {
   padding: 15% 0 0 10%;
 }
 
-.containers {
-  align-items: center;
-  height: 60vh;
+.box {
+  height: 88vh;
   width: 60%;
 
-  margin-top: 15vh;
+  padding-top: 10%;
+
   margin-left: 20%;
-  border-radius: 5%;
 }
 input {
   background: none;
@@ -29,14 +26,17 @@ input {
   width: 50%;
   float: left;
   height: 100%;
-  background: lightgray;
-  border-radius: 15px 0 0 15px;
+  background: #278ef1;
+  border-radius: 40px 0 0 40px;
 }
 .left-top {
-  margin-top: 5px;
+  margin-top: 13%;
+  color: white;
 }
+
 .left_bottom {
-  margin-top: 80%;
+  margin-top: 6%;
+  color: white;
 }
 
 .right-side {
@@ -44,100 +44,48 @@ input {
   height: 100%;
   float: right;
   background: white;
-  border-radius: 0 15px 15px 0;
+  border-radius: 0 40px 40px 0;
 }
 
-.signin-form,
-.signin-form:focus {
-  box-shadow: none;
-  border: none;
-  outline: none;
-}
-
-.signin-form:focus {
-  border-color: #4aba70;
-}
-
-.login-form {
+.log-form {
   padding: 3px 0;
 }
 
-.registerotp-form {
-  width: 380px;
-  margin: 0 auto;
-  padding: 30px 0;
-}
-
-.signinnav {
-  margin-bottom: 32px;
-}
-
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #6e6e6e;
-}
-
-.login-form form {
-  color: #434343;
-  background: #fff;
+.log-form form {
+  color: #f2f8ff;
+  background: #f2f8ff;
   padding: 20px;
 }
 
-.login-form h4 {
+.log-form h4 {
   text-align: center;
   font-size: 22px;
   margin-bottom: 20px;
   font-weight: bolder;
 }
 
-.login-form .form-group {
+.log-form .form-group {
   margin-bottom: 20px;
 }
 
-.login-form .signin-form,
-.login-form .btn {
-  min-height: 40px;
-  border-radius: 2px;
-  transition: all 0.5s;
-}
-
-.login-form .close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-
-.login-form .btn {
-  margin-top: 6%;
-  width: fit-content !important;
-  margin-left: auto;
-  margin-right: auto;
-  background: #436fb6;
-  border: none;
-  color: white;
-  width: 100%;
-  line-height: normal;
-}
-
-.login-form .btn:hover,
-.login-form .btn:focus {
+.log-form .btn:hover,
+.log-form .btn:focus {
   background: #436fb6;
 }
 
-.login-form .checkbox-inline {
+.log-form .checkbox-inline {
   float: left;
 }
 
-.login-form input[type="checkbox"] {
+.log-form input[type="checkbox"] {
   margin-top: 2px;
 }
 
-.login-form .forgot-link {
+.log-form .forgot-link {
   float: right;
 }
 
-.login-form .small {
+.log-form .small {
   font-size: 13px;
 }
 
@@ -149,22 +97,6 @@ input {
 
 .backgroundGraySignIn > .active {
   background-color: #b3b3b3;
-}
-
-.navlink-signin {
-  color: #ffffff !important;
-}
-
-.otphr {
-  margin: 29px 0;
-  color: inherit;
-  background-color: currentColor;
-  border: 0;
-  opacity: 0.25;
-}
-
-.regotp-input {
-  margin-bottom: 10%;
 }
 
 .otptext {
@@ -194,48 +126,6 @@ input {
   margin-bottom: 20px;
 }
 
-.registerotp-form .signin-form,
-.login-form .btn {
-  min-height: 40px;
-  border-radius: 2px;
-  transition: all 0.5s;
-}
-
-.registerotp-form .close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-
-.registerotp-form .btn {
-  background: #436fb6;
-  border: none;
-  color: white;
-  width: 100%;
-  line-height: normal;
-}
-
-.registerotp-form .btn:hover,
-.login-form .btn:focus {
-  background: #436fb6;
-}
-
-.registerotp-form .checkbox-inline {
-  float: left;
-}
-
-.registerotp-form input[type="checkbox"] {
-  margin-top: 2px;
-}
-
-.registerotp-form .forgot-link {
-  float: right;
-}
-
-.registerotp-form .small {
-  font-size: 13px;
-}
-
 ​​​ .errorMsgCont1 {
   display: flex;
   justify-content: space-between;
@@ -263,8 +153,8 @@ input {
   padding-left: 10px;
   border-radius: 4px;
 }
-.login {
-  background: grey;
+.log {
+  background: #f2f8ff;
   height: 100vh;
 }
 

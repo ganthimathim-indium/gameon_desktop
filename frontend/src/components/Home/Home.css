@@ -6,13 +6,15 @@
 
 .big-container {
   display: flex;
+  margin-left: 8%;
 }
 .device-info {
   height: 70vh;
   width: 30%;
-  background: white;
+  background: #278ef1;
   border-radius: 10px;
   margin-right: 20px;
+  margin-top: -2.5%;
 }
 
 h3 {
@@ -24,16 +26,28 @@ h3 {
   object-fit: contain;
   margin-left: -30;
 }
+.android-container {
+  width: 75%;
+  margin-left: 12.5%;
+  height: 17%;
+  margin-top: 5%;
+  background: white;
+  border-radius: 5px;
+}
+
+.android {
+  width: 85%;
+  object-fit: contain;
+  padding: 2%;
+}
 .mini_card p {
   display: inline;
 }
-.mini-card p {
-  diplay: inline;
-}
 
 .device-info p {
-  padding-left: 20%;
+  padding-left: 8%;
   padding-top: 15px;
+  color: white;
 }
 img {
   width: 100%;
@@ -41,18 +55,14 @@ img {
   height: 80%;
 }
 .nolist {
-  height: 10%;
-  width: 17%;
-  padding: 1%;
-  margin: 1.8%;
-  background-color: white;
-  border-radius: 10px;
+  margin-left: 8.5%;
+  margin-top: 2%;
 }
 .basicButton {
-  background: rgb(236, 228, 228);
-  margin-left: 3%;
-  float: right;
-  border-radius: 1px;
+  background: none;
+  margin-left: 1%;
+  display: block;
+  color: #fea14a;
 }
 
 .container {
@@ -67,13 +77,14 @@ img {
 }
 
 .mini-card {
-  width: 23%;
-  height: 65px;
+  width: 22%;
+  height: 55px;
   padding: none;
   background: white;
   border: 1px solid none;
-  border-radius: 15px;
+  border-radius: 11px;
   margin: 7px;
+  margin-right: 2%;
   padding: 2px;
 }
 h3 {

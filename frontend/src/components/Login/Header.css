@@ -1,3 +1,10 @@
+.header {
+  width: 100%;
+  height: 10vh;
+  background-color: #ffffff;
+  box-shadow: 3px 3px 20px #3939392b;
+}
+
 .dropdown-item {
   font-size: 14px;
 }

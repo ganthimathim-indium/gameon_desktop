@@ -28,7 +28,7 @@ function App() {
   // };
   // console.log(user, "message");
   return (
-    <div>
+    <div className="app">
       <Router>
         <Switch>
           <Route exact path="/" component={SignIn} />
