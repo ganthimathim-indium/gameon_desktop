@@ -31,7 +31,7 @@ var mapObj = {
 
 const BasicInfo = () => {
   const user = useSelector(selectUser);
-  console.log(user, "redux user");
+  // console.log(user, "redux user");
 
   const [state, setState] = useState({
     osname: "",
@@ -41,6 +41,26 @@ const BasicInfo = () => {
     SelectedList: "",
     openStatus: false,
   });
+  const [filteredResults, setFilteredResults] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+
+  const searchItems = (searchValue) => {
+    setSearchInput(searchValue);
+    if (searchInput !== "") {
+      const filteredData = state.applist.filter((item) => {
+        return Object.values(item)
+          .join("")
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      });
+      setFilteredResults(filteredData);
+    } else {
+      setFilteredResults(state.applist);
+    }
+  };
+
+  console.log(state.applist);
+
   useEffect(() => {
     window.backend.basic().then((result) => {
       var num2x;
@@ -100,6 +120,8 @@ const BasicInfo = () => {
             position: "relative",
           }}
           placeholder="Search app here"
+          type="text"
+          onChange={(e) => searchItems(e.target.value)}
         />
         <img
           src={searchIcon}
@@ -112,31 +134,64 @@ const BasicInfo = () => {
           }}
         />
       </div>
+
       <div className="big-container">
         <div className="container">
-          {state.applist.map((list) => (
-            <div className="mini-card">
-              {/* <div>
+          {searchInput.length > 1
+            ? filteredResults.map((list) => {
+                return (
+                  <div className="mini-card">
+                    {/* <div>
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aEE0AUQIbPgaoWSwIl-fTVQA8tIfTcFkow&usqp=CAU"
                   alt=""
                 />
               </div> */}
-              <div>
-                <p style={{ display: "inline" }}>
-                  {list.replace(
-                    /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi,
-                    function (matched) {
-                      return mapObj[matched];
-                    }
-                  )}
-                </p>
-                <button className="basicButton" onClick={() => openApp(list)}>
-                  Open App >
-                </button>
-              </div>
-            </div>
-          ))}
+                    <div>
+                      <p style={{ display: "inline" }}>
+                        {list.replace(
+                          /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi,
+                          function (matched) {
+                            return mapObj[matched];
+                          }
+                        )}
+                      </p>
+                      <button
+                        className="basicButton"
+                        onClick={() => openApp(list)}
+                      >
+                        Open App
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            : state.applist.map((list) => (
+                <div className="mini-card">
+                  {/* <div>
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aEE0AUQIbPgaoWSwIl-fTVQA8tIfTcFkow&usqp=CAU"
+                  alt=""
+                />
+              </div> */}
+                  <div>
+                    <p style={{ display: "inline" }}>
+                      {list.replace(
+                        /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi,
+                        function (matched) {
+                          return mapObj[matched];
+                        }
+                      )}
+                    </p>
+                    <button
+                      className="basicButton"
+                      onClick={() => openApp(list)}
+                    >
+                      Open App
+                    </button>
+                  </div>
+                </div>
+              ))}
         </div>
 
         <div className="device-info">

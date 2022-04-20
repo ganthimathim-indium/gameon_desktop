@@ -144,6 +144,7 @@ const SignIn = () => {
       const myJSON = JSON.stringify(data);
       window.backend.mylogin(myJSON).then((result) => {
         const userObj = JSON.parse(result);
+        console.log(userObj, "userObj");
         var data = [];
         data.push(userObj);
         if (data.length > 0) {

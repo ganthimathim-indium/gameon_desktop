@@ -7,9 +7,9 @@ import indlogo from "../../asset/Group.png";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/loginAuth/loginAuthSlice";
 
-function LoginHeader() {
-  // const user = useSelector(selectUser);
-  // console.log(user, "user");
+const LoginHeader = () => {
+  let users = useSelector(selectUser);
+  console.log(users, "user");
 
   // const [state, setState] = useState({
   //   isChecked: false,
@@ -63,13 +63,21 @@ function LoginHeader() {
         >
           GameOn
         </h2>
-        <p style={{ float: "right", marginRight: "10%", paddingTop: "2%" }}>
-          vivek
+        <p
+          style={{
+            float: "right",
+            marginRight: "10%",
+            paddingTop: "2%",
+            fontSize: "18px",
+            fontWeight: 600,
+          }}
+        >
+          Ganthi
         </p>
       </header>
     </div>
   );
-}
+};
 
 // class LoginHeader extends Component {
 //   constructor(props) {
