@@ -19,9 +19,9 @@ func Appnamenew() (val string) {
 }
 
 func Appname() (val string) {
-	run("shell", "cmd package list package")
+	run("shell", "cmd package list package -3")
 
-	result1 := string(run("shell", "cmd package list package"))
+	result1 := string(run("shell", "cmd package list package -3"))
 
 	return result1
 
