@@ -4,6 +4,7 @@ import { Link, MemoryRouter as Router, Route, Switch } from "react-router-dom";
 import BasicInfo from "../Home/BasicInfo";
 import LoginHeader from "../Login/Header";
 import "./SelectPage.css";
+import mobile from "../../asset/mobile.png";
 
 export default class SelectPages extends Component {
   constructor(props) {
@@ -13,7 +14,6 @@ export default class SelectPages extends Component {
       devicecheck: false,
     };
   }
-
   componentDidMount() {
     window.backend.checkdevice().then((result) => {
       console.log(result, "connectivity");
@@ -30,7 +30,6 @@ export default class SelectPages extends Component {
       }
     });
   }
-
   connectdevice = () => {
     window.backend.checkdevice().then((result) => {
       if (result == "Device Attached") {
@@ -46,27 +45,27 @@ export default class SelectPages extends Component {
       }
     });
   };
-
   render() {
     return (
       <div>
         {this.state.devicecheck == true ? (
           <BasicInfo />
         ) : (
-          <div>
+          <div className="select">
             <LoginHeader />
             <div className="page_container">
               <img
                 src={mobile}
                 alt=" "
-                style={{ width: "25%", height: "70%", marginLeft: "13%" }}
+                style={{ width: "25%", height: "70%", marginLeft: "16%" }}
               />
               <div
                 style={{
                   float: "right",
                   color: "#FFFFFF",
                   display: "inline",
-                  marginRight: "10%",
+                  marginRight: "22%",
+                  marginTop: "10%",
                 }}
               >
                 <p>No Device</p>
