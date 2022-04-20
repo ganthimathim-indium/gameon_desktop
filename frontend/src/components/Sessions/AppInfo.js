@@ -126,6 +126,7 @@ class AppData extends React.Component {
         window.backend
           .gpuMetric(this.props.location.state.value)
           .then((result) => {
+            console.log(result, "gpu");
             let results = Number(result.substr(18));
             console.log(results);
             console.log(result);
@@ -320,7 +321,7 @@ class AppData extends React.Component {
                     <p class="card-text">
                       {" "}
                       <i class="fa fa-info-circle text-info mx-2"></i>
-                      <span style={{ fontWeight: "bold" }}>Version:</span>
+                      <span style={{ fontWeight: "bold" }}>OS Version:</span>
                       <small
                         style={{
                           marginLeft: "21px",
@@ -357,9 +358,7 @@ class AppData extends React.Component {
                     <p class="card-text">
                       {" "}
                       <i class="fa fa-android text-info mx-2"></i>
-                      <span style={{ fontWeight: "bold" }}>
-                        Android version:
-                      </span>
+                      <span style={{ fontWeight: "bold" }}>App version:</span>
                       <small
                         style={{
                           marginLeft: "21px",

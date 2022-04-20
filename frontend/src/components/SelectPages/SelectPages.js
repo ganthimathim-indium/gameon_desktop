@@ -3,6 +3,7 @@ import { Link, MemoryRouter as Router, Route, Switch } from "react-router-dom";
 // import Home from '../Home/Home';
 import BasicInfo from "../Home/BasicInfo";
 import LoginHeader from "../Login/Header";
+import "./SelectPage.css";
 
 export default class SelectPages extends Component {
   constructor(props) {
@@ -54,22 +55,38 @@ export default class SelectPages extends Component {
         ) : (
           <div>
             <LoginHeader />
-            <p
-              style={{
-                textAlign: "center",
-                fontWeight: "bold",
-                fontSize: "23px",
-              }}
-            >
-              No Device Attached, Kindly Connect Your Device..
-            </p>
-            <button
-              className="btn btn-primary"
-              style={{ marginLeft: "45%" }}
-              onClick={this.connectdevice}
-            >
-              Connect Device
-            </button>
+            <div className="page_container">
+              <img
+                src={mobile}
+                alt=" "
+                style={{ width: "25%", height: "70%", marginLeft: "13%" }}
+              />
+              <div
+                style={{
+                  float: "right",
+                  color: "#FFFFFF",
+                  display: "inline",
+                  marginRight: "10%",
+                }}
+              >
+                <p>No Device</p>
+                <h1>Attached</h1>
+                <small>Kindly connect your device!</small>
+                <button
+                  style={{
+                    width: "50%",
+                    height: "30px",
+                    color: "black",
+                    marginTop: "30px",
+                    background: "#FFFFFF",
+                    border: "1px solid white",
+                    borderRadius: "20px",
+                  }}
+                >
+                  Connect Device
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

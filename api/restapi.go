@@ -11,7 +11,7 @@ import (
 
 type Response struct {
 	Id           int    `json:"id"`
-	Name         string `json:"name"`
+	Name         string `json:"user_Name"`
 	Password     string `json:"password"`
 	Email        string `json:"email"`
 	Phone_number int    `json:"phone_number"`
