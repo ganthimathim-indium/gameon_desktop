@@ -500,7 +500,7 @@ func memmetric(appnamess string) (val string) {
 	Memory_deviations = "Mainactivity"
 	currentTime := time.Now()
 
-	Memory_deviations = currentTime.Format("3:4:5 pm")
+	Memory_time = currentTime.Format("3:4:5 pm")
 
 	return valsss
 

@@ -82,6 +82,7 @@ export default class SelectPages extends Component {
                     border: "1px solid white",
                     borderRadius: "20px",
                   }}
+                  onclick={this.connectdevice}
                 >
                   Connect Device
                 </button>

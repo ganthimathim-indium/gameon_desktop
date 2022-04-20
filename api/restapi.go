@@ -10,6 +10,7 @@ import (
 )
 
 type Response struct {
+<<<<<<< HEAD
 	Id           int    `json:"id"`
 	Name         string `json:"user_Name"`
 	Password     string `json:"password"`
@@ -17,6 +18,14 @@ type Response struct {
 	Phone_number int    `json:"phone_number"`
 	Token        string `json:"token"`
 	Created_at   string `json:"created_at"`
+=======
+	Id       int    `json:"id"`
+	Status   string `json:"status"`
+	Name     string `json:"user_Name"`
+	Password string `json:"password"`
+	Token    string `json:"token"`
+	Role     string `json:"role"`
+>>>>>>> 9e9a460ccc45894607d56216e4bc67cc802e6c77
 }
 
 type Responseinfo struct {
