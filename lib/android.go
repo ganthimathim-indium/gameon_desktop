@@ -100,7 +100,7 @@ func AndroidMemoryUsage(names string) (val string) {
 }
 func AndroidAppPowerUsage(names string) (val string) {
 
-	s := string(run("shell", "ps | findstr ", names))
+	s := string(run("shell", "ps | grep ", names))
 
 	if len(s) == 0 {
 		return "0"
