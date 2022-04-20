@@ -45,7 +45,15 @@ type Stopresponce struct {
 	Data average_values `json:"average_values"`
 }
 type average_values struct {
-	Cpu_usage string `json:"cpu_usage"`
+	Cpu_usage           string `json:"cpu_usage"`
+	Memory_usage        string `json:"memory_usage"`
+	Power_usage         string `json:"power_usage"`
+	Gpu_usage           string `json:"gpu_usage"`
+	Upload_data_usage   string `json:"upload_data_usage"`
+	Download_data_usage string `json:"download_data_usage"`
+	Cpucores_app_usage  string `json:"cpucores_app_usage"`
+	Apppower_app_usage  string `json:"apppower_app_usage"`
+	Avgfps_app_usage    string `json:"avgfps_app_usage"`
 }
 
 func Apihit(val map[string]string) string {
