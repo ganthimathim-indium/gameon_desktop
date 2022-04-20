@@ -342,11 +342,27 @@ const SignIn = () => {
                           </div>
                         )}
                       </div>
+                      <div style={{ marginTop: "6%" }}>
+                        <div class="myTest custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="customCheck1"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="customCheck1"
+                            style={{ fontWeight: "9px" }}
+                          >
+                            Remember Me
+                          </label>
+                        </div>
+                      </div>
                       <input
                         type="submit"
                         value="Login"
                         style={{
-                          marginTop: "15%",
+                          marginTop: "8%",
                           background: "#278EF1",
                           borderRadius: "20px",
                           width: "84%",

@@ -67,12 +67,12 @@ const LoginHeader = () => {
           style={{
             float: "right",
             marginRight: "10%",
-            paddingTop: "2%",
+            paddingTop: "1%",
             fontSize: "18px",
             fontWeight: 600,
           }}
         >
-          Ganthi
+          Vivek
         </p>
       </header>
     </div>

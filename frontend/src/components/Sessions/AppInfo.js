@@ -561,7 +561,11 @@ class AppData extends React.Component {
         {console.log(this.state.gpuValues)}
 
         <div class="graphs">
-          <Plot
+          <MetricGraph
+            metTime={this.state.timeValues}
+            metValues={this.state.gpuValues}
+          />
+          {/* <Plot
             data={[
               {
                 x: this.state.timeValues,
@@ -598,7 +602,7 @@ class AppData extends React.Component {
               plot_bgcolor: "#F5F5F5",
               plot_height: 300,
             }}
-          />
+          /> */}
         </div>
 
         {/* <MetricGraph

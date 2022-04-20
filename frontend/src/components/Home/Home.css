@@ -4,6 +4,10 @@
   margin-right: auto;
 }
 
+.mini-card button {
+  margin-left: 4%;
+}
+
 .big-container {
   display: flex;
   margin-left: 8%;
@@ -19,6 +23,18 @@
 
 h3 {
   margin-top: -40vh;
+}
+.nolist ::placeholder {
+  font-size: 13px;
+}
+
+.nolist input:focus {
+  border: 1px solid white;
+}
+
+.mini-card p {
+  margin-left: 7%;
+  font-size: 13px;
 }
 
 .mini-card img {
@@ -39,9 +55,6 @@ h3 {
   width: 85%;
   object-fit: contain;
   padding: 2%;
-}
-.mini_card p {
-  display: inline;
 }
 
 .device-info p {

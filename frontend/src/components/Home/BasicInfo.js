@@ -27,6 +27,7 @@ var mapObj = {
   ".internal": " ",
   ".emulation": " ",
   ".network": " ",
+  ".dragonfistztamilan": " ",
 };
 
 const BasicInfo = () => {
@@ -101,7 +102,7 @@ const BasicInfo = () => {
   return (
     <div>
       <LoginHeader />
-      <div style={{ marginLeft: "9.5%", marginTop: "4%" }}>
+      <div style={{ marginLeft: "9.8%", marginTop: "4%", fontWeight: 600 }}>
         List of Applications
       </div>
 
@@ -111,13 +112,14 @@ const BasicInfo = () => {
         </p>
         <input
           style={{
-            width: "20%",
-            height: "9%",
+            width: "19%",
+            height: "13%",
             background: "white",
             border: "2px solid white",
-            borderRadius: "7px",
+            borderRadius: "10px",
             marginLeft: "20%",
             position: "relative",
+            boxShadow: "0px 3px 6px #0000001A",
           }}
           placeholder="Search app here"
           type="text"
@@ -130,7 +132,7 @@ const BasicInfo = () => {
             position: "relative",
             width: "12px",
             height: "12px",
-            right: 13,
+            right: 15,
           }}
         />
       </div>
@@ -147,22 +149,21 @@ const BasicInfo = () => {
                   alt=""
                 />
               </div> */}
-                    <div>
-                      <p style={{ display: "inline" }}>
-                        {list.replace(
-                          /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi,
-                          function (matched) {
-                            return mapObj[matched];
-                          }
-                        )}
-                      </p>
-                      <button
-                        className="basicButton"
-                        onClick={() => openApp(list)}
-                      >
-                        Open App
-                      </button>
-                    </div>
+
+                    <p style={{ display: "inline" }}>
+                      {list.replace(
+                        /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.dragonfistztamilan|.network/gi,
+                        function (matched) {
+                          return mapObj[matched];
+                        }
+                      )}
+                    </p>
+                    <button
+                      className="basicButton"
+                      onClick={() => openApp(list)}
+                    >
+                      Open App>
+                    </button>
                   </div>
                 );
               })
@@ -174,22 +175,18 @@ const BasicInfo = () => {
                   alt=""
                 />
               </div> */}
-                  <div>
-                    <p style={{ display: "inline" }}>
-                      {list.replace(
-                        /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi,
-                        function (matched) {
-                          return mapObj[matched];
-                        }
-                      )}
-                    </p>
-                    <button
-                      className="basicButton"
-                      onClick={() => openApp(list)}
-                    >
-                      Open App
-                    </button>
-                  </div>
+
+                  <p style={{ display: "inline" }}>
+                    {list.replace(
+                      /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.dragonfistztamilan|.network/gi,
+                      function (matched) {
+                        return mapObj[matched];
+                      }
+                    )}
+                  </p>
+                  <button className="basicButton" onClick={() => openApp(list)}>
+                    Open App>
+                  </button>
                 </div>
               ))}
         </div>

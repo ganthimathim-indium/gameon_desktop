@@ -2,6 +2,7 @@ import React from "react";
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import "./metricGraph.css";
+import { blue } from "@mui/material/colors";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -18,21 +19,37 @@ function MetricGraph(props) {
               x: props.metTime,
               y: props.metValues,
               type: "scatter",
-              mode: "lines",
-              marker: { color: "blue" },
+              mode: "line",
+
+              marker: { enabled: false },
+              line: { shape: "spline", smoothing: 0.8 },
+              marker: { color: "#87CEEB", size: "0" },
             },
           ]}
           layout={{
+            X: 0,
+            xanchor: "left",
+            title: "Total GPU Usage",
             width: 1150,
-            height: 230,
-            margin: { l: 40 },
-            padding: 0,
+            height: 250,
+            margin: { l: 22, r: 20, b: 20, t: 20, pad: 5 },
+            title: false,
+            xref: 400,
+
+            text: "GpuUsage",
+            borderRadius: 20,
             xaxis: {
               autorange: true,
-              rangeslider: {
-                range: ["00:00:00", "00:01:60"],
-              },
+              // rangeslider: {
+              //   range: ["00:00:00", "00:01:60"],
+              //   borderColor: "blue",
+              //   bgColor: "grey",
+              // },
             },
+            plot_bgcolor: "#F5F5F5",
+            // paper_bgcolor: "",
+
+            plot_height: 300,
           }}
         />
       </div>
