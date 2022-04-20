@@ -15,12 +15,13 @@ export default class SelectPages extends Component {
 
   componentDidMount() {
     window.backend.checkdevice().then((result) => {
-      if (result == "Device Attached") {
+      console.log(result, "connectivity");
+      if (result === "Device Attached") {
         this.setState({
           devicecheck: true,
           devicetext: "Device Attached Successfully",
         });
-      } else {
+      } else if (result === "No Device Attached") {
         this.setState({
           devicecheck: false,
           devicetext: "No Device Attached Kindly Connect Your Device Properly",

@@ -131,7 +131,7 @@ class AppData extends React.Component {
             console.log(result);
             this.setState({ GpuUsage: results });
             this.setState({
-              timeSeconds: this.state.timeSeconds + 1,
+              timeSeconds: this.state.timeSeconds + 3,
             });
             let time = new Date(this.state.timeSeconds * 1000)
               .toISOString()
@@ -221,7 +221,7 @@ class AppData extends React.Component {
             this.setState({ avgMedianFPS: results });
             console.log(this.state.cpuCores);
           });
-      }, 1000);
+      }, 3000);
     }
   }
 

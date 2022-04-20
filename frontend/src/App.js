@@ -27,17 +27,15 @@ function App() {
   // };
   // console.log(user, "message");
   return (
-    <div>
+    <div className="app">
       <Router>
         <Switch>
           <Route exact path="/" component={SignIn} />
 
           <Route exact path="/select-page" component={SelectPages} />
           <Route exact path="/home" component={BasicInfo} />
-          {/* <Route exact path="/home" component={BasicInfo} /> */}
 
           <Route exact path="/app-info" component={AppInfo} />
-          {/* <Route exact path="/app-info" component={AppInf} /> */}
         </Switch>
       </Router>
     </div>

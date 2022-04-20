@@ -3,6 +3,8 @@ import "./SignIn.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import background from "../../asset/pc-game.jpg";
+import image from "../../asset/img.png";
+import indlogo from "../../asset/Group.png";
 import {
   Link,
   MemoryRouter as Router,
@@ -149,7 +151,7 @@ const SignIn = () => {
             return {
               ...ps,
               result: true,
-              name: userObj.name,
+              name: userObj.user_Name,
               id: userObj.id,
               token: userObj.token,
               userRole: userObj.role,
@@ -158,7 +160,7 @@ const SignIn = () => {
           console.log(userObj.role, "role in sign");
           dispatch(
             login({
-              name: userObj.name,
+              name: userObj.user_Name,
               id: userObj.id,
               token: userObj.token,
               userRole: userObj.role,
@@ -203,122 +205,165 @@ const SignIn = () => {
     );
   }
   return (
-    <div className="login">
-      <p>h </p>
-      <div className="containers">
-        <div className="left-side">
-          <Grid align="center">
-            <h5 className="left-top">GameOn</h5>
-            <h5 className="left_bottom"> Smart way to test GameOn </h5>
-
-            {/* {state.result && <Link to="/select-page"></Link>} */}
-          </Grid>
+    <>
+      <div className="log">
+        <div>
+          <img
+            src={indlogo}
+            alt=""
+            style={{ float: "left", width: "15%", height: "15%" }}
+          />
+          <h2
+            style={{
+              float: "right",
+              marginRight: "10%",
+              fontSize: "25px",
+              marginTop: "1.5%",
+              marginLeft: "0.7%",
+            }}
+          >
+            GameOn
+          </h2>
+          <img
+            src={indlogo}
+            alt=" "
+            style={{ width: "5%", height: "5%", float: "right" }}
+          />
         </div>
+        <div className="box-container">
+          <div className="box">
+            <div className="left-side">
+              <Grid align="center">
+                <h5 className="left-top">GameOn</h5>
+                <img src={image} alt="" className="login_image" />
+                <h5 className="left_bottom"> Smart way to test Game App </h5>
 
-        <div className="right-side">
-          <div className="contents">
-            <form onSubmit={handleSubmit}>
-              <h3 style={{ textAlign: "left" }}>Login</h3>
-              <div className="tab-content" id="pills-tabContent">
-                <div
-                  className="tab-pane fade show active"
-                  id="pills-home"
-                  role="tabpanel"
-                  aria-labelledby="pills-home-tab"
-                >
-                  <div>
+                {/* {state.result && <Link to="/select-page"></Link>} */}
+              </Grid>
+            </div>
+
+            <div className="right-side">
+              <div className="contents">
+                <form onSubmit={handleSubmit}>
+                  <h3
+                    style={{
+                      textAlign: "left",
+                      marginTop: "10%",
+                      marginBottom: "10%",
+                    }}
+                  >
+                    Login
+                  </h3>
+                  <div className="tab-content" id="pills-tabContent">
                     <div
-                      className={
-                        state.mobile && state.mobile.length > 0 ? "" : " mb-0"
-                      }
+                      className="tab-pane fade show active"
+                      id="pills-home"
+                      role="tabpanel"
+                      aria-labelledby="pills-home-tab"
                     >
-                      <TextField
-                        id="standard-basic"
-                        variant="standard"
-                        value={state.email}
-                        onChange={onEmailChange}
-                        style={{ position: "absolute", width: "23%" }}
-                        placeholder="Enter Email"
-                        disabled={
-                          state.mobile && state.mobile.length > 0 ? true : false
-                        }
-                      />
-                      <i
-                        className="bi bi-envelope "
-                        style={{
-                          fontSize: "26px",
-                          color: "black",
-                          position: "relative",
-                          marginLeft: "75%",
-                        }}
-                      ></i>
-                    </div>
-                    {(state.validEmail || state.isEmptyEmail) && (
-                      <div className="validCred">*Enter a valid Email</div>
-                    )}
-                  </div>
-                  {/* <div
+                      <div>
+                        <div
+                          className={
+                            state.mobile && state.mobile.length > 0
+                              ? ""
+                              : " mb-0"
+                          }
+                        >
+                          <TextField
+                            id="standard-basic"
+                            variant="standard"
+                            value={state.email}
+                            onChange={onEmailChange}
+                            style={{ position: "absolute", width: "23%" }}
+                            placeholder="Enter Email"
+                            disabled={
+                              state.mobile && state.mobile.length > 0
+                                ? true
+                                : false
+                            }
+                          />
+                          <i
+                            className="bi bi-envelope "
+                            style={{
+                              fontSize: "26px",
+                              color: "#FEA14A",
+                              position: "relative",
+                              marginLeft: "75%",
+                            }}
+                          ></i>
+                        </div>
+                        {(state.validEmail || state.isEmptyEmail) && (
+                          <div className="validCred">*Enter a valid Email</div>
+                        )}
+                      </div>
+                      {/* <div
                     className={
                       state.email.length > 0
                         ? "form-group inputPhone"
                         : "form-group"
                     }
                   ></div> */}
-                  <div>
-                    <div>
-                      <TextField
-                        id="standard-basic"
-                        variant="standard"
-                        value={state.password}
-                        onChange={onPasswordChange}
-                        style={{ position: "absolute", width: "23%" }}
-                        placeholder="Enter Password"
-                      />
+                      <div>
+                        <div>
+                          <TextField
+                            id="standard-basic"
+                            variant="standard"
+                            value={state.password}
+                            onChange={onPasswordChange}
+                            style={{ position: "absolute", width: "23%" }}
+                            placeholder="Enter Password"
+                          />
 
-                      <button
-                        style={{
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          postion: "relative",
-                          marginTop: "-2%",
-                          bottom: 1500,
-                          marginLeft: "75%",
-                          display: "inline",
-                        }}
-                        // onClick={pwdhandleClick}
-                      >
-                        {state.types === "text" ? (
-                          <i>{eye}</i>
-                        ) : (
-                          <i>{eyeslash}</i>
+                          <button
+                            style={{
+                              background: "none",
+                              color: "#FEA14A",
+                              border: "none",
+                              cursor: "pointer",
+                              postion: "relative",
+                              marginTop: "-2%",
+                              bottom: 1500,
+                              marginLeft: "75%",
+                              display: "inline",
+                            }}
+                            // onClick={pwdhandleClick}
+                          >
+                            {state.types === "text" ? (
+                              <i>{eye}</i>
+                            ) : (
+                              <i>{eyeslash}</i>
+                            )}
+                          </button>
+                        </div>
+                        {state.validPassword && (
+                          <div className="validCred">
+                            *Password cannot be empty
+                          </div>
                         )}
-                      </button>
+                      </div>
+                      <input
+                        type="submit"
+                        value="Login"
+                        style={{
+                          marginTop: "15%",
+                          background: "#278EF1",
+                          borderRadius: "20px",
+                          width: "84%",
+                          height: "5%",
+                          padding: "3px",
+                        }}
+                      />
                     </div>
-                    {state.validPassword && (
-                      <div className="validCred">*Password cannot be empty</div>
-                    )}
                   </div>
-                  <input
-                    type="submit"
-                    value="Login"
-                    style={{
-                      marginTop: "15%",
-                      background: "grey",
-                      borderRadius: "8px",
-                      width: "84%",
-                      padding: "3px",
-                    }}
-                  />
-                </div>
+                </form>
               </div>
-            </form>
+            </div>
+
+            <br></br>
           </div>
         </div>
-
-        <br></br>
       </div>
-    </div>
+    </>
   );
 };
 

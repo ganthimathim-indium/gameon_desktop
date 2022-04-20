@@ -1,80 +1,145 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import logo from "../../asset/game.png";
 import "./Header.css";
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router-dom";
+import indlogo from "../../asset/Group.png";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/loginAuth/loginAuthSlice";
 
-class LoginHeader extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isChecked: false,
-      connection: false,
-    };
-  }
+function LoginHeader() {
+  // const user = useSelector(selectUser);
+  // console.log(user, "user");
 
-  redirect = () => {
-    if (this.props.history.location.pathname) {
-      let redirect_path = `/signin?continue=${window.location.href
-        .split("/")
-        .slice(3)
-        .join("/")}`;
-      this.props.history.push(redirect_path)
-    }
-  };
+  // const [state, setState] = useState({
+  //   isChecked: false,
+  //   connection: false,
+  // });
 
-  logout = () => {
-    var email = localStorage.getItem("email");
-    var password = localStorage.getItem("password");
-    var rememberMe = localStorage.getItem("rememberMe");
-    var login_email = localStorage.getItem("login_email");
-    localStorage.clear();
-    localStorage.setItem("email", email);
-    localStorage.setItem("password", password);
-    localStorage.setItem("rememberMe", rememberMe);
-    localStorage.setItem("login_email", login_email);
-    window.location = "/aladdin-landing";
-  };
+  // const redirect = () => {
+  //   if (props.history.location.pathname) {
+  //     let redirect_path = `/signin?continue=${window.location.href
+  //       .split("/")
+  //       .slice(3)
+  //       .join("/")}`;
+  //     props.history.push(redirect_path);
+  //   }
+  // };
 
+  // const logout = () => {
+  //   var email = localStorage.getItem("email");
+  //   var password = localStorage.getItem("password");
+  //   var rememberMe = localStorage.getItem("rememberMe");
+  //   var login_email = localStorage.getItem("login_email");
+  //   localStorage.clear();
+  //   localStorage.setItem("email", email);
+  //   localStorage.setItem("password", password);
+  //   localStorage.setItem("rememberMe", rememberMe);
+  //   localStorage.setItem("login_email", login_email);
+  //   window.location = "/aladdin-landing";
+  // };
 
-
-  render() {
-    var profile = (
-      <i
-        className="bi bi-person-square iconStyleHeader"
-      ></i>
-    );
-
-    let data;
-    data = (
-      <div>
-              <h5 style={{display: "inline"}}>Ganthimathi</h5> 
-              <span style={{ marginLeft: "55%" }}>{profile}</span>
-              </div>
-          
-      )
-
-    return (
-      <div>
-        <header>
-          <nav className="navbar navbarX  navbar-light bg-grey">
-            <div className="container-fluid col-10">
-              <Link
-                style={{ textDecoration: "none" }}
-                to={{ pathname: "/" }}
-              >
-               
-              </Link>
-             
-              {data}
-            </div>
-          </nav>
-        </header>
-        <div style={{ height: "80px" }}></div>
-      </div>
-    );
-  }
+  return (
+    <div className="header">
+      <header>
+        <Link style={{ textDecoration: "none" }} to={{ pathname: "/" }}></Link>
+        <img
+          src={indlogo}
+          alt=" "
+          style={{
+            float: "left",
+            marginLeft: "3%",
+            width: "4%",
+            objectFit: "contain",
+          }}
+        />
+        <h2
+          style={{
+            float: "left",
+            marginLeft: "10px",
+            fontSize: "22px",
+            paddingTop: "1%",
+          }}
+        >
+          GameOn
+        </h2>
+        <p style={{ float: "right", marginRight: "10%", paddingTop: "2%" }}>
+          vivek
+        </p>
+      </header>
+    </div>
+  );
 }
 
+// class LoginHeader extends Component {
+//   constructor(props) {
+//     super(props);
+//     state = {
+//       isChecked: false,
+//       connection: false,
+//     };
+//   }
 
-export default (withRouter(LoginHeader));
+//   redirect = () => {
+//     if (props.history.location.pathname) {
+//       let redirect_path = `/signin?continue=${window.location.href
+//         .split("/")
+//         .slice(3)
+//         .join("/")}`;
+//       props.history.push(redirect_path);
+//     }
+//   };
+
+//   logout = () => {
+//     var email = localStorage.getItem("email");
+//     var password = localStorage.getItem("password");
+//     var rememberMe = localStorage.getItem("rememberMe");
+//     var login_email = localStorage.getItem("login_email");
+//     localStorage.clear();
+//     localStorage.setItem("email", email);
+//     localStorage.setItem("password", password);
+//     localStorage.setItem("rememberMe", rememberMe);
+//     localStorage.setItem("login_email", login_email);
+//     window.location = "/aladdin-landing";
+//   };
+
+//   render() {
+//     var profile = <i className="bi bi-person-square iconStyleHeader"></i>;
+
+//     return (
+//       <div className="header">
+//         <header>
+//           <Link
+//             style={{ textDecoration: "none" }}
+//             to={{ pathname: "/" }}
+//           ></Link>
+//           <img
+//             src={indlogo}
+//             alt=" "
+//             style={{
+//               float: "left",
+//               marginLeft: "3%",
+//               width: "4%",
+//               objectFit: "contain",
+//             }}
+//           />
+//           <h2
+//             style={{
+//               float: "left",
+//               marginLeft: "10px",
+//               fontSize: "22px",
+//               paddingTop: "1%",
+//             }}
+//           >
+//             GameOn
+//           </h2>
+//           <p style={{ float: "right", marginRight: "10%", paddingTop: "2%" }}>
+//             {user.name}
+//           </p>
+//         </header>
+//       </div>
+//     );
+//   }
+// }
+
+export default withRouter(LoginHeader);
