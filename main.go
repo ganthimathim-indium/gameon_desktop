@@ -32,6 +32,42 @@ var leadingInt = regexp.MustCompile(`^[-+]?\d+`)
 var ticker time.Ticker
 var timedata string
 
+var cpu_useage string
+var cpu_deviations string
+var cpu_time string
+
+var Memory_useage string
+var Memory_deviations string
+var Memory_time string
+
+var gpuMetric_useage string
+var gpuMetric_deviations string
+var gpuMetric_time string
+
+var Uploaddata_useage string
+var Uploaddata_deviations string
+var Uploaddata_time string
+
+var Downloadddata_useage string
+var Downloadddata_deviations string
+var Downloadddata_time string
+
+var CPUCores_useage string
+var CPUCores_deviations string
+var CPUCores_time string
+
+var power_useage string
+var power_deviations string
+var power_time string
+
+var Apppower_useage string
+var Apppower_deviations string
+var Apppower_time string
+
+var AvgMedianFPS_useage string
+var AvgMedianFPS_deviations string
+var AvgMedianFPS_time string
+
 type Appinfo struct {
 	Osname     string `json:"osname"`
 	Devicename string `json:"devicename"`
@@ -77,14 +113,40 @@ type Mystop struct {
 
 type results struct {
 	Cpu_app_usage string `json:"cpu_app_usage"`
-	// avg_gpu_usage    string `json:"avg_gpu_usage"`
-	// memory_deviation string `json:"memory_deviation"`
-	// power_deviation  string `json:"power_deviation"`
-	Time string `json:"time"`
-	// gpu_deviation    string `json:"gpu_deviation"`
-	// avg_memory_usage string `json:"avg_memory_usage"`
-	// avg_power_usage  string `json:"avg_power_usage"`
+	Cpu_time_val  string `json:"cpu_time"`
 	Cpu_deviation string `json:"cpu_deviation"`
+
+	Memory_app_useage    string `json:"memory_app_useage"`
+	Memory_app_deviation string `json:"memory_app_deviation"`
+	Memory_app_time      string `json:"memory_app_time"`
+
+	Gpu_app_useage    string `json:"gpu_app_useage"`
+	Gpu_app_deviation string `json:"gpu_app_deviation"`
+	Gpu_app_time      string `json:"gpu_app_time"`
+
+	Uploaddata_app_useage    string `json:"uploaddata_app_useage"`
+	Uploaddata_app_deviation string `json:"uploaddata_app_deviation"`
+	Uploaddata_app_time      string `json:"uploaddata_app_time"`
+
+	Downloadddata_app_useage    string `json:"downloadddata_app_useage"`
+	Downloadddata_app_deviation string `json:"downloadddata_app_deviation"`
+	Downloadddata_app_time      string `json:"downloadddata_app_time"`
+
+	CPUCores_app_useage    string `json:"cpucores_app_useage"`
+	CPUCores_app_deviation string `json:"cpucores_app_deviation"`
+	CPUCores_app_time      string `json:"cpucores_app_time"`
+
+	Power_app_useage    string `json:"power_app_useage"`
+	Power_app_deviation string `json:"power_app_deviation"`
+	Power_time          string `json:"power_app_time"`
+
+	Apppower_app_useage    string `json:"apppower_app_useage"`
+	Apppower_app_deviation string `json:"apppower_app_deviation"`
+	Apppower_time          string `json:"apppower_app_time"`
+
+	Avgfps_app_useage    string `json:"avgfps_app_useage"`
+	Avgfps_app_deviation string `json:"avgfps_app_deviation"`
+	Avgfps_time          string `json:"avgfps_app_time"`
 }
 
 //3 basic info
@@ -401,12 +463,13 @@ func cpumetric(appnamess string) (val string) {
 	fmt.Println("tttt" + res2)
 	var valsss string
 	currentTime := time.Now()
+	cpu_useage = ""
+	cpu_deviations = ""
+	cpu_time = ""
+	cpu_useage = L.AndroidCPUUsage(appnamess)
+	cpu_deviations = "Mainactivity"
+	cpu_time = currentTime.Format("3:4:5 pm")
 
-	result := results{Cpu_app_usage: L.AndroidCPUUsage(appnamess), Time: currentTime.Format("3:4:5 pm"),
-		Cpu_deviation: "Mainactivity"}
-
-	human2 = append(human2, result)
-	fmt.Println(human2) // {"Name":"Bob","Age":10,"Active":true}
 	valsss = "Total CPU Useage : " + res2 + " %"
 	return valsss
 
@@ -414,14 +477,13 @@ func cpumetric(appnamess string) (val string) {
 
 //2.menory metric
 func memmetric(appnamess string) (val string) {
-	res2 := L.Androidmemoryuseage(appnamess)
-
-	lastByByte := res2[0:10]
+	res2 := L.AndroidMemoryUsage(appnamess)
 
 	var valsss string
+	var valsss1 string
+
 	var valss string
-	fmt.Println("rrrr" + lastByByte)
-	valss = strings.TrimSuffix(lastByByte, "kB")
+	valss = strings.TrimSpace(res2)
 	intVar, err := strconv.Atoi(strings.TrimSpace(valss))
 	if err != nil {
 		fmt.Println(err)
@@ -429,6 +491,16 @@ func memmetric(appnamess string) (val string) {
 
 	fmt.Println(intVar)
 	valsss = fmt.Sprintf("Total Memory Usage : %v MB", kBToMB(intVar))
+	valsss1 = fmt.Sprintf("%v", kBToMB(intVar))
+
+	Memory_useage = ""
+	Memory_deviations = ""
+	Memory_time = ""
+	Memory_useage = valsss1
+	Memory_deviations = "Mainactivity"
+	currentTime := time.Now()
+
+	Memory_deviations = currentTime.Format("3:4:5 pm")
 
 	return valsss
 
@@ -441,7 +513,16 @@ func gpuMetric(appnamess string) (val string) {
 	res2 = strings.Split(res2, ",")[1]
 	res2 = strings.TrimSpace(res2)
 
-	value := "Total Gpu Usage : " + res2
+	gpuMetric_useage = ""
+	gpuMetric_deviations = ""
+	gpuMetric_time = ""
+	gpuMetric_useage = res2
+	gpuMetric_deviations = "Mainactivity"
+	currentTime := time.Now()
+
+	gpuMetric_time = currentTime.Format("3:4:5 pm")
+
+	value := "Total Gpu Usage : " + res2 + " MB"
 	return value
 
 }
@@ -451,9 +532,23 @@ func Uploaddata(appnames string) (val string) {
 	res2 := L.AndroidUploadedData(appnames)
 	fmt.Println("tttt" + res2)
 	var valsss string
+
 	intVar, _ := strconv.Atoi(res2)
 
 	valsss = fmt.Sprintf("Total DataUploaded : %v MB", bytesToMB(intVar))
+
+	var valsss1 string
+
+	valsss1 = fmt.Sprintf("%v", bytesToMB(intVar))
+
+	Uploaddata_useage = ""
+	Uploaddata_deviations = ""
+	Uploaddata_time = ""
+	Uploaddata_useage = valsss1
+	Uploaddata_deviations = "Mainactivity"
+	currentTime := time.Now()
+
+	Uploaddata_time = currentTime.Format("3:4:5 pm")
 
 	return valsss
 
@@ -468,6 +563,19 @@ func AndroidDownloadedData1(appnames string) (val string) {
 
 	valsss = fmt.Sprintf("Total Download data : %v MB", bytesToMB(intVar))
 
+	var valsss1 string
+
+	valsss1 = fmt.Sprintf("%v", bytesToMB(intVar))
+
+	Downloadddata_useage = ""
+	Downloadddata_deviations = ""
+	Downloadddata_time = ""
+	Downloadddata_useage = valsss1
+	Downloadddata_deviations = "Mainactivity"
+	currentTime := time.Now()
+
+	Downloadddata_time = currentTime.Format("3:4:5 pm")
+
 	return valsss
 
 }
@@ -479,6 +587,15 @@ func AndroidCPUCores1(appnamess string) (val string) {
 	var valsss string
 	valsss = "cpu Cores : " + res2
 
+	CPUCores_useage = ""
+	CPUCores_deviations = ""
+	CPUCores_time = ""
+	CPUCores_useage = res2
+	CPUCores_deviations = "Mainactivity"
+	currentTime := time.Now()
+
+	CPUCores_time = currentTime.Format("3:4:5 pm")
+
 	return valsss
 
 }
@@ -489,6 +606,16 @@ func powermetric(appnamess string) (val string) {
 	fmt.Println("tttt" + res2)
 	var valsss string
 	valsss = "Total Battery Useage : " + res2 + " %"
+
+	power_useage = ""
+	power_deviations = ""
+	power_time = ""
+	power_useage = res2
+	power_deviations = "Mainactivity"
+	currentTime := time.Now()
+
+	power_time = currentTime.Format("3:4:5 pm")
+
 	return valsss
 
 }
@@ -500,6 +627,16 @@ func Apppowermetric(appnamess string) (val string) {
 	fmt.Println("App usage" + res2)
 	var valsss string
 	valsss = "Total App Useage : " + res2 + " mAh"
+
+	Apppower_useage = ""
+	Apppower_deviations = ""
+	Apppower_time = ""
+	Apppower_useage = res2
+	Apppower_deviations = "Mainactivity"
+	currentTime := time.Now()
+
+	Apppower_time = currentTime.Format("3:4:5 pm")
+
 	return valsss
 
 }
@@ -521,6 +658,30 @@ func AvgMedianFPS(appnames string) (val string) {
 	res2 := L.AndroidMedianFPS(appnames)
 
 	var valsss string
+
+	AvgMedianFPS_useage = ""
+	AvgMedianFPS_deviations = ""
+	AvgMedianFPS_time = ""
+	AvgMedianFPS_useage = res2
+	AvgMedianFPS_deviations = "Mainactivity"
+	currentTime := time.Now()
+
+	AvgMedianFPS_time = currentTime.Format("3:4:5 pm")
+
+	result := results{
+		Cpu_app_usage: cpu_useage, Cpu_time_val: cpu_time, Cpu_deviation: cpu_deviations,
+		Memory_app_useage: Memory_useage, Memory_app_deviation: Memory_deviations, Memory_app_time: Memory_time,
+		Gpu_app_useage: gpuMetric_useage, Gpu_app_deviation: gpuMetric_deviations, Gpu_app_time: gpuMetric_time,
+		Uploaddata_app_useage: Uploaddata_useage, Uploaddata_app_deviation: Uploaddata_deviations, Uploaddata_app_time: Uploaddata_time,
+		Downloadddata_app_useage: Downloadddata_useage, Downloadddata_app_deviation: Downloadddata_deviations, Downloadddata_app_time: Downloadddata_time,
+		CPUCores_app_useage: CPUCores_useage, CPUCores_app_deviation: CPUCores_deviations, CPUCores_app_time: CPUCores_time,
+		Power_app_useage: power_useage, Power_app_deviation: power_deviations, Power_time: power_time,
+		Apppower_app_useage: Apppower_useage, Apppower_app_deviation: Apppower_deviations, Apppower_time: Apppower_time,
+		Avgfps_app_useage: AvgMedianFPS_useage, Avgfps_app_deviation: AvgMedianFPS_deviations, Avgfps_time: AvgMedianFPS_time}
+
+	human2 = append(human2, result)
+	fmt.Println("myyyyyyyyyyyyyyyyyyyyyyyy")
+	fmt.Println(human2) // {"Name":"Bob","Age":10,"Active":true}
 
 	valsss = "Avg. Median FPS Usage : " + res2
 

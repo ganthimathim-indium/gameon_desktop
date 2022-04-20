@@ -16,6 +16,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/loginAuth/loginAuthSlice";
 import BasicInfo from "./components/Home/BasicInfo.js";
+import Heloo from "./components/HelloWorld.js"
 
 function App() {
   const user = useSelector(selectUser);
@@ -38,6 +39,11 @@ function App() {
           <Route exact path="/app-info" component={AppInfo} />
         </Switch>
       </Router>
+      {/* <Route exact path="/app-info" component={AppInf} /> */}
+
+      {/* <Route exact path="/home" component={BasicInfo} /> */}
+
+      {/* <Heloo></Heloo> */}
     </div>
   );
 }
