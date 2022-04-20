@@ -522,7 +522,7 @@ func gpuMetric(appnamess string) (val string) {
 
 	gpuMetric_time = currentTime.Format("3:4:5 pm")
 
-	value := "Total Gpu Usage : " + res2 + " MB"
+	value := "Total Gpu Usage : " + res2
 	return value
 
 }
