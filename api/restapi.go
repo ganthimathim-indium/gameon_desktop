@@ -10,13 +10,12 @@ import (
 )
 
 type Response struct {
-	Id           int    `json:"id"`
-	Name         string `json:"name"`
-	Password     string `json:"password"`
-	Email        string `json:"email"`
-	Phone_number int    `json:"phone_number"`
-	Token        string `json:"token"`
-	Created_at   string `json:"created_at"`
+	Id       int    `json:"id"`
+	Status   string `json:"status"`
+	Name     string `json:"user_Name"`
+	Password string `json:"password"`
+	Token    string `json:"token"`
+	Role     string `json:"role"`
 }
 
 type Responseinfo struct {
