@@ -3,55 +3,69 @@ import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import "./metricGraph.css";
 import { blue } from "@mui/material/colors";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
 
 const Plot = createPlotlyComponent(Plotly);
+const Styles = makeStyles((theme) => ({
+  paper: {
+    width: "100%",
+    height: "auto",
+    background: "white",
+    borderRadius: "10px",
+    padding: "10px 10px 10px 10px",
+  },
+}));
 
 function MetricGraph(props) {
+  const classes = Styles();
   console.log(props.metValues, "graph value");
   console.log(props.metTime, "graph time");
   return (
     <>
-      <div>MetricGraph</div>
       <div class="graphs">
-        <Plot
-          data={[
-            {
-              x: props.metTime,
-              y: props.metValues,
-              type: "scatter",
-              mode: "line",
+        <Paper className={classes.paper}>
+          <Plot
+            data={[
+              {
+                x: props.metTime,
+                y: props.metValues,
+                type: "scatter",
+                mode: "line",
 
-              marker: { enabled: false },
-              line: { shape: "spline", smoothing: 0.8 },
-              marker: { color: "#87CEEB", size: "0" },
-            },
-          ]}
-          layout={{
-            X: 0,
-            xanchor: "left",
-            title: "Total GPU Usage",
-            width: 1150,
-            height: 250,
-            margin: { l: 22, r: 20, b: 20, t: 20, pad: 5 },
-            title: false,
-            xref: 400,
+                marker: { enabled: false },
+                line: { shape: "spline", smoothing: 0.8 },
+                marker: { color: "#87CEEB", size: "0" },
+              },
+            ]}
+            layout={{
+              X: 0,
+              xanchor: "left",
+              title: "Total GPU Usage",
+              width: 745,
+              height: 200,
+              margin: { l: 28, r: 20, b: 20, t: 20, pad: 5 },
+              title: false,
+              xref: 400,
 
-            text: "GpuUsage",
-            borderRadius: 20,
-            xaxis: {
-              autorange: true,
-              // rangeslider: {
-              //   range: ["00:00:00", "00:01:60"],
-              //   borderColor: "blue",
-              //   bgColor: "grey",
-              // },
-            },
-            plot_bgcolor: "#F5F5F5",
-            // paper_bgcolor: "",
+              text: "GpuUsage",
+              borderRadius: 20,
+              xaxis: {
+                autorange: true,
+                // rangeslider: {
+                //   range: ["00:00:00", "00:01:60"],
+                //   borderColor: "blue",
+                //   bgColor: "grey",
+                // },
+              },
+              plot_bgcolor: "#F5F5F5",
+              // paper_bgcolor: "",
 
-            plot_height: 300,
-          }}
-        />
+              plot_height: 300,
+            }}
+          />
+          <div style={{ marginLeft: "40%", padding: "2%" }}>GPU Usage</div>
+        </Paper>
       </div>
     </>
   );

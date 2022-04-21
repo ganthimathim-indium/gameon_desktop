@@ -6,7 +6,8 @@ import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import MetricGraph from "../../Graph/MetricGraph.js";
 import PulseLoader from "react-spinners/PulseLoader";
-
+import MetricUsage from "../../MetricUsage/MetricUsage";
+import DeviceInfo from "../DeviceInfo/DeviceInfo";
 // import { useSelector } from "react-redux";
 // import{ selectUser} from "../../features/loginAuth/loginAuthSlice"
 
@@ -58,6 +59,9 @@ class AppData extends React.Component {
       cpuStart: true,
       cpuValues: [],
       gpuValues: [],
+      memValues: [],
+      fpsValues: [],
+
       timeSeconds: 0,
       timeValues: [],
       userInfo: null,
@@ -116,6 +120,22 @@ class AppData extends React.Component {
       // const myJSON1 = JSON.stringify(persons1);
 
       this.timer = setInterval(() => {
+        this.setState({
+          timeSeconds: this.state.timeSeconds + 3,
+        });
+        let time = new Date(this.state.timeSeconds * 1000)
+          .toISOString()
+          .substr(14, 5);
+        if (this.state.timeValues.length < 8) {
+          this.setState({
+            timeValues: [...this.state.timeValues, time],
+          });
+        } else {
+          this.state.timeValues.shift();
+          this.setState({
+            timeValues: [...this.state.timeValues, time],
+          });
+        }
         window.backend
           .cpumetric(this.props.location.state.value)
           .then((result) => {
@@ -131,25 +151,25 @@ class AppData extends React.Component {
             console.log(results);
             console.log(result);
             this.setState({ GpuUsage: results });
-            this.setState({
-              timeSeconds: this.state.timeSeconds + 3,
-            });
-            let time = new Date(this.state.timeSeconds * 1000)
-              .toISOString()
-              .substr(14, 5);
+            // this.setState({
+            //   timeSeconds: this.state.timeSeconds + 3,
+            // });
+            // let time = new Date(this.state.timeSeconds * 1000)
+            //   .toISOString()
+            //   .substr(14, 5);
             console.log(this.state.GpuUsage, "gpu");
             if (this.state.gpuValues.length < 8) {
               this.setState({
                 gpuValues: [...this.state.gpuValues, results],
-                timeValues: [...this.state.timeValues, time],
+                // timeValues: [...this.state.timeValues, time],
               });
               console.log(time, "timeeeeeeeeeeeeeeeeee");
             } else {
               this.state.gpuValues.shift();
-              this.state.timeValues.shift();
+              // this.state.timeValues.shift();
               this.setState({
                 gpuValues: [...this.state.gpuValues, results],
-                timeValues: [...this.state.timeValues, time],
+                // timeValues: [...this.state.timeValues, time],
               });
             }
             console.log(this.state.gpuValues, "gpuValues");
@@ -217,10 +237,10 @@ class AppData extends React.Component {
         window.backend
           .AvgMedianFPS(this.props.location.state.value)
           .then((result) => {
-            console.log(result);
+            console.log(result, "fps result");
             let results = result.substring(result.indexOf(":") + 1);
             this.setState({ avgMedianFPS: results });
-            console.log(this.state.cpuCores);
+            console.log(this.state.avgMedianFPS, "fps value");
           });
       }, 3000);
     }
@@ -245,36 +265,13 @@ class AppData extends React.Component {
     });
   }
 
-  handleStartScan() {
-    console.log("scanning started");
-    console.log(this.state.result, "onStart");
-    window.backend.startscan("com.android.chrome", "true").then((result) => {
-      this.setState({ result: result });
-      console.log(this.state.result, "onscanning");
-    });
-    this.setState({ loader: true });
-  }
-
-  handleStopScan() {
-    console.log("scanning stopped");
-    window.backend.stopscan("com.android.chrome", "fales").then((result) => {
-      this.setState({ result: result });
-      alert(result);
-    });
-
-    this.setState({ loader: false });
-  }
-
   render() {
     console.log(this.props.location.state.value);
     return (
       <div className="appInfo">
         <LoginHeader />
 
-        {/* <button className="btn btn-primary" onClick={this.handleStartScan.bind(this)}>Start Scan</button>
-<button className="btn btn-secondary" onClick={this.handleStopScan.bind(this)}>Stop Scan</button> */}
-
-        <h1
+        {/* <h1
           style={{ textAlign: "center", marginTop: "-10%", fontSize: "40px" }}
         >
           Device Metrics
@@ -307,308 +304,63 @@ class AppData extends React.Component {
           >
             Stop Scan
           </button>
+        </div> */}
+        <div className="appBar">
+          <p style={{ float: "left" }}>Application Statistics</p>
+          <button
+            className="startButton"
+            onClick={this.handleCpuStart.bind(this)}
+          >
+            Start Scan
+          </button>
+          <button className="backButton">Back</button>
         </div>
 
         <div className="container">
           <div class="left">
             <div class="row">
               <div>
-                <div>
-                  <div className="info-card">
-                    <h5 class="card-title" style={{ fontWeight: "bold" }}>
-                      Device Info:
-                    </h5>
-                    <p class="card-text">
-                      {" "}
-                      <i class="fa fa-info-circle text-info mx-2"></i>
-                      <span style={{ fontWeight: "bold" }}>OS Version:</span>
-                      <small
-                        style={{
-                          marginLeft: "21px",
-                          fontSize: "90%",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {this.state.versionName}
-                      </small>
-                    </p>{" "}
-                    <p class="card-text">
-                      {" "}
-                      <i class="fa fa-laptop text-info mx-2"></i>
-                      <span style={{ fontWeight: "bold" }}>
-                        Application Name:
-                      </span>{" "}
-                      <small
-                        style={{
-                          marginLeft: "21px",
-                          fontSize: "90%",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {this.state.basicInfo.appname
-                          .replace(
-                            /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.network/gi,
-                            function (matched) {
-                              return mapObj[matched];
-                            }
-                          )
-                          .split(".")}
-                      </small>
-                    </p>{" "}
-                    <p class="card-text">
-                      {" "}
-                      <i class="fa fa-android text-info mx-2"></i>
-                      <span style={{ fontWeight: "bold" }}>App version:</span>
-                      <small
-                        style={{
-                          marginLeft: "21px",
-                          fontSize: "90%",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {this.state.androidVersion}{" "}
-                      </small>
-                    </p>{" "}
-                    <p class="card-text">
-                      {" "}
-                      <i class="fa fa-desktop text-info mx-2"></i>
-                      <span style={{ fontWeight: "bold" }}>Device Model:</span>
-                      <small
-                        style={{
-                          marginLeft: "21px",
-                          fontSize: "90%",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {this.state.deviceId}{" "}
-                      </small>
-                    </p>
-                    <p class="card-text">
-                      {" "}
-                      <i class="fa fa-mobile text-info mx-2"></i>
-                      <span style={{ fontWeight: "bold" }}>Device Name:</span>
-                      <small
-                        style={{
-                          marginLeft: "21px",
-                          fontSize: "90%",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {this.state.deviceName}{" "}
-                      </small>
-                    </p>
-                  </div>
-                </div>
+                <DeviceInfo
+                  osVersion={this.state.versionName}
+                  androidVersion={this.state.androidVersion}
+                  appName={this.state.appName}
+                  deviceId={this.state.deviceId}
+                  deviceName={this.state.deviceName}
+                />
               </div>
             </div>
           </div>
 
           <div className="right">
             <div className="right-container">
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.cpuUsage && (
-                        <p className="font">{this.state.cpuUsage}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <p className="card-text">
-                  <strong>Total CPU Usage</strong>
-                </p>
-              </div>
-
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.memoryUsage && (
-                        <p className="font">{this.state.memoryUsage}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <p className="card-text">
-                  <strong>Memory Usage</strong>
-                </p>
-              </div>
-
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.GpuUsage && (
-                        <p className="font">{this.state.GpuUsage} MB</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <p className="card-text">
-                  <strong>Total GPU Usage</strong>
-                </p>
-              </div>
-
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.Uploaddata && (
-                        <p className="font">{this.state.Uploaddata}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <p className="card-text">
-                  <strong>Upload Data</strong>
-                </p>
-              </div>
-
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.DownloadData && (
-                        <p className="font">{this.state.DownloadData}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <p className="card-text">
-                  <strong>Download Data</strong>
-                </p>
-              </div>
-
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.cpuCores && (
-                        <p className="font">{this.state.cpuCores}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <p className="card-text">
-                  <strong>CPU Cores</strong>
-                </p>
-              </div>
-
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.power && (
-                        <p className="font">{this.state.power}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <p className="card-text">
-                  <strong>Power</strong>
-                </p>
-              </div>
-
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.appPower && (
-                        <p className="font">{this.state.appPower}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <p className="card-text">
-                  <strong>App Power</strong>
-                </p>
-              </div>
-
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.cpuArch && (
-                        <p className="font">{this.state.cpuArch}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <p className="card-text">
-                  <strong>CPU Arch</strong>
-                </p>
-              </div>
-
-              <div className="metric-usage">
-                <div class="contain">
-                  <div class="ui-widgets">
-                    <div class="ui-values" style={{ marginTop: "32px" }}>
-                      {this.state.avgMedianFPS && (
-                        <p className="font">{this.state.avgMedianFPS}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <p className="card-text">
-                  <strong>Avg Median FPS</strong>
-                </p>
+              <MetricUsage value={this.state.cpuUsage} text="Total CPU Usage" />
+              <MetricUsage
+                value={this.state.memoryUsage}
+                text="Total Memory Usage"
+              />
+              <MetricUsage value={this.state.GpuUsage} text="Total Gpu Usage" />
+              <MetricUsage value={this.state.Uploaddata} text="Upload data" />
+              <MetricUsage
+                value={this.state.DownloadData}
+                text="Download data"
+              />
+              <MetricUsage value={this.state.cpuCores} text="CPU cores" />
+              <MetricUsage value={this.state.power} text="Power" />
+              <MetricUsage value={this.state.appPower} text="App power" />
+              <MetricUsage
+                value={this.state.avgMedianFPS}
+                text="Avg Median FPS"
+              />
+              <div class="graphs">
+                <MetricGraph
+                  metTime={this.state.timeValues}
+                  metValues={this.state.gpuValues}
+                />
               </div>
             </div>
           </div>
         </div>
         {console.log(this.state.gpuValues)}
-
-        <div class="graphs">
-          <MetricGraph
-            metTime={this.state.timeValues}
-            metValues={this.state.gpuValues}
-          />
-          {/* <Plot
-            data={[
-              {
-                x: this.state.timeValues,
-                y: this.state.gpuValues,
-                type: "scatter",
-                mode: "line",
-
-                marker: { enabled: false },
-                line: { shape: "spline", smoothing: 0.8 },
-                marker: { color: "#87CEEB", size: "0" },
-              },
-            ]}
-            layout={{
-              title: "Total GPU Usage",
-              width: 1150,
-              height: 300,
-              margin: { l: 60 },
-              padding: {
-                t: 0,
-                r: 0,
-                b: 0,
-                l: 0,
-                pad: -20,
-              },
-
-              text: this.state.GpuUsage,
-              borderRadius: 20,
-              xaxis: {
-                autorange: true,
-                rangeslider: {
-                  range: ["00:00:00", "00:01:60"],
-                },
-              },
-              plot_bgcolor: "#F5F5F5",
-              plot_height: 300,
-            }}
-          /> */}
-        </div>
-
-        {/* <MetricGraph
-          metValues={this.state.gpuValues}
-          metTime={this.state.timeValues}
-        /> */}
       </div>
     );
   }

@@ -1,0 +1,95 @@
+.device-info-style {
+  width: 100%;
+  height: auto;
+
+  border-radius: 10px;
+  color: white;
+  background: #278ef1;
+}
+.name-info-style {
+  width: 100%;
+  height: auto;
+
+  border-radius: 10px;
+}
+.name-info-image {
+  width: 15%;
+  object-fit: contain;
+  float: left;
+}
+
+.app-info-style {
+  width: 100%;
+  margin-top: 4%;
+  height: auto;
+  border-radius: 10px;
+  color: black;
+  background: white;
+}
+.app-info-sub > p {
+  font-size: 18px;
+  font-weight: 300;
+  padding-left: 7%;
+
+  color: #278ef1;
+}
+
+.device-info-sub {
+  padding: 1.5%;
+  padding-left: 7%;
+}
+.name-info-sub {
+  padding: 1.5%;
+}
+
+.app-info-sub {
+}
+.device-divider-style {
+  color: white;
+  margin-top: -1%;
+
+  height: 1px;
+  border-width: 0;
+}
+
+.app-divider-style {
+  color: grey;
+  margin-top: -1%;
+
+  height: 0px;
+  border-width: 0;
+}
+
+.app-info-image {
+  width: 15%;
+
+  object-fit: contain;
+  float: left;
+  margin-left: 5%;
+}
+
+.device-info-image {
+  margin-top: 3%;
+  width: 13%;
+
+  object-fit: contain;
+  float: left;
+  border-radius: 19px;
+}
+.device-info-text {
+  padding-left: 5%;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  font-weight: 350;
+  margin-top: 2%;
+}
+.name-info-text {
+  padding-left: 4%;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 2%;
+  color: #278ef1;
+}

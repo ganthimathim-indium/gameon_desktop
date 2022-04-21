@@ -1,0 +1,9 @@
+.metric-usage {
+  background: white;
+  border-radius: 10px;
+  padding: 2%;
+  width: 29%;
+  height: auto;
+  margin: 2%;
+  box-shadow: 0px 1px 10px #0000001a;
+}
