@@ -52,6 +52,17 @@
   background-color: #278ef1;
   color: white;
 }
+.stopButton {
+  width: 10%;
+  height: 100%;
+  padding: 3px;
+  border-radius: 20px;
+  float: right;
+  margin-right: 4%;
+  margin-left: 10px;
+  background-color: rgb(243, 53, 53);
+  color: white;
+}
 .backButton {
   width: 8%;
   height: 100%;

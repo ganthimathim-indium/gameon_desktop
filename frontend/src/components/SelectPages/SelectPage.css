@@ -5,5 +5,10 @@
   background: #278ef1;
   border-radius: 30px;
   margin-left: 15%;
-  margin-top: 26%;
+  margin-top: 10%;
+}
+
+.select {
+  background: #f2f8ff;
+  height: 100%;
 }

@@ -56,11 +56,15 @@ class AppData extends React.Component {
       cpuCores: 0,
       DownloadData: 0,
       loader: false,
-      cpuStart: true,
+      cpuStart: false,
       cpuValues: [],
       gpuValues: [],
       memValues: [],
       fpsValues: [],
+      uploadValues: [],
+      downloadValues: [],
+      powerValues: [],
+      appPowerValues: [],
 
       timeSeconds: 0,
       timeValues: [],
@@ -105,149 +109,252 @@ class AppData extends React.Component {
   // }
 
   handleCpuStart() {
-    if (this.state.cpuStart) {
-      const myJson = JSON.stringify(this.state.basicInfo);
-      this.setState({ loader: true });
+    console.log(this.state.cpuStart, "cpustrtbefore");
 
-      window.backend.startscan(myJson, "false").then((result) => {
-        const data = JSON.parse(result);
-        console.log(data, "start data result");
-        this.session_id = data.data.session_id;
-      });
-      //setdeviceId(data.data.session_id)
+    this.setState({ cpuStart: !this.state.cpuStart }, () => {
+      console.log(this.state.cpuStart, "cpustrt");
+      if (this.state.cpuStart) {
+        const myJson = JSON.stringify(this.state.basicInfo);
+        this.setState({ loader: true });
 
-      // const persons1 = { "appname": "com.google.android.play.games", "id": "1", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidmluYXlAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjIzLCJpYXQiOjE2NDk3MDk3NDl9.ZsLXUGiTpUqQRUvYEcRzDsh5iWl4pVmoNSWm1HvWN3E", "session_id": data.data.session_id }
-      // const myJSON1 = JSON.stringify(persons1);
-
-      this.timer = setInterval(() => {
-        this.setState({
-          timeSeconds: this.state.timeSeconds + 3,
+        window.backend.startscan(myJson, "false").then((result) => {
+          const data = JSON.parse(result);
+          console.log(data, "start data result");
+          this.session_id = data.data.session_id;
         });
-        let time = new Date(this.state.timeSeconds * 1000)
-          .toISOString()
-          .substr(14, 5);
-        if (this.state.timeValues.length < 8) {
+        //setdeviceId(data.data.session_id)
+
+        // const persons1 = { "appname": "com.google.android.play.games", "id": "1", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidmluYXlAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjIzLCJpYXQiOjE2NDk3MDk3NDl9.ZsLXUGiTpUqQRUvYEcRzDsh5iWl4pVmoNSWm1HvWN3E", "session_id": data.data.session_id }
+        // const myJSON1 = JSON.stringify(persons1);
+
+        this.timer = setInterval(() => {
           this.setState({
-            timeValues: [...this.state.timeValues, time],
+            timeSeconds: this.state.timeSeconds + 3,
           });
-        } else {
-          this.state.timeValues.shift();
-          this.setState({
-            timeValues: [...this.state.timeValues, time],
-          });
-        }
-        window.backend
-          .cpumetric(this.props.location.state.value)
-          .then((result) => {
-            let results = result.substr(18);
-            this.setState({ cpuUsage: results });
-            console.log(this.state.cpuUsage, "cpu");
-          });
-        window.backend
-          .gpuMetric(this.props.location.state.value)
-          .then((result) => {
-            console.log(result, "gpu");
-            let results = Number(result.substr(18));
-            console.log(results);
-            console.log(result);
-            this.setState({ GpuUsage: results });
-            // this.setState({
-            //   timeSeconds: this.state.timeSeconds + 3,
-            // });
-            // let time = new Date(this.state.timeSeconds * 1000)
-            //   .toISOString()
-            //   .substr(14, 5);
-            console.log(this.state.GpuUsage, "gpu");
-            if (this.state.gpuValues.length < 8) {
-              this.setState({
-                gpuValues: [...this.state.gpuValues, results],
-                // timeValues: [...this.state.timeValues, time],
-              });
-              console.log(time, "timeeeeeeeeeeeeeeeeee");
-            } else {
-              this.state.gpuValues.shift();
-              // this.state.timeValues.shift();
-              this.setState({
-                gpuValues: [...this.state.gpuValues, results],
-                // timeValues: [...this.state.timeValues, time],
-              });
-            }
-            console.log(this.state.gpuValues, "gpuValues");
-            console.log(this.state.timeValues, "timeValues");
-          });
-        window.backend
-          .memmetric(this.props.location.state.value)
-          .then((result) => {
-            let results = result.substring(result.indexOf(":") + 1);
-            this.setState({ memoryUsage: results });
-            console.log(this.state.memoryUsage, "memory");
-          });
-        window.backend
-          .Uploaddata(this.props.location.state.value)
-          .then((result) => {
-            console.log(result);
-            let results = result.substring(result.indexOf(":") + 1);
-            this.setState({ Uploaddata: results });
-            console.log(this.state.Uploaddata);
-          });
-        window.backend
-          .AndroidDownloadedData1(this.props.location.state.value)
-          .then((result) => {
-            console.log(result);
-            let results = result.substring(result.indexOf(":") + 1);
-            this.setState({ DownloadData: results });
-            console.log(this.state.DownloadData);
-          });
-        window.backend
-          .AndroidCPUCores1(this.props.location.state.value)
-          .then((result) => {
-            console.log(result);
-            let results = result.substring(result.indexOf(":") + 1);
-            this.setState({ cpuCores: results });
-            console.log(this.state.cpuCores);
-          });
+          let time = new Date(this.state.timeSeconds * 1000)
+            .toISOString()
+            .substr(14, 5);
+          if (this.state.timeValues.length < 8) {
+            this.setState({
+              timeValues: [...this.state.timeValues, time],
+            });
+          } else {
+            this.state.timeValues.shift();
+            this.setState({
+              timeValues: [...this.state.timeValues, time],
+            });
+          }
+          window.backend
+            .cpumetric(this.props.location.state.value)
+            .then((result) => {
+              let results = result.substr(18);
+              this.setState({ cpuUsage: results });
+              console.log(this.state.cpuUsage, "cpu");
+              if (this.state.cpuValues.length < 8) {
+                this.setState({
+                  cpuValues: [...this.state.cpuValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.cpuValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  cpuValues: [...this.state.cpuValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+            });
+          window.backend
+            .gpuMetric(this.props.location.state.value)
+            .then((result) => {
+              console.log(result, "gpu");
+              let results = Number(result.substr(18));
+              console.log(results);
+              console.log(result);
+              this.setState({ GpuUsage: results });
+              // this.setState({
+              //   timeSeconds: this.state.timeSeconds + 3,
+              // });
+              // let time = new Date(this.state.timeSeconds * 1000)
+              //   .toISOString()
+              //   .substr(14, 5);
+              console.log(this.state.GpuUsage, "gpu");
+              if (this.state.gpuValues.length < 8) {
+                this.setState({
+                  gpuValues: [...this.state.gpuValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.gpuValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  gpuValues: [...this.state.gpuValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+              console.log(this.state.gpuValues, "gpuValues");
+              console.log(this.state.timeValues, "timeValues");
+            });
+          window.backend
+            .memmetric(this.props.location.state.value)
+            .then((result) => {
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ memoryUsage: results });
+              if (this.state.memValues.length < 8) {
+                this.setState({
+                  memValues: [...this.state.memValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.gpuValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  memValues: [...this.state.memValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+              console.log(this.state.memoryUsage, "memory");
+            });
+          window.backend
+            .Uploaddata(this.props.location.state.value)
+            .then((result) => {
+              console.log(result);
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ Uploaddata: results });
+              console.log(this.state.Uploaddata);
+              if (this.state.uploadValues.length < 8) {
+                this.setState({
+                  uploadValues: [...this.state.uploadValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.uploadValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  uploadValues: [...this.state.uploadValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+            });
+          window.backend
+            .AndroidDownloadedData1(this.props.location.state.value)
+            .then((result) => {
+              console.log(result);
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ DownloadData: results });
+              console.log(this.state.DownloadData);
+              if (this.state.downloadValues.length < 8) {
+                this.setState({
+                  downloadValues: [...this.state.downloadValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.downloadValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  downloadValues: [...this.state.downloadValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+            });
+          window.backend
+            .AndroidCPUCores1(this.props.location.state.value)
+            .then((result) => {
+              console.log(result);
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ cpuCores: results });
+              console.log(this.state.cpuCores);
+            });
 
-        window.backend
-          .powermetric(this.props.location.state.value)
-          .then((result) => {
-            console.log(result);
-            let results = result.substring(result.indexOf(":") + 1);
-            this.setState({ power: results });
-            console.log(this.state.power);
-          });
+          window.backend
+            .powermetric(this.props.location.state.value)
+            .then((result) => {
+              console.log(result);
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ power: results });
+              console.log(this.state.power);
+              if (this.state.powerValues.length < 8) {
+                this.setState({
+                  powerValues: [...this.state.powerValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.powerValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  powerValues: [...this.state.powerValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+            });
 
-        window.backend
-          .Apppowermetric(this.props.location.state.value)
-          .then((result) => {
-            console.log(result);
-            let results = result.substring(result.indexOf(":") + 1);
-            this.setState({ appPower: results });
-            console.log(this.state.appPower);
-          });
+          window.backend
+            .Apppowermetric(this.props.location.state.value)
+            .then((result) => {
+              console.log(result);
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ appPower: results });
+              console.log(this.state.appPower);
+              if (this.state.appPowerValues.length < 8) {
+                this.setState({
+                  appPowerValues: [...this.state.appPowerValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.appPowerValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  appPowerValues: [...this.state.appPowerValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+            });
 
-        window.backend
-          .cpuarch(this.props.location.state.value)
-          .then((result) => {
-            console.log(result);
-            let results = result.substring(result.indexOf(":") + 1);
-            this.setState({ cpuArch: results });
-            console.log(this.state.cpuArch);
-          });
+          window.backend
+            .cpuarch(this.props.location.state.value)
+            .then((result) => {
+              console.log(result);
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ cpuArch: results });
+              console.log(this.state.cpuArch);
+            });
 
-        window.backend
-          .AvgMedianFPS(this.props.location.state.value)
-          .then((result) => {
-            console.log(result, "fps result");
-            let results = result.substring(result.indexOf(":") + 1);
-            this.setState({ avgMedianFPS: results });
-            console.log(this.state.avgMedianFPS, "fps value");
-          });
-      }, 3000);
-    }
+          window.backend
+            .AvgMedianFPS(this.props.location.state.value)
+            .then((result) => {
+              console.log(result, "fps result");
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ avgMedianFPS: results });
+              console.log(this.state.avgMedianFPS, "fps value");
+              if (this.state.fpsValues.length < 8) {
+                this.setState({
+                  fpsValues: [...this.state.fpsValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.fpsValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  fpsValues: [...this.state.fpsValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+            });
+        }, 3000);
+      }
+    });
   }
 
   handleCpuStop() {
-    this.setState({ cpuStart: false });
+    this.setState({ cpuStart: !this.state.cpuStart });
     this.setState({ loader: false });
     clearInterval(this.timer);
     let stopData = {
@@ -307,12 +414,22 @@ class AppData extends React.Component {
         </div> */}
         <div className="appBar">
           <p style={{ float: "left" }}>Application Statistics</p>
-          <button
-            className="startButton"
-            onClick={this.handleCpuStart.bind(this)}
-          >
-            Start Scan
-          </button>
+          {this.state.cpuStart ? (
+            <button
+              className="stopButton"
+              onClick={this.handleCpuStop.bind(this)}
+            >
+              Stop Scan
+            </button>
+          ) : (
+            <button
+              className="startButton"
+              onClick={this.handleCpuStart.bind(this)}
+            >
+              Start Scan
+            </button>
+          )}
+
           <button className="backButton">Back</button>
         </div>
 
@@ -333,28 +450,83 @@ class AppData extends React.Component {
 
           <div className="right">
             <div className="right-container">
-              <MetricUsage value={this.state.cpuUsage} text="Total CPU Usage" />
+              <MetricUsage
+                value={this.state.cpuUsage}
+                text="Total CPU Usage"
+                unit="%"
+              />
               <MetricUsage
                 value={this.state.memoryUsage}
                 text="Total Memory Usage"
+                unit="MB"
               />
-              <MetricUsage value={this.state.GpuUsage} text="Total Gpu Usage" />
-              <MetricUsage value={this.state.Uploaddata} text="Upload data" />
+              <MetricUsage
+                value={this.state.GpuUsage}
+                text="Total Gpu Usage"
+                unit="MB"
+              />
+              <MetricUsage
+                value={this.state.Uploaddata}
+                text="Upload data"
+                unit="MB"
+              />
               <MetricUsage
                 value={this.state.DownloadData}
                 text="Download data"
+                unit="MB"
               />
               <MetricUsage value={this.state.cpuCores} text="CPU cores" />
-              <MetricUsage value={this.state.power} text="Power" />
-              <MetricUsage value={this.state.appPower} text="App power" />
+              <MetricUsage value={this.state.power} text="Power" unit="%" />
+              <MetricUsage
+                value={this.state.appPower}
+                text="App power"
+                unit="mAh"
+              />
               <MetricUsage
                 value={this.state.avgMedianFPS}
                 text="Avg Median FPS"
+                unit=""
               />
               <div class="graphs">
                 <MetricGraph
                   metTime={this.state.timeValues}
+                  metValues={this.state.cpuValues}
+                  text="CPU Usage"
+                />
+                <MetricGraph
+                  metTime={this.state.timeValues}
                   metValues={this.state.gpuValues}
+                  text="GPU Usage"
+                />
+                <MetricGraph
+                  metTime={this.state.timeValues}
+                  metValues={this.state.memValues}
+                  text="Memory Usage"
+                />
+                <MetricGraph
+                  metTime={this.state.timeValues}
+                  metValues={this.state.powerValues}
+                  text="Power Usage"
+                />
+                <MetricGraph
+                  metTime={this.state.timeValues}
+                  metValues={this.state.appPowerValues}
+                  text="App Power Usage"
+                />
+                <MetricGraph
+                  metTime={this.state.timeValues}
+                  metValues={this.state.uploadValues}
+                  text="Upload Data"
+                />
+                <MetricGraph
+                  metTime={this.state.timeValues}
+                  metValues={this.state.downloadValues}
+                  text="Download Data"
+                />
+                <MetricGraph
+                  metTime={this.state.timeValues}
+                  metValues={this.state.fpsValues}
+                  text="Median FPS"
                 />
               </div>
             </div>

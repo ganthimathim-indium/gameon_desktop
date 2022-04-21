@@ -368,6 +368,7 @@ const SignIn = () => {
                           width: "84%",
                           height: "5%",
                           padding: "3px",
+                          color: "white",
                         }}
                       />
                     </div>

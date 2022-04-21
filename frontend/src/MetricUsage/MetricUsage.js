@@ -28,6 +28,7 @@ function MetricUsage(props) {
         <BorderLinearProgress variant="determinate" value={40} />
         <small style={{ marginLeft: "10px", marginTop: "-5px" }}>
           {props.value}
+          {props.unit}
         </small>
       </div>
     </div>

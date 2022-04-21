@@ -14,6 +14,7 @@ const Styles = makeStyles((theme) => ({
     background: "white",
     borderRadius: "10px",
     padding: "10px 10px 10px 10px",
+    marginTop: "20px",
   },
 }));
 
@@ -44,7 +45,7 @@ function MetricGraph(props) {
               title: "Total GPU Usage",
               width: 745,
               height: 200,
-              margin: { l: 28, r: 20, b: 20, t: 20, pad: 5 },
+              margin: { l: 36, r: 18, b: 20, t: 20, pad: 5 },
               title: false,
               xref: 400,
 
@@ -64,7 +65,7 @@ function MetricGraph(props) {
               plot_height: 300,
             }}
           />
-          <div style={{ marginLeft: "40%", padding: "2%" }}>GPU Usage</div>
+          <div style={{ marginLeft: "40%", padding: "2%" }}>{props.text}</div>
         </Paper>
       </div>
     </>

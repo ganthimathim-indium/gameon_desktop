@@ -87,7 +87,7 @@ function DeviceInfo(props) {
             <p style={{ fontSize: "9px", fontWeight: "200" }}>
               {props.deviceId}
             </p>
-            <p style={{ marginTop: "-10px" }}>Device Id</p>
+            <p style={{ marginTop: "-10px" }}>Market Name</p>
           </div>
         </div>
         <hr className="app-divider-style" />

@@ -187,7 +187,7 @@ func mylogin(req string) (val string) {
 //2check device
 func checkdevice() (val string) {
 	//fmt.Println(len(L.Appnamenew()))
-	if len(L.Appnamenew()) == 4 {
+	if len(strings.TrimSpace(L.Appnamenew())) == 0 {
 		fmt.Println("No Device Attached")
 
 		return "No Device Attached"
@@ -470,7 +470,7 @@ func cpumetric(appnamess string) (val string) {
 	cpu_deviations = "Mainactivity"
 	cpu_time = currentTime.Format("3:4:5 pm")
 
-	valsss = "Total CPU Useage : " + res2 + " %"
+	valsss = "Total CPU Useage : " + res2
 	return valsss
 
 }
@@ -490,7 +490,7 @@ func memmetric(appnamess string) (val string) {
 	}
 
 	fmt.Println(intVar)
-	valsss = fmt.Sprintf("Total Memory Usage : %v MB", kBToMB(intVar))
+	valsss = fmt.Sprintf("Total Memory Usage : %v ", kBToMB(intVar))
 	valsss1 = fmt.Sprintf("%v", kBToMB(intVar))
 
 	Memory_useage = ""
@@ -535,7 +535,7 @@ func Uploaddata(appnames string) (val string) {
 
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total DataUploaded : %v MB", bytesToMB(intVar))
+	valsss = fmt.Sprintf("Total DataUploaded : %v", bytesToMB(intVar))
 
 	var valsss1 string
 
@@ -561,7 +561,7 @@ func AndroidDownloadedData1(appnames string) (val string) {
 	var valsss string
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total Download data : %v MB", bytesToMB(intVar))
+	valsss = fmt.Sprintf("Total Download data : %v", bytesToMB(intVar))
 
 	var valsss1 string
 
@@ -605,7 +605,7 @@ func powermetric(appnamess string) (val string) {
 	res2 := L.Battery(appnamess)
 	fmt.Println("tttt" + res2)
 	var valsss string
-	valsss = "Total Battery Useage : " + res2 + " %"
+	valsss = "Total Battery Useage : " + res2
 
 	power_useage = ""
 	power_deviations = ""
@@ -626,7 +626,7 @@ func Apppowermetric(appnamess string) (val string) {
 	res2 := L.AndroidAppPowerUsage(appnamess)
 	fmt.Println("App usage" + res2)
 	var valsss string
-	valsss = "Total App Useage : " + res2 + " mAh"
+	valsss = "Total App Useage : " + res2
 
 	Apppower_useage = ""
 	Apppower_deviations = ""
