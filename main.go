@@ -187,7 +187,7 @@ func mylogin(req string) (val string) {
 //2check device
 func checkdevice() (val string) {
 	//fmt.Println(len(L.Appnamenew()))
-	if len(L.Appnamenew()) == 4 {
+	if len(strings.TrimSpace(L.Appnamenew())) == 0 {
 		fmt.Println("No Device Attached")
 
 		return "No Device Attached"

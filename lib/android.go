@@ -2,7 +2,9 @@ package lib
 
 import (
 	"fmt"
+	"math"
 	"os/exec"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -128,7 +130,9 @@ func AndroidAppPowerUsage(names string) (val string) {
 }
 func Androidcpuarch(names string) (val string) {
 
-	return string(run("shell", "getprop ro.product.cpu.abi"))
+	s := string(run("shell", "getprop ro.product.cpu.abi"))
+
+	return strings.Split(s, "-")[0]
 
 }
 func AndroidUploadedData(names string) (val string) {
@@ -336,4 +340,86 @@ func run(args ...string) (array []byte) {
 		return (stdout1)
 
 	}
+}
+
+func AndroidVariabilityIndex(names string) (val string) {
+
+	s := string(run("shell", "dumpsys gfxinfo ", names))
+
+	sec := s[strings.Index(s, "Stats since: "):]
+	sec = strings.Replace(sec, "Stats since: ", "", -1)
+	sec = sec[:strings.Index(s, "ns")]
+	//sec := ""
+	//return sec
+	//ns := strings.Replace(sec, "Stats since: ", "", -1)
+	t, _ := strconv.Atoi(sec)
+	//return strconv.Itoa(t)
+	//index1 := strings.Index(s, "GPU HISTOGRAM: ")
+	//index2 := strings.Index(s, "Pipeline=")
+	//fpsData := s[index1:index2]
+	//fpsData = strings.Replace(fpsData, "GPU HISTOGRAM: ", "", 1)
+	//data := strings.Split(fpsData, " ")
+	index1 := strings.Index(s, "HISTOGRAM: ")
+	index2 := strings.Index(s, "50th gpu percentile")
+	fpsData := s[index1:index2]
+	fpsData = strings.Replace(fpsData, "HISTOGRAM: ", "", 1)
+	data := strings.Split(fpsData, " ")
+
+	var result int64
+	var fps []int
+	var ssss string
+	//data := strings.Split(s, " ")
+	for i, value := range data {
+		//if strings.Contains(value, "%") {
+		// result = strings.Replace(value, "%", "", 1)
+		// result = strings.TrimSpace(result)
+		// break // we need only the first as other values are further distribution of this total value
+		//}
+		d := strings.Split(value, "=")[1]
+		di, _ := strconv.Atoi(d)
+		if di != 0 {
+			fps = append(fps, (di))
+		}
+		result += int64(di)
+		data[i] = d
+		ssss += d + " "
+	}
+	//return ssss
+	//return fmt.Sprintf("%s", strconv.Itoa(int(calculateVariance(fps[1:5], result, int64(t)))))
+	return fmt.Sprintf("%f", calculateVariance(fps, result, int64(t)))
+	return fmt.Sprintf("%.2f", calculateVariance(fps, result, int64(t)))
+}
+
+func calculateVariance(data []int, sum, t int64) float64 {
+
+	n := len(data)
+	//n := 1000 * 1000
+	//mean := float64(sum*1000000000) / float64(t*int64(n))
+	sort.Ints(data)
+	//summ := 0
+	//for _, i := range data[:len(data)-2] {
+	// summ += i
+	//}
+	mean := float64(sum) / float64(n)
+	//s := (strconv.Itoa(int(mean)))
+	//return s
+	//return mean
+	var result float64
+	var val int
+	small := float64(data[len(data)-1])
+	for _, value := range data {
+		//result += math.Pow(float64(int64(n)*value/t)-mean, 2)
+		//if len(s) == len(strconv.Itoa(int(value))) {
+		// result += math.Pow(float64(value)-mean, 2)
+		//}
+		//result += math.Pow(float64(value)-mean, 2)
+		diff := math.Abs(float64(value) - mean)
+		if small > diff {
+			small = diff
+			val = value
+		}
+	}
+	result += math.Pow(float64(val)-mean, 2)
+
+	return result / float64(n-1)
 }
