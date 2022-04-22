@@ -59,11 +59,13 @@ function MetricGraph(props) {
                 //   bgColor: "grey",
                 // },
               },
+
               plot_bgcolor: "#F5F5F5",
               // paper_bgcolor: "",
 
               plot_height: 300,
             }}
+            config={{ staticPlot: true }}
           />
           <div style={{ marginLeft: "40%", padding: "2%" }}>{props.text}</div>
         </Paper>

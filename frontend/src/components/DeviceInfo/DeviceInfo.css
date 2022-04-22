@@ -1,6 +1,7 @@
 .device-info-style {
   width: 100%;
   height: auto;
+  margin-top: 0%;
 
   border-radius: 10px;
   color: white;
@@ -27,7 +28,7 @@
   background: white;
 }
 .app-info-sub > p {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 300;
   padding-left: 7%;
 
@@ -35,7 +36,8 @@
 }
 
 .device-info-sub {
-  padding: 1.5%;
+  padding: 1%;
+
   padding-left: 7%;
 }
 .name-info-sub {
@@ -46,22 +48,22 @@
 }
 .device-divider-style {
   color: white;
-  margin-top: -1%;
+  margin-top: -2%;
 
   height: 1px;
   border-width: 0;
 }
 
 .app-divider-style {
-  color: grey;
-  margin-top: -1%;
+  color: rgb(238, 231, 231);
+  margin-top: -2%;
 
-  height: 0px;
+  height: 1px;
   border-width: 0;
 }
 
 .app-info-image {
-  width: 15%;
+  width: 14%;
 
   object-fit: contain;
   float: left;
@@ -70,7 +72,7 @@
 
 .device-info-image {
   margin-top: 3%;
-  width: 13%;
+  width: 12%;
 
   object-fit: contain;
   float: left;
@@ -80,7 +82,7 @@
   padding-left: 5%;
   display: flex;
   flex-direction: column;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 350;
   margin-top: 2%;
 }

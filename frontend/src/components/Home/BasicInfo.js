@@ -118,7 +118,10 @@ const BasicInfo = () => {
 
       <div className="nolist">
         <p className="list" style={{ display: "inline" }}>
-          Installed Applications:{state.applist.length}
+          Installed Applications:
+          <p style={{ color: "#278EF1", display: "inline" }}>
+            {state.applist.length}
+          </p>
         </p>
         <input
           style={{

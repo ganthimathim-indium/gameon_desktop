@@ -21,7 +21,7 @@ var mapObj = {
 function DeviceInfo(props) {
   return (
     <>
-      <div className="name-info-style">
+      {/* <div className="name-info-style">
         <div className="name-info-sub">
           <div>
             <img src={charge} alt=" " className="app-info-image" />
@@ -35,7 +35,7 @@ function DeviceInfo(props) {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="device-info-style">
         <div className="device-info-sub">
           <div>
@@ -75,7 +75,7 @@ function DeviceInfo(props) {
             <p style={{ fontSize: "9px", fontWeight: "200" }}>
               {props.osVersion}
             </p>
-            <p style={{ marginTop: "-10px" }}>os Version</p>
+            <p style={{ marginTop: "-12px" }}>OS Version</p>
           </div>
         </div>
         <hr className="app-divider-style" />
@@ -87,7 +87,7 @@ function DeviceInfo(props) {
             <p style={{ fontSize: "9px", fontWeight: "200" }}>
               {props.deviceId}
             </p>
-            <p style={{ marginTop: "-10px" }}>Market Name</p>
+            <p style={{ marginTop: "-12px" }}>Market Name</p>
           </div>
         </div>
         <hr className="app-divider-style" />
@@ -99,11 +99,11 @@ function DeviceInfo(props) {
             <p style={{ fontSize: "9px", fontWeight: "200" }}>
               {props.deviceName}
             </p>
-            <p style={{ marginTop: "-10px" }}>Device name</p>
+            <p style={{ marginTop: "-12px" }}>Device name</p>
           </div>
         </div>
 
-        {/* <hr className="app-divider-style" />
+        <hr className="app-divider-style" />
         <div className="app-info-sub">
           <div>
             <img src={androidLogo} alt=" " className="app-info-image" />
@@ -114,19 +114,19 @@ function DeviceInfo(props) {
             </p>
             <p style={{ marginTop: "-10px" }}>CPU Arch</p>
           </div>
-        </div> */}
-        {/* <hr className="app-divider-style" />
+        </div>
+        <hr className="app-divider-style" />
         <div className="app-info-sub">
           <div>
             <img src={androidLogo} alt=" " className="app-info-image" />
           </div>
           <div className="device-info-text">
             <p style={{ fontSize: "9px", fontWeight: "200" }}>
-              {props.deviceName}
+              {props.cpuCores}
             </p>
-            <p style={{ marginTop: "-10px" }}>Device name</p>
+            <p style={{ marginTop: "-10px" }}>CPU cores</p>
           </div>
-        </div> */}
+        </div>
       </div>
     </>
 

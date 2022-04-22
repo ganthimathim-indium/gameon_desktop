@@ -112,7 +112,17 @@ class AppData extends React.Component {
       this.setState({ cpuArch: results });
       console.log(this.state.cpuArch);
     });
+
+    window.backend
+      .AndroidCPUCores1(this.props.location.state.value)
+      .then((result) => {
+        console.log(result);
+        let results = result.substring(result.indexOf(":") + 1);
+        this.setState({ cpuCores: results });
+        console.log(this.state.cpuCores);
+      });
   }
+
   // componentDidUpdate(prevprops) {
   //   if (this.props.userInfo !== prevprops.state) {
   //     this.setState({ userInfo: this.props.userInfo });
@@ -272,14 +282,6 @@ class AppData extends React.Component {
                   // timeValues: [...this.state.timeValues, time],
                 });
               }
-            });
-          window.backend
-            .AndroidCPUCores1(this.props.location.state.value)
-            .then((result) => {
-              console.log(result);
-              let results = result.substring(result.indexOf(":") + 1);
-              this.setState({ cpuCores: results });
-              console.log(this.state.cpuCores);
             });
 
           window.backend
@@ -472,6 +474,7 @@ class AppData extends React.Component {
                 deviceId={this.state.deviceId}
                 deviceName={this.state.deviceName}
                 cpuArch={this.state.cpuArch}
+                cpuCores={this.state.cpuCores}
               />
             </div>
           </div>
@@ -490,7 +493,7 @@ class AppData extends React.Component {
               />
               <MetricUsage
                 value={this.state.GpuUsage}
-                text="Total Gpu Usage"
+                text="Total GPU Usage"
                 unit="MB"
               />
               <MetricUsage
@@ -503,7 +506,6 @@ class AppData extends React.Component {
                 text="Download data"
                 unit="MB"
               />
-              <MetricUsage value={this.state.cpuCores} text="CPU cores" />
               <MetricUsage value={this.state.power} text="Power" unit="%" />
               <MetricUsage
                 value={this.state.appPower}
@@ -520,41 +522,49 @@ class AppData extends React.Component {
                   metTime={this.state.timeValues}
                   metValues={this.state.cpuValues}
                   text="CPU Usage"
+                  unit="%"
                 />
                 <MetricGraph
                   metTime={this.state.timeValues}
                   metValues={this.state.gpuValues}
                   text="GPU Usage"
+                  unit="%"
                 />
                 <MetricGraph
                   metTime={this.state.timeValues}
                   metValues={this.state.memValues}
                   text="Memory Usage"
+                  unit="%"
                 />
                 <MetricGraph
                   metTime={this.state.timeValues}
                   metValues={this.state.powerValues}
                   text="Power Usage"
+                  unit="%"
                 />
                 <MetricGraph
                   metTime={this.state.timeValues}
                   metValues={this.state.appPowerValues}
                   text="App Power Usage"
+                  unit="%"
                 />
                 <MetricGraph
                   metTime={this.state.timeValues}
                   metValues={this.state.uploadValues}
                   text="Upload Data"
+                  unit="%"
                 />
                 <MetricGraph
                   metTime={this.state.timeValues}
                   metValues={this.state.downloadValues}
                   text="Download Data"
+                  unit="%"
                 />
                 <MetricGraph
                   metTime={this.state.timeValues}
                   metValues={this.state.fpsValues}
                   text="Median FPS"
+                  unit="%"
                 />
               </div>
             </div>
