@@ -535,11 +535,11 @@ func Uploaddata(appnames string) (val string) {
 
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total DataUploaded : %v", bytesToMB(intVar))
+	valsss = fmt.Sprintf("Total Data Uploaded : %.2f", bytesToMiB(intVar))
 
 	var valsss1 string
 
-	valsss1 = fmt.Sprintf("%v", bytesToMB(intVar))
+	valsss1 = fmt.Sprintf("%.2f", bytesToMiB(intVar))
 
 	Uploaddata_useage = ""
 	Uploaddata_deviations = ""
@@ -561,11 +561,11 @@ func AndroidDownloadedData1(appnames string) (val string) {
 	var valsss string
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total Download data : %v", bytesToMB(intVar))
+	valsss = fmt.Sprintf("Total Download data : %.2f", bytesToMiB(intVar))
 
 	var valsss1 string
 
-	valsss1 = fmt.Sprintf("%v", bytesToMB(intVar))
+	valsss1 = fmt.Sprintf("%.2f", bytesToMiB(intVar))
 
 	Downloadddata_useage = ""
 	Downloadddata_deviations = ""
@@ -762,6 +762,16 @@ func kBToMB(kB int) float64 {
 }
 
 func bytesToMB(bytes int) float64 {
+
+	return toFixed(float64(bytes)/(1024*1024), 2)
+}
+
+func kBToMiB(kB int) float64 {
+
+	return toFixed(float64(kB)/(1024*1.024), 2)
+}
+
+func bytesToMiB(bytes int) float64 {
 
 	return toFixed(float64(bytes)/(1024*1024), 2)
 }
