@@ -8,6 +8,8 @@ import MetricGraph from "../../Graph/MetricGraph.js";
 import PulseLoader from "react-spinners/PulseLoader";
 import MetricUsage from "../../MetricUsage/MetricUsage";
 import DeviceInfo from "../DeviceInfo/DeviceInfo";
+import { withRouter } from "react-router-dom";
+
 // import { useSelector } from "react-redux";
 // import{ selectUser} from "../../features/loginAuth/loginAuthSlice"
 
@@ -71,8 +73,10 @@ class AppData extends React.Component {
       userInfo: null,
       power: 0,
       appPower: 0,
-      cpuArch: 0,
+      cpuArch: "",
       avgMedianFPS: 0,
+      devicetext: " ",
+      devicecheck: false,
     };
   }
 
@@ -101,6 +105,13 @@ class AppData extends React.Component {
       .catch((err) => {
         console.log(err, "error");
       });
+
+    window.backend.cpuarch(this.props.location.state.value).then((result) => {
+      console.log(result);
+      let results = result.substring(result.indexOf(":") + 1);
+      this.setState({ cpuArch: results });
+      console.log(this.state.cpuArch);
+    });
   }
   // componentDidUpdate(prevprops) {
   //   if (this.props.userInfo !== prevprops.state) {
@@ -318,15 +329,6 @@ class AppData extends React.Component {
             });
 
           window.backend
-            .cpuarch(this.props.location.state.value)
-            .then((result) => {
-              console.log(result);
-              let results = result.substring(result.indexOf(":") + 1);
-              this.setState({ cpuArch: results });
-              console.log(this.state.cpuArch);
-            });
-
-          window.backend
             .AvgMedianFPS(this.props.location.state.value)
             .then((result) => {
               console.log(result, "fps result");
@@ -369,6 +371,28 @@ class AppData extends React.Component {
     window.backend.stopscan(stopJSON, "false").then((result) => {
       const data = result;
       console.log(data, "stop session");
+    });
+  }
+  handleRedirect() {
+    // let history = useHistory();
+    window.backend.checkdevice().then((result) => {
+      if (result == "Device Attached") {
+        this.setState(
+          {
+            devicecheck: true,
+            devicetext: "Device Attached Successfully",
+          },
+          () => {
+            let path = "/home";
+            this.props.history.push(path);
+          }
+        );
+      } else {
+        this.setState({
+          devicecheck: false,
+          devicetext: "No Device Attached Kindly Connect Your Device Properly",
+        });
+      }
     });
   }
 
@@ -430,21 +454,25 @@ class AppData extends React.Component {
             </button>
           )}
 
-          <button className="backButton">Back</button>
+          <button
+            className="backButton"
+            onClick={this.handleRedirect.bind(this)}
+          >
+            Back
+          </button>
         </div>
 
         <div className="container">
           <div class="left">
-            <div class="row">
-              <div>
-                <DeviceInfo
-                  osVersion={this.state.versionName}
-                  androidVersion={this.state.androidVersion}
-                  appName={this.state.appName}
-                  deviceId={this.state.deviceId}
-                  deviceName={this.state.deviceName}
-                />
-              </div>
+            <div>
+              <DeviceInfo
+                osVersion={this.state.versionName}
+                androidVersion={this.state.androidVersion}
+                appName={this.state.appName}
+                deviceId={this.state.deviceId}
+                deviceName={this.state.deviceName}
+                cpuArch={this.state.cpuArch}
+              />
             </div>
           </div>
 

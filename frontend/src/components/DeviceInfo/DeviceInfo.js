@@ -102,6 +102,31 @@ function DeviceInfo(props) {
             <p style={{ marginTop: "-10px" }}>Device name</p>
           </div>
         </div>
+
+        {/* <hr className="app-divider-style" />
+        <div className="app-info-sub">
+          <div>
+            <img src={androidLogo} alt=" " className="app-info-image" />
+          </div>
+          <div className="device-info-text">
+            <p style={{ fontSize: "9px", fontWeight: "200" }}>
+              {props.cpuArch}
+            </p>
+            <p style={{ marginTop: "-10px" }}>CPU Arch</p>
+          </div>
+        </div> */}
+        {/* <hr className="app-divider-style" />
+        <div className="app-info-sub">
+          <div>
+            <img src={androidLogo} alt=" " className="app-info-image" />
+          </div>
+          <div className="device-info-text">
+            <p style={{ fontSize: "9px", fontWeight: "200" }}>
+              {props.deviceName}
+            </p>
+            <p style={{ marginTop: "-10px" }}>Device name</p>
+          </div>
+        </div> */}
       </div>
     </>
 

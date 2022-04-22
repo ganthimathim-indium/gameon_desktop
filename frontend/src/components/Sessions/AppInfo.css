@@ -99,7 +99,13 @@
   margin-left: 0;
   width: 23%;
   margin-top: 1.4%;
+  height: 100%;
+
   position: fixed;
+  /* overflow-y: scroll; */
+  /* position: -webkit-sticky;
+  position: sticky;
+  top: 20%; */
 }
 .font {
   font-size: 16px;

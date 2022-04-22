@@ -15,6 +15,7 @@ import searchIcon from "../../asset/Icon-search.png";
 import "./Home.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/loginAuth/loginAuthSlice";
+import sort from "../../asset/sort.png";
 
 var mapObj = {
   com: " ",
@@ -42,6 +43,8 @@ const BasicInfo = () => {
     SelectedList: "",
     openStatus: false,
   });
+  const [sortby, setSortby] = useState();
+
   const [filteredResults, setFilteredResults] = useState([]);
   const [searchInput, setSearchInput] = useState("");
 
@@ -81,6 +84,13 @@ const BasicInfo = () => {
     });
   });
 
+  function ascorder() {
+    setSortby(
+      state.applist.sort(function (a, b) {
+        return a.localeCompare(b);
+      })
+    );
+  }
   const openApp = (list) => {
     setState((ps) => {
       return { ...ps, SelectedList: list, openStatus: true };
@@ -117,7 +127,7 @@ const BasicInfo = () => {
             background: "white",
             border: "2px solid white",
             borderRadius: "10px",
-            marginLeft: "20%",
+            marginLeft: "24%",
             position: "relative",
             boxShadow: "0px 3px 6px #0000001A",
           }}
@@ -135,6 +145,10 @@ const BasicInfo = () => {
             right: 15,
           }}
         />
+        <img src={sort} alt="" className="sortImageStyle" />
+        <p className="sortStyle" onClick={ascorder}>
+          Sort
+        </p>
       </div>
 
       <div className="big-container">
@@ -194,25 +208,48 @@ const BasicInfo = () => {
         <div className="device-info">
           {/* <p>Device Model:{state.deviceid} </p> */}
           <p>Device Info</p>
+          <hr style={{ color: "white" }} />
+          <p
+            style={{
+              fontSize: "20px",
+              color: "white",
+              textAlign: "center",
+              display: "inline",
+              marginLeft: "25%",
+            }}
+          >
+            {state.deviceid}
+          </p>
+          <p
+            style={{
+              fontSize: "10px",
+              color: "white",
+              marginLeft: "27%",
+              marginTop: "-3%",
+            }}
+          >
+            Device Name
+          </p>
           <div style={{ positon: "relative" }}>
             <img
               src={ellipse}
               alt=""
               style={{
                 position: "absolute",
-                top: 115,
+                top: 210,
                 right: 70,
                 width: "13%",
                 objectFit: "contain",
               }}
             />
+
             <img
               src={phone}
               alt=""
               style={{
                 position: "relative",
                 width: "50%",
-                height: "60%",
+                height: "50%",
                 marginLeft: "25%",
               }}
             />

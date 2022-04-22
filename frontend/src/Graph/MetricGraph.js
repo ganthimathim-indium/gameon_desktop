@@ -43,9 +43,9 @@ function MetricGraph(props) {
               X: 0,
               xanchor: "left",
               title: "Total GPU Usage",
-              width: 745,
+              width: 765,
               height: 200,
-              margin: { l: 36, r: 18, b: 20, t: 20, pad: 5 },
+              margin: { l: 60, r: 20, b: 20, t: 20, pad: 5 },
               title: false,
               xref: 400,
 

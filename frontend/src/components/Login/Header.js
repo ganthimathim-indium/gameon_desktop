@@ -63,6 +63,7 @@ const LoginHeader = () => {
         >
           GameOn
         </h2>
+
         <p
           style={{
             float: "right",
