@@ -19,9 +19,9 @@ function HelloWorld() {
 		//window.backend.AndroidDownloadedData1("com.android.chrome").then((result) => setResult(result));
 		//window.backend.AndroidCPUCores1("com.android.chrome").then((result) => setResult(result));
 		//window.backend.powermetric("com.android.chrome").then((result) => setResult(result));
-		window.backend.Apppowermetric("com.android.chrome").then((result) => setResult(result));
+		//window.backend.Apppowermetric("com.android.chrome").then((result) => setResult(result));
 		//window.backend.cpuarch("com.android.chrome").then((result) => setResult(result));
-		//window.backend.AvgMedianFPS("com.android.chrome").then((result) => setResult(result));
+		window.backend.AvgMedianFPS("com.action.survival.craft.rpg").then((result) => setResult(result));
 		//	window.backend.checkdevice().then((result) => setResult(result));
 		//window.backend.openapp("com.android.chrome").then((result) => setResult(result));
 

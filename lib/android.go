@@ -281,20 +281,19 @@ func AndroidCPUUsage(names string) (val string) {
 func AndroidMedianFPS(names string) (val string) {
 
 	var result string
-	var result1 string
+	s := string(run("shell", "dumpsys gfxinfo "+names, " framestats"))
 
-	s := string(run("shell", "dumpsys display ", names))
+	fs := s[strings.Index(s, "Total frames rendered: "):]
+	fs = strings.Replace(fs, "Total frames rendered: ", "", -1)
+	fs = strings.Split(fs, "\n")[0]
+	frames, _ := strconv.Atoi(fs)
 
-	i := strings.Index(s, "fps=")
+	sec := s[strings.Index(s, "Stats since: "):]
+	sec = strings.Replace(sec, "Stats since: ", "", -1)
+	sec = sec[:strings.Index(sec, "ns")]
+	t, _ := strconv.Atoi(sec)
 
-	a := s[i:]
-
-	data := strings.Split(a, " ")[0]
-
-	s1 := strings.Replace(data, "fps=", "", 1)
-
-	result1 = strings.Replace(s1, "}]", "", -1)
-	result = strings.Replace(result1, ",", "", -1)
+	result = fmt.Sprintf("%.2f", float64(frames*1000000000)/float64(t))
 
 	fmt.Println("Avg. Median FPS Usage Data ", result)
 
