@@ -280,23 +280,22 @@ func AndroidCPUUsage(names string) (val string) {
 
 func AndroidMedianFPS(names string) (val string) {
 
+	s := string(run("shell", "dumpsys gfxinfo "+names, "framestats"))
 	var result string
-	var result1 string
+	v := strings.Index(s, "Janky frames:")
+	s = s[v:]
+	s = strings.Replace(s, "Janky frames:", "", -1)
+	data := strings.Split(s, " ")
+	for _, value := range data {
 
-	s := string(run("shell", "dumpsys display ", names))
+		if len(value) != 0 && value != " " {
+			result = value
+			break
+		}
+	}
+	fmt.Println("mydata" + result)
 
-	i := strings.Index(s, "fps=")
-
-	a := s[i:]
-
-	data := strings.Split(a, " ")[0]
-
-	s1 := strings.Replace(data, "fps=", "", 1)
-
-	result1 = strings.Replace(s1, "}]", "", -1)
-	result = strings.Replace(result1, ",", "", -1)
-
-	fmt.Println("Avg. Median FPS Usage Data ", result)
+	//fmt.Println("Avg. Median FPS Usage Data ", result)
 
 	return result
 
