@@ -485,37 +485,48 @@ class AppData extends React.Component {
                 value={this.state.cpuUsage}
                 text="Total CPU Usage"
                 unit="%"
+                max={100}
               />
               <MetricUsage
                 value={this.state.memoryUsage}
                 text="Total Memory Usage"
                 unit="MB"
+                max={1024}
               />
               <MetricUsage
                 value={this.state.GpuUsage}
                 text="Total GPU Usage"
                 unit="MB"
+                max={1024}
               />
               <MetricUsage
                 value={this.state.Uploaddata}
                 text="Upload data"
-                unit="MB"
+                unit="MiB"
+                max={2048}
               />
               <MetricUsage
                 value={this.state.DownloadData}
                 text="Download data"
-                unit="MB"
+                unit="MiB"
+                max={100000}
               />
-              <MetricUsage value={this.state.power} text="Power" unit="%" />
+              <MetricUsage
+                value={this.state.power}
+                text="Power"
+                unit="%"
+                max={100}
+              />
               <MetricUsage
                 value={this.state.appPower}
                 text="App power"
                 unit="mAh"
+                max={100}
               />
               <MetricUsage
                 value={this.state.avgMedianFPS}
                 text="Avg Median FPS"
-                unit=""
+                max={60}
               />
               <div class="graphs">
                 <MetricGraph

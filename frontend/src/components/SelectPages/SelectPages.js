@@ -30,9 +30,10 @@ export default class SelectPages extends Component {
       }
     });
   }
-  connectdevice = () => {
+  connectdevice() {
     window.backend.checkdevice().then((result) => {
-      if (result == "Device Attached") {
+      console.log(result, "device att");
+      if (result === "Device Attached") {
         this.setState({
           devicecheck: true,
           devicetext: "Device Attached Successfully",
@@ -44,7 +45,8 @@ export default class SelectPages extends Component {
         });
       }
     });
-  };
+    console.log(this.state.devicecheck, "hello");
+  }
   render() {
     return (
       <div>
@@ -81,7 +83,7 @@ export default class SelectPages extends Component {
                     border: "1px solid white",
                     borderRadius: "20px",
                   }}
-                  onclick={this.connectdevice}
+                  onClick={this.connectdevice.bind(this)}
                 >
                   Connect Device
                 </button>

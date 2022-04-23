@@ -6,10 +6,24 @@ import { withRouter } from "react-router-dom";
 import indlogo from "../../asset/Group.png";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/loginAuth/loginAuthSlice";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { makeStyles } from "@material-ui/core/styles";
+
+const Styles = makeStyles((theme) => ({
+  circle: {
+    float: "right",
+    marginRight: "5%",
+    marginTop: "1.5%",
+
+    zIndex: 99,
+  },
+}));
 
 const LoginHeader = () => {
   let users = useSelector(selectUser);
   console.log(users, "user");
+
+  const classes = Styles();
 
   // const [state, setState] = useState({
   //   isChecked: false,
@@ -64,11 +78,12 @@ const LoginHeader = () => {
           GameOn
         </h2>
 
+        <AccountCircleIcon className={classes.circle} />
         <p
           style={{
             float: "right",
-            marginRight: "10%",
-            paddingTop: "1%",
+            marginRight: "1%",
+            paddingTop: "1.5%",
             fontSize: "18px",
             fontWeight: 600,
           }}

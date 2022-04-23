@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import "./metricGraph.css";
@@ -7,6 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 
 const Plot = createPlotlyComponent(Plotly);
+const [progress, setProgress] = "";
 const Styles = makeStyles((theme) => ({
   paper: {
     width: "100%",
@@ -15,6 +16,11 @@ const Styles = makeStyles((theme) => ({
     borderRadius: "10px",
     padding: "10px 10px 10px 10px",
     marginTop: "20px",
+  },
+  prog: {
+    "& .MuiLinearProgress-colorPrimary": {
+      backgroundColor: "red",
+    },
   },
 }));
 

@@ -5,6 +5,9 @@ import androidLogo from "../../asset/androidlogo.png";
 import mini from "../../asset/mini.png";
 import appVersion from "../../asset/appVersion.png";
 import charge from "../../asset/charge.png";
+import p1 from "../../asset/p1.png";
+import p2 from "../../asset/p2.png";
+
 var mapObj = {
   com: " ",
   ".oneplus": " ",
@@ -106,7 +109,7 @@ function DeviceInfo(props) {
         <hr className="app-divider-style" />
         <div className="app-info-sub">
           <div>
-            <img src={androidLogo} alt=" " className="app-info-image" />
+            <img src={p1} alt=" " className="app-info-image" />
           </div>
           <div className="device-info-text">
             <p style={{ fontSize: "9px", fontWeight: "200" }}>
@@ -118,7 +121,7 @@ function DeviceInfo(props) {
         <hr className="app-divider-style" />
         <div className="app-info-sub">
           <div>
-            <img src={androidLogo} alt=" " className="app-info-image" />
+            <img src={p2} alt=" " className="app-info-image" />
           </div>
           <div className="device-info-text">
             <p style={{ fontSize: "9px", fontWeight: "200" }}>

@@ -11,6 +11,7 @@
 .big-container {
   display: flex;
   margin-left: 8%;
+  margin-top: 1%;
 }
 .device-info {
   height: 80vh;
@@ -22,14 +23,14 @@
 }
 .sortStyle {
   width: 8%;
-  height: 17%;
+  height: 18%;
   background: white;
   padding-left: 4%;
   display: inline-block;
   font-size: 13px;
-  border-radius: 10px;
+  border-radius: 5px;
   border: 2px solid white;
-  margin-left: 2%;
+  margin-left: 0.5%;
   position: relative;
   box-shadow: 0px 3px 6px #0000001a;
 }
@@ -37,7 +38,7 @@
   position: relative;
   width: 12px;
   height: 12px;
-  left: 5%;
+  left: 3.3%;
   z-index: 99;
   /* right: 15; */
 }
@@ -52,9 +53,23 @@ h3 {
   border: 1px solid white;
 }
 
+.basic-info-image {
+  width: 14%;
+
+  object-fit: contain;
+  float: left;
+}
+
+.basic-info-sub {
+  padding: 1%;
+  padding-top: 4%;
+
+  padding-left: 7%;
+}
+
 .mini-card p {
   margin-left: 7%;
-  font-size: 13px;
+  font-size: 10px;
 }
 
 .mini-card img {
@@ -93,9 +108,11 @@ img {
 }
 .basicButton {
   background: none;
-  margin-left: 1%;
+  padding-left: 8%;
   display: block;
   color: #fea14a;
+  font-size: 15px;
+  margin-top: -2%;
 }
 
 .container {
@@ -111,8 +128,7 @@ img {
 
 .mini-card {
   width: 22%;
-  height: 55px;
-  padding: none;
+  height: 59px;
   background: white;
   border: 1px solid none;
   border-radius: 11px;
