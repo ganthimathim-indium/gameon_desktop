@@ -424,16 +424,6 @@ class AppData extends React.Component {
   }
   handleRedirect() {
     console.log(this.props.location.state, "find");
-    // const mapDispatchToProps = (dispatch) => {
-
-    //   return {
-    //   user: () => dispatch(login({...user,backClick:true})),
-    //   }
-    // }
-    // login({
-    //   ...this.props.location.state.user,
-    //   backClick: true,
-    // })
 
     if (this.state.back) {
       let path = "/home";
