@@ -8,6 +8,16 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/loginAuth/loginAuthSlice";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
+import { Logout } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/loginAuth/loginAuthSlice.js";
+import {
+  MemoryRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+} from "react-router-dom";
 
 const Styles = makeStyles((theme) => ({
   circle: {
@@ -20,10 +30,16 @@ const Styles = makeStyles((theme) => ({
 }));
 
 const LoginHeader = () => {
-  let users = useSelector(selectUser);
-  console.log(users, "user");
+  let user = useSelector(selectUser);
+  const dispatch = useDispatch();
+  console.log(user, "user");
+  const history = useHistory();
 
   const classes = Styles();
+  const handleLogOut = () => {
+    dispatch(logout());
+    history.push("/");
+  };
 
   // const [state, setState] = useState({
   //   isChecked: false,
@@ -53,6 +69,15 @@ const LoginHeader = () => {
   //   window.location = "/aladdin-landing";
   // };
 
+  // if (!user) {
+  //   return (
+  //     <Redirect
+  //       to={{
+  //         pathname: "/",
+  //       }}
+  //     />
+  //   );
+  // } else {
   return (
     <div className="header">
       <header>
@@ -90,9 +115,11 @@ const LoginHeader = () => {
         >
           Vivek
         </p>
+        <button onClick={handleLogOut}>Log out</button>
       </header>
     </div>
   );
+  // }
 };
 
 // class LoginHeader extends Component {

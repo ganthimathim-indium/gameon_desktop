@@ -23,6 +23,19 @@
   font-size: 50px;
   color: #17a2b8;
 }
+.start-div {
+  position: "relative";
+}
+.start-image-style {
+  width: 9px;
+  object-fit: contain;
+  position: absolute;
+  margin-right: 12%;
+  margin-top: -3px;
+  right: 0;
+  top: 10;
+  z-index: 10;
+}
 
 .container {
   margin-top: -1.5%;
@@ -38,26 +51,64 @@
   top: 10%;
   z-index: 1;
 }
-
+.note {
+  margin-left: 5%;
+}
+.note p {
+  display: inline;
+  color: blue;
+}
+.ok {
+  text-align: center;
+  padding: 3%;
+}
+.ok button {
+  margin-right: 5%;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  background: blue;
+  width: 16%;
+  border-radius: 12%;
+}
+.popup-div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 3%;
+}
+.popup-div p {
+  background: rgb(228, 219, 219);
+  width: 45%;
+  margin-left: 2%;
+  height: 5%;
+  border-radius: 5px;
+  text-align: center;
+}
 .startButton {
+  font-size: 14px;
   width: 10%;
-  height: 100%;
+  height: 70%;
   padding: 3px;
   border-radius: 20px;
   float: right;
   margin-right: 4%;
-  margin-left: 10px;
   background-color: #278ef1;
   color: white;
+  position: absolute;
+  right: 0;
 }
 .stopButton {
+  font-size: 14px;
   width: 10%;
-  height: 100%;
+  height: 70%;
   padding: 3px;
   border-radius: 20px;
   float: right;
   margin-right: 4%;
-  margin-left: 10px;
+
+  position: absolute;
+  right: 0;
   background-color: rgb(243, 53, 53);
   color: white;
 }
@@ -68,6 +119,7 @@
   float: right;
   color: #278ef1;
   border: 1px solid blue;
+  margin-right: 16%;
 }
 .appInfo {
   background: #f2f8ff;

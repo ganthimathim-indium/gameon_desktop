@@ -723,8 +723,8 @@ func deviceinfonew() (val string) {
 		log.Fatal(err)
 	}
 	for _, device := range devices {
-		// fmt.Printf("\t%+v\n", *device)
-		devicename = device.Model
+		fmt.Printf("\t%+v\n", *device)
+		devicename = device.Product
 		deviceserial = device.Serial
 	}
 

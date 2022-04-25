@@ -9,11 +9,28 @@ import PulseLoader from "react-spinners/PulseLoader";
 import MetricUsage from "../../MetricUsage/MetricUsage";
 import DeviceInfo from "../DeviceInfo/DeviceInfo";
 import { withRouter } from "react-router-dom";
+import start from "../../asset/start.svg";
+import stop from "../../asset/stop.svg";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import { useDispatch } from "react-redux";
+import { login } from "../../features/loginAuth/loginAuthSlice";
 
 // import { useSelector } from "react-redux";
-// import{ selectUser} from "../../features/loginAuth/loginAuthSlice"
+// import { selectUser } from "../../features/loginAuth/loginAuthSlice";
 
 const Plot = createPlotlyComponent(Plotly);
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "background.paper",
+
+  boxShadow: 24,
+};
 
 var mapObj = {
   com: " ",
@@ -33,7 +50,7 @@ var mapObj = {
 // console.log(user.token,"userToken")
 
 // "id": this.props.userInfo.id , "token": this.props.userInfo.token
-
+// const user = useSelector(selectUser);
 class AppData extends React.Component {
   constructor(props) {
     super(props);
@@ -77,8 +94,22 @@ class AppData extends React.Component {
       avgMedianFPS: 0,
       devicetext: " ",
       devicecheck: false,
+      open: false,
+      openBack: false,
+      back: true,
+      avgCPU: "",
+      avgGPU: "",
+      avgMem: "",
+      avgFps: "",
+      avgPower: "",
+      avgAppPower: "",
+      avgUpload: "",
+      avgDownload: "",
     };
   }
+
+  handleClose = () => this.setState({ open: false });
+  // handleBackClose = () => this.setState({ openBack: false });
 
   componentDidMount() {
     console.log(this.props);
@@ -132,7 +163,7 @@ class AppData extends React.Component {
   handleCpuStart() {
     console.log(this.state.cpuStart, "cpustrtbefore");
 
-    this.setState({ cpuStart: !this.state.cpuStart }, () => {
+    this.setState({ cpuStart: !this.state.cpuStart, back: false }, () => {
       console.log(this.state.cpuStart, "cpustrt");
       if (this.state.cpuStart) {
         const myJson = JSON.stringify(this.state.basicInfo);
@@ -358,7 +389,11 @@ class AppData extends React.Component {
   }
 
   handleCpuStop() {
-    this.setState({ cpuStart: !this.state.cpuStart });
+    this.setState({
+      cpuStart: !this.state.cpuStart,
+      back: true,
+    });
+    this.setState({ open: true });
     this.setState({ loader: false });
     clearInterval(this.timer);
     let stopData = {
@@ -371,219 +406,276 @@ class AppData extends React.Component {
 
     let stopJSON = JSON.stringify(stopData);
     window.backend.stopscan(stopJSON, "false").then((result) => {
-      const data = result;
+      const data = JSON.parse(result);
+      console.log(data, "data");
+      console.log(data.average_values, "avaerage values");
+      this.setState({
+        avgCPU: data.average_values.cpu_usage,
+        avgGPU: data.average_values.gpu_usage,
+        avgMem: data.average_values.memory_usage,
+        avgFps: data.average_values.avgfps_app_usage,
+        avgPower: data.average_values.power_usage,
+        avgAppPower: data.average_values.apppower_app_usage,
+        avgUpload: data.average_values.upload_data_usage,
+        avgDownload: data.average_values.download_data_usage,
+      });
       console.log(data, "stop session");
     });
   }
   handleRedirect() {
-    // let history = useHistory();
-    window.backend.checkdevice().then((result) => {
-      if (result == "Device Attached") {
-        this.setState(
-          {
-            devicecheck: true,
-            devicetext: "Device Attached Successfully",
-          },
-          () => {
-            let path = "/home";
-            this.props.history.push(path);
-          }
-        );
-      } else {
-        this.setState({
-          devicecheck: false,
-          devicetext: "No Device Attached Kindly Connect Your Device Properly",
-        });
-      }
-    });
+    console.log(this.props.location.state, "find");
+    // const mapDispatchToProps = (dispatch) => {
+
+    //   return {
+    //   user: () => dispatch(login({...user,backClick:true})),
+    //   }
+    // }
+    // login({
+    //   ...this.props.location.state.user,
+    //   backClick: true,
+    // })
+
+    if (this.state.back) {
+      let path = "/home";
+      this.props.history.push(path);
+    }
   }
 
   render() {
     console.log(this.props.location.state.value);
-    return (
-      <div className="appInfo">
-        <LoginHeader />
+    if (!this.props.location.state.user.backClick) {
+      return (
+        <div style={{ position: "relative" }}>
+          <div className="appInfo">
+            <LoginHeader />
 
-        {/* <h1
-          style={{ textAlign: "center", marginTop: "-10%", fontSize: "40px" }}
-        >
-          Device Metrics
-        </h1>
+            <div className="appBar">
+              <p style={{ float: "left" }}>Application Statistics</p>
+              {this.state.cpuStart ? (
+                <div className="start-div">
+                  <img src={stop} alt="" className="start-image-style" />
+                  <button
+                    className="stopButton"
+                    onClick={this.handleCpuStop.bind(this)}
+                  >
+                    Stop Scan
+                  </button>
+                </div>
+              ) : (
+                <div className="start-div">
+                  <img src={start} alt="" className="start-image-style" />
+                  <button
+                    className="startButton"
+                    onClick={this.handleCpuStart.bind(this)}
+                  >
+                    Start Scan
+                  </button>
+                </div>
+              )}
 
-        <div className="buttonStyle">
-          <button
-            className="btn btn-primary"
-            onClick={this.handleCpuStart.bind(this)}
-            style={{ align: "center " }}
-          >
-            Start Scan
-          </button>
-
-          {this.state.loader && (
-            <h3>
-              Scanning
-              <PulseLoader
-                size={10}
-                color={"#123abc"}
-                loading={this.state.loader}
-              />
-            </h3>
-          )}
-
-          <button
-            className="btn btn-secondary"
-            onClick={this.handleCpuStop.bind(this)}
-            style={{ align: "center " }}
-          >
-            Stop Scan
-          </button>
-        </div> */}
-        <div className="appBar">
-          <p style={{ float: "left" }}>Application Statistics</p>
-          {this.state.cpuStart ? (
-            <button
-              className="stopButton"
-              onClick={this.handleCpuStop.bind(this)}
-            >
-              Stop Scan
-            </button>
-          ) : (
-            <button
-              className="startButton"
-              onClick={this.handleCpuStart.bind(this)}
-            >
-              Start Scan
-            </button>
-          )}
-
-          <button
-            className="backButton"
-            onClick={this.handleRedirect.bind(this)}
-          >
-            Back
-          </button>
-        </div>
-
-        <div className="container">
-          <div class="left">
-            <div>
-              <DeviceInfo
-                osVersion={this.state.versionName}
-                androidVersion={this.state.androidVersion}
-                appName={this.state.appName}
-                deviceId={this.state.deviceId}
-                deviceName={this.state.deviceName}
-                cpuArch={this.state.cpuArch}
-                cpuCores={this.state.cpuCores}
-              />
+              <button
+                className="backButton"
+                onClick={this.handleRedirect.bind(this)}
+              >
+                Back
+              </button>
             </div>
-          </div>
 
-          <div className="right">
-            <div className="right-container">
-              <MetricUsage
-                value={this.state.cpuUsage}
-                text="Total CPU Usage"
-                unit="%"
-                max={100}
-              />
-              <MetricUsage
-                value={this.state.memoryUsage}
-                text="Total Memory Usage"
-                unit="MB"
-                max={1024}
-              />
-              <MetricUsage
-                value={this.state.GpuUsage}
-                text="Total GPU Usage"
-                unit="MB"
-                max={1024}
-              />
-              <MetricUsage
-                value={this.state.Uploaddata}
-                text="Upload data"
-                unit="MiB"
-                max={2048}
-              />
-              <MetricUsage
-                value={this.state.DownloadData}
-                text="Download data"
-                unit="MiB"
-                max={100000}
-              />
-              <MetricUsage
-                value={this.state.power}
-                text="Power"
-                unit="%"
-                max={100}
-              />
-              <MetricUsage
-                value={this.state.appPower}
-                text="App power"
-                unit="mAh"
-                max={100}
-              />
-              <MetricUsage
-                value={this.state.avgMedianFPS}
-                text="Avg Median FPS"
-                max={60}
-              />
-              <div class="graphs">
-                <MetricGraph
-                  metTime={this.state.timeValues}
-                  metValues={this.state.cpuValues}
-                  text="CPU Usage"
-                  unit="%"
-                />
-                <MetricGraph
-                  metTime={this.state.timeValues}
-                  metValues={this.state.gpuValues}
-                  text="GPU Usage"
-                  unit="%"
-                />
-                <MetricGraph
-                  metTime={this.state.timeValues}
-                  metValues={this.state.memValues}
-                  text="Memory Usage"
-                  unit="%"
-                />
-                <MetricGraph
-                  metTime={this.state.timeValues}
-                  metValues={this.state.powerValues}
-                  text="Power Usage"
-                  unit="%"
-                />
-                <MetricGraph
-                  metTime={this.state.timeValues}
-                  metValues={this.state.appPowerValues}
-                  text="App Power Usage"
-                  unit="%"
-                />
-                <MetricGraph
-                  metTime={this.state.timeValues}
-                  metValues={this.state.uploadValues}
-                  text="Upload Data"
-                  unit="%"
-                />
-                <MetricGraph
-                  metTime={this.state.timeValues}
-                  metValues={this.state.downloadValues}
-                  text="Download Data"
-                  unit="%"
-                />
-                <MetricGraph
-                  metTime={this.state.timeValues}
-                  metValues={this.state.fpsValues}
-                  text="Median FPS"
-                  unit="%"
-                />
+            <div className="container">
+              <div class="left">
+                <div>
+                  <DeviceInfo
+                    osVersion={this.state.versionName}
+                    androidVersion={this.state.androidVersion}
+                    appName={this.state.appName}
+                    deviceId={this.state.deviceId}
+                    deviceName={this.state.deviceName}
+                    cpuArch={this.state.cpuArch}
+                    cpuCores={this.state.cpuCores}
+                  />
+                </div>
+              </div>
+
+              <div className="right">
+                <div className="right-container">
+                  <MetricUsage
+                    value={this.state.cpuUsage}
+                    text="Total CPU Usage"
+                    unit="%"
+                    max={100}
+                  />
+                  <MetricUsage
+                    value={this.state.memoryUsage}
+                    text="Total Memory Usage"
+                    unit="MB"
+                    max={1024}
+                  />
+                  <MetricUsage
+                    value={this.state.GpuUsage}
+                    text="Total GPU Usage"
+                    unit="MB"
+                    max={100}
+                  />
+                  <MetricUsage
+                    value={this.state.Uploaddata}
+                    text="Upload data"
+                    unit="MiB"
+                    max={2048}
+                  />
+                  <MetricUsage
+                    value={this.state.DownloadData}
+                    text="Download data"
+                    unit="MiB"
+                    max={100000}
+                  />
+                  <MetricUsage
+                    value={this.state.power}
+                    text="Power"
+                    unit="%"
+                    max={100}
+                  />
+                  <MetricUsage
+                    value={this.state.appPower}
+                    text="App power"
+                    unit="mAh"
+                    max={100}
+                  />
+                  <MetricUsage
+                    value={this.state.avgMedianFPS}
+                    text="Avg Median FPS"
+                    max={1}
+                  />
+                  <div class="graphs">
+                    <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.cpuValues}
+                      text="CPU Usage"
+                      unit="%"
+                    />
+                    <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.gpuValues}
+                      text="GPU Usage"
+                      unit="MB"
+                    />
+                    <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.memValues}
+                      text="Memory Usage"
+                      unit="MB"
+                    />
+                    <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.powerValues}
+                      text="Power Usage"
+                      unit="%"
+                    />
+                    <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.appPowerValues}
+                      text="App Power Usage"
+                      unit="mAh"
+                    />
+                    <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.uploadValues}
+                      text="Upload Data"
+                      unit="MiB"
+                    />
+                    <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.downloadValues}
+                      text="Download Data"
+                      unit="MiB"
+                    />
+                    <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.fpsValues}
+                      text="Median FPS"
+                      unit=""
+                    />
+                  </div>
+                </div>
               </div>
             </div>
+            {console.log(this.state.gpuValues)}
           </div>
+          {/* {this.state.openBack && (
+            <div>
+              <Modal
+                open={this.state.openBack}
+                onClose={this.handleBackClose.bind(this)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                 
+  
+                  <div className="note">
+                    <p>
+                      If you want to look for the detailed session details check{" "}
+                    </p>
+                  </div>
+                  <hr />
+                  <div className="ok">
+                    <button onClick={this.handleBackClose.bind(this)}>Ok</button>
+                  </div>
+                </Box>
+              </Modal>
+            </div>
+          )} */}
+          {this.state.open && (
+            <div>
+              <Modal
+                open={this.state.open}
+                onClose={this.handleClose.bind(this)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <div sx={{ p: 4 }}>
+                    <p
+                      style={{
+                        textAlign: "center",
+                        fontSize: "19px",
+                        color: "#278EF1",
+                      }}
+                    >
+                      Average Metrics
+                    </p>
+                  </div>
+                  <hr />
+                  <div className="popup-div">
+                    <p className="popup-p">
+                      Avg CPU value:{this.state.avgCPU + " "}%
+                    </p>
+                    <p>Avg GPU value:{this.state.avgGPU + " "}MB</p>
+
+                    <p>Avg memory :{this.state.avgMem + " "}MB</p>
+
+                    <p>Avg uploaded data:{this.state.avgUpload + " "}MiB</p>
+                    <p>Avg downloaded data:{this.state.avgDownload + " "}MiB</p>
+                    <p>Avg fps value:{this.state.avgfps_app_usage + " "}</p>
+                    <p>Avg power value:{this.state.avgAppPower + " "}%</p>
+                    <p>Avg App Power value:{this.state.avgPower + " "}mAh</p>
+                  </div>
+                  <div className="note">
+                    <p>
+                      If you want to look for the detailed session details check{" "}
+                    </p>
+                    <p>for the web app.</p>
+                  </div>
+                  <hr />
+                  <div className="ok">
+                    <button onClick={this.handleClose.bind(this)}>Ok</button>
+                  </div>
+                </Box>
+              </Modal>
+            </div>
+          )}
         </div>
-        {console.log(this.state.gpuValues)}
-      </div>
-    );
+      );
+    }
   }
 }
 export default AppData;

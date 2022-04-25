@@ -17,11 +17,6 @@ const Styles = makeStyles((theme) => ({
     padding: "10px 10px 10px 10px",
     marginTop: "20px",
   },
-  prog: {
-    "& .MuiLinearProgress-colorPrimary": {
-      backgroundColor: "red",
-    },
-  },
 }));
 
 function MetricGraph(props) {
@@ -51,7 +46,7 @@ function MetricGraph(props) {
               title: "Total GPU Usage",
               width: 765,
               height: 200,
-              margin: { l: 60, r: 20, b: 20, t: 20, pad: 5 },
+              margin: { l: 90, r: 20, b: 40, t: 20, pad: 5 },
               title: false,
               xref: 400,
 
@@ -59,11 +54,28 @@ function MetricGraph(props) {
               borderRadius: 20,
               xaxis: {
                 autorange: true,
+                title: {
+                  text: "Time",
+                  font: {
+                    family: "Courier New, monospace",
+                    size: 16,
+                  },
+                },
                 // rangeslider: {
                 //   range: ["00:00:00", "00:01:60"],
                 //   borderColor: "blue",
                 //   bgColor: "grey",
                 // },
+              },
+
+              yaxis: {
+                title: {
+                  text: props.unit,
+                  font: {
+                    family: "Courier New, monospace",
+                    size: 16,
+                  },
+                },
               },
 
               plot_bgcolor: "#F5F5F5",
@@ -73,7 +85,7 @@ function MetricGraph(props) {
             }}
             config={{ staticPlot: true }}
           />
-          <div style={{ marginLeft: "40%", padding: "2%" }}>{props.text}</div>
+          <div style={{ marginLeft: "48%", padding: "2%" }}>{props.text}</div>
         </Paper>
       </div>
     </>

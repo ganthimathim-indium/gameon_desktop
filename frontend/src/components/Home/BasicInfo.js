@@ -19,6 +19,8 @@ import sort from "../../asset/sort.png";
 import loader from "../../asset/loader.png";
 import appVersion from "../../asset/appVersion.png";
 import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../../features/loginAuth/loginAuthSlice.js";
 
 import p1 from "../../asset/p1.png";
 import p2 from "../../asset/p2.png";
@@ -46,11 +48,10 @@ var mapObj = {
   ".dragonfistztamilan": " ",
 };
 
-const BasicInfo = () => {
-  const { key } = useLocation();
-
+const BasicInfo = (props) => {
   const user = useSelector(selectUser);
   // console.log(user, "redux user");
+  const dispatch = useDispatch();
 
   const [state, setState] = useState({
     osname: "",
@@ -86,7 +87,9 @@ const BasicInfo = () => {
   console.log(state.applist);
 
   useEffect(() => {
+    console.log("hi");
     window.backend.basic().then((result) => {
+      console.log(result, "result");
       var num2x;
       const data = JSON.parse(result);
       num2x = data.map((n) => {
@@ -113,6 +116,14 @@ const BasicInfo = () => {
     );
   }
   const openApp = (list) => {
+    dispatch(
+      login({
+        ...user,
+        backClick: false,
+      })
+    );
+
+    console.log(user, "hello user");
     setState((ps) => {
       return { ...ps, SelectedList: list, openStatus: true };
     });
@@ -125,78 +136,127 @@ const BasicInfo = () => {
       <Redirect
         to={{
           pathname: "/app-info",
-          state: { user: user, value: state.SelectedList },
+          state: { user: user, value: state.SelectedList, store: props.store },
         }}
       />
     );
   }
-  return (
-    <div style={{ position: "relative" }}>
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          width: "100%",
-          background: "#f2f8ff",
-        }}
-      >
-        <LoginHeader />
 
-        <div style={{ marginLeft: "9.8%", marginTop: "4%", fontWeight: 600 }}>
-          List of Applications
-        </div>
+  if (user.backClick) {
+    return (
+      <div style={{ position: "relative" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: "100%",
+            background: "#f2f8ff",
+          }}
+        >
+          <LoginHeader />
 
-        <div className="nolist">
-          <p className="list" style={{ display: "inline" }}>
-            Installed Applications:
-            <p style={{ color: "#278EF1", display: "inline" }}>
-              {state.applist.length}
+          <div style={{ marginLeft: "9.8%", marginTop: "4%", fontWeight: 600 }}>
+            List of Applications
+          </div>
+
+          <div className="nolist">
+            <p className="list" style={{ display: "inline" }}>
+              Installed Applications:
+              <p style={{ color: "#278EF1", display: "inline" }}>
+                {state.applist.length}
+              </p>
             </p>
-          </p>
-          <input
-            style={{
-              width: "19%",
-              height: "15%",
-              background: "white",
-              border: "2px solid white",
-              borderRadius: "5px",
-              marginLeft: "26%",
-              position: "relative",
-              boxShadow: "0px 3px 6px #0000001A",
-            }}
-            placeholder="Search app here"
-            type="text"
-            onChange={(e) => searchItems(e.target.value)}
-          />
-          <img
-            src={searchIcon}
-            alt=""
-            style={{
-              position: "relative",
-              width: "12px",
-              height: "12px",
-              right: 15,
-            }}
-          />
-          <img src={sort} alt="" className="sortImageStyle" />
-          <p className="sortStyle" onClick={ascorder}>
-            Sort
-          </p>
-        </div>
+            <input
+              style={{
+                width: "19%",
+                height: "15%",
+                background: "white",
+                border: "2px solid white",
+                borderRadius: "5px",
+                marginLeft: "26%",
+                position: "relative",
+                boxShadow: "0px 3px 6px #0000001A",
+              }}
+              placeholder="Search app here"
+              type="text"
+              onChange={(e) => searchItems(e.target.value)}
+            />
+            <img
+              src={searchIcon}
+              alt=""
+              style={{
+                position: "relative",
+                width: "12px",
+                height: "12px",
+                right: 15,
+              }}
+            />
+            <img src={sort} alt="" className="sortImageStyle" />
+            <p className="sortStyle" onClick={ascorder}>
+              Sort
+            </p>
+          </div>
 
-        <div className="big-container">
-          <div className="container">
-            {searchInput.length > 1
-              ? filteredResults.map((list) => {
-                  return (
+          <div className="big-container">
+            <div className="container">
+              {searchInput.length > 1
+                ? filteredResults.map((list) => {
+                    return (
+                      <div className="mini-card">
+                        {/* <div>
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aEE0AUQIbPgaoWSwIl-fTVQA8tIfTcFkow&usqp=CAU"
+                      alt=""
+                    />
+                  </div> */}
+
+                        <div className="basic-info-sub">
+                          <div>
+                            <img
+                              src={
+                                imgArr[
+                                  Math.floor(Math.random() * imgArr.length)
+                                ]
+                              }
+                              alt=" "
+                              className="basic-info-image"
+                            />
+                          </div>
+                          <div>
+                            <p
+                              style={{
+                                display: "inline",
+                                color: "#3B3B3B",
+                                marginTop: "-1%",
+                              }}
+                            >
+                              {list.replace(
+                                /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.dragonfistztamilan|.network/gi,
+                                function (matched) {
+                                  return mapObj[matched];
+                                }
+                              )}
+                            </p>
+                            <button
+                              className="basicButton"
+                              onClick={() => openApp(list)}
+                            >
+                              Open App>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                : state.applist.map((list) => (
                     <div className="mini-card">
                       {/* <div>
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aEE0AUQIbPgaoWSwIl-fTVQA8tIfTcFkow&usqp=CAU"
-                  alt=""
-                />
-              </div> */}
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aEE0AUQIbPgaoWSwIl-fTVQA8tIfTcFkow&usqp=CAU"
+                      alt=""
+                    />
+                  </div> */}
 
                       <div className="basic-info-sub">
                         <div>
@@ -232,139 +292,95 @@ const BasicInfo = () => {
                         </div>
                       </div>
                     </div>
-                  );
-                })
-              : state.applist.map((list) => (
-                  <div className="mini-card">
-                    {/* <div>
+                  ))}
+            </div>
+
+            <div className="device-info">
+              {/* <p>Device Model:{state.deviceid} </p> */}
+              <p>Device Info</p>
+              <hr style={{ color: "white" }} />
+              <p
+                style={{
+                  fontSize: "20px",
+                  color: "white",
+                  textAlign: "center",
+                  display: "inline",
+                  marginLeft: "22%",
+                }}
+              >
+                {state.deviceid}
+              </p>
+              <p
+                style={{
+                  fontSize: "10px",
+                  color: "white",
+                  marginLeft: "27%",
+                  marginTop: "-3%",
+                }}
+              >
+                Device Name
+              </p>
+              <div style={{ positon: "relative" }}>
+                {/* <img
+                    src={ellipse}
+                    alt=""
+                    style={{
+                      position: "absolute",
+                      top: "12%",
+    
+                      width: "10%",
+                      objectFit: "contain",
+                      marginLeft: "10%",
+                      zIndex: 10,
+                    }}
+                  /> */}
+
                 <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aEE0AUQIbPgaoWSwIl-fTVQA8tIfTcFkow&usqp=CAU"
+                  src={phone}
                   alt=""
+                  style={{
+                    // position: "absolute",
+                    width: "50%",
+                    height: "50%",
+                    marginLeft: "25%",
+                    // top: "20%",
+                  }}
                 />
-              </div> */}
-
-                    <div className="basic-info-sub">
-                      <div>
-                        <img
-                          src={
-                            imgArr[Math.floor(Math.random() * imgArr.length)]
-                          }
-                          alt=" "
-                          className="basic-info-image"
-                        />
-                      </div>
-                      <div>
-                        <p
-                          style={{
-                            display: "inline",
-                            color: "#3B3B3B",
-                            marginTop: "-1%",
-                          }}
-                        >
-                          {list.replace(
-                            /com|.qualcomm|.oneplus|.android|.display|.google|.tools|.internal|.emulation|.dragonfistztamilan|.network/gi,
-                            function (matched) {
-                              return mapObj[matched];
-                            }
-                          )}
-                        </p>
-                        <button
-                          className="basicButton"
-                          onClick={() => openApp(list)}
-                        >
-                          Open App>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-          </div>
-
-          <div className="device-info">
-            {/* <p>Device Model:{state.deviceid} </p> */}
-            <p>Device Info</p>
-            <hr style={{ color: "white" }} />
-            <p
-              style={{
-                fontSize: "20px",
-                color: "white",
-                textAlign: "center",
-                display: "inline",
-                marginLeft: "25%",
-              }}
-            >
-              {state.deviceid}
-            </p>
-            <p
-              style={{
-                fontSize: "10px",
-                color: "white",
-                marginLeft: "27%",
-                marginTop: "-3%",
-              }}
-            >
-              Device Name
-            </p>
-            <div style={{ positon: "relative" }}>
-              {/* <img
-                src={ellipse}
-                alt=""
-                style={{
-                  position: "absolute",
-                  top: "12%",
-
-                  width: "10%",
-                  objectFit: "contain",
-                  marginLeft: "10%",
-                  zIndex: 10,
-                }}
-              /> */}
-
-              <img
-                src={phone}
-                alt=""
-                style={{
-                  // position: "absolute",
-                  width: "50%",
-                  height: "50%",
-                  marginLeft: "25%",
-                  // top: "20%",
-                }}
-              />
-            </div>
-            <div className="android-container">
-              <img src={android} alt="" className="android" />
+              </div>
+              <div className="android-container">
+                <img src={android} alt="" className="android" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {state.loading && (
-        <div
-          style={{
-            width: "100%",
-            height: "100vh",
-            background: "#00000036",
-            position: "absolute",
-            top: 0,
-
-            zIndex: 99,
-          }}
-        >
-          <img
-            src={loader}
-            alt=""
+        {state.loading && (
+          <div
             style={{
-              width: "13%",
-              objectFit: "contain",
+              width: "100%",
+              height: "100vh",
+              background: "#00000036",
+              position: "absolute",
+              top: 0,
 
-              marginLeft: "45vw",
+              zIndex: 99,
             }}
-          />
-        </div>
-      )}
-    </div>
-  );
+          >
+            <img
+              src={loader}
+              alt=""
+              style={{
+                width: "13%",
+                objectFit: "contain",
+
+                marginLeft: "45vw",
+              }}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
 };
 
 export default BasicInfo;

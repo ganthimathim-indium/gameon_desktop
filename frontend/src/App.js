@@ -6,6 +6,7 @@ import {
   Redirect,
   Route,
   Switch,
+  useHistory,
 } from "react-router-dom";
 import SignIn from "./components/Login/SignIn";
 import SelectPages from "./components/SelectPages/SelectPages";
@@ -16,9 +17,13 @@ import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/loginAuth/loginAuthSlice";
 import BasicInfo from "./components/Home/BasicInfo.js";
-import Heloo from "./components/HelloWorld.js"
+import Heloo from "./components/HelloWorld.js";
+
+const BrowserHistory = React.createContext(null);
 
 function App() {
+  const history = useHistory();
+
   const user = useSelector(selectUser);
   console.log(user, "redux user");
 
@@ -29,16 +34,22 @@ function App() {
   // console.log(user, "message");
   return (
     <div className="app">
-      <Router>
-        <Switch>
-          <Route exact path="/" component={SignIn} />
+      <BrowserHistory.Provider value={history}>
+        <Router>
+          <Switch>
+            {user ? (
+              <>
+                <Route exact path="/select-page" component={SelectPages} />
+                <Route exact path="/home" component={BasicInfo} />
 
-          <Route exact path="/select-page" component={SelectPages} />
-          <Route exact path="/home" component={BasicInfo} />
-
-          <Route exact path="/app-info" component={AppInfo} />
-        </Switch>
-      </Router>
+                <Route exact path="/app-info" component={AppInfo} />
+              </>
+            ) : (
+              <Route exact path="/" component={SignIn} />
+            )}
+          </Switch>
+        </Router>
+      </BrowserHistory.Provider>
       {/* <Route exact path="/app-info" component={AppInf} /> */}
 
       {/* <Route exact path="/home" component={BasicInfo} /> */}

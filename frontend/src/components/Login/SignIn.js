@@ -165,6 +165,7 @@ const SignIn = () => {
               id: userObj.id,
               token: userObj.token,
               userRole: userObj.role,
+              backClick: true,
             })
           );
         } else {
