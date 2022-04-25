@@ -4,7 +4,148 @@
   margin-right: auto;
 }
 
-#customers td, #customers th {
+.mini-card button {
+  margin-left: 4%;
+}
+
+.big-container {
+  display: flex;
+  margin-left: 8%;
+  margin-top: 1%;
+}
+.device-info {
+  height: 80vh;
+  width: 30%;
+  background: #278ef1;
+  border-radius: 10px;
+  margin-right: 20px;
+  margin-top: -2.5%;
+}
+.sortStyle {
+  width: 8%;
+  height: 18%;
+  background: white;
+  padding-left: 4%;
+  display: inline-block;
+  font-size: 13px;
+  border-radius: 5px;
+  border: 2px solid white;
+  margin-left: 0.5%;
+  position: relative;
+  box-shadow: 0px 3px 6px #0000001a;
+}
+.sortImageStyle {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  left: 3.3%;
+  z-index: 99;
+  /* right: 15; */
+}
+h3 {
+  margin-top: -40vh;
+}
+.nolist ::placeholder {
+  font-size: 13px;
+}
+
+.nolist input:focus {
+  border: 1px solid white;
+}
+
+.basic-info-image {
+  width: 14%;
+
+  object-fit: contain;
+  float: left;
+}
+
+.basic-info-sub {
+  padding: 1%;
+  padding-top: 4%;
+
+  padding-left: 7%;
+}
+
+.mini-card p {
+  margin-left: 7%;
+  font-size: 10px;
+}
+
+.mini-card img {
+  height: 35px;
+  object-fit: contain;
+  margin-left: -30;
+}
+.android-container {
+  width: 75%;
+  margin-left: 12.5%;
+  height: 17%;
+  margin-top: 5%;
+  background: white;
+  border-radius: 5px;
+}
+
+.android {
+  width: 85%;
+  object-fit: contain;
+  padding: 2%;
+}
+
+.device-info p {
+  padding-left: 8%;
+  padding-top: 15px;
+  color: white;
+}
+img {
+  width: 100%;
+  margin: auto;
+  height: 80%;
+}
+.nolist {
+  margin-left: 8.5%;
+  margin-top: 2%;
+}
+.basicButton {
+  background: none;
+  padding-left: 8%;
+  display: block;
+  color: #fea14a;
+  font-size: 15px;
+  margin-top: -2%;
+}
+
+.container {
+  display: flex;
+  margin-left: 15px;
+  width: 65vw;
+  flex-wrap: wrap;
+}
+
+.list {
+  margin-left: 15px;
+}
+
+.mini-card {
+  width: 22%;
+  height: 59px;
+  background: white;
+  border: 1px solid none;
+  border-radius: 11px;
+  margin: 7px;
+  margin-right: 2%;
+  padding: 2px;
+}
+h3 {
+  text-align: center;
+}
+
+.mini-card > small {
+  font-size: 8px;
+}
+
+#customers td,
+#customers th {
   border: 2px solid #ddd;
   padding: 12px;
 }
@@ -22,13 +163,14 @@ table tbody {
   overflow-y: scroll;
 }
 
-table thead, table tbody tr {
+table thead,
+table tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed;
 }
-.blue-color{
-  color:#ddd;
+.blue-color {
+  color: #ddd;
   margin-right: 10%;
 }
 @import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
@@ -39,7 +181,7 @@ table thead, table tbody tr {
   padding-bottom: 12px;
   text-align: left !important;
   text-align: left !important;
-  background-color:#007bff;
+  background-color: #007bff;
   color: white;
   text-align: center;
 }
@@ -66,4 +208,3 @@ table thead, table tbody tr {
   margin-top: 3% !important;
   width: 8% !important;
 }
-

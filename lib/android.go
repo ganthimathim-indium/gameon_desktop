@@ -2,7 +2,10 @@ package lib
 
 import (
 	"fmt"
+	"math"
 	"os/exec"
+	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -18,9 +21,9 @@ func Appnamenew() (val string) {
 }
 
 func Appname() (val string) {
-	run("shell", "cmd package list package")
+	run("shell", "cmd package list package -3")
 
-	result1 := string(run("shell", "cmd package list package"))
+	result1 := string(run("shell", "cmd package list package -3"))
 
 	return result1
 
@@ -35,13 +38,22 @@ func Appopen(appnames string) (val string) {
 
 }
 
-func Appversion() (val string) {
-	run("shell", "getprop ro.build.version.sdk")
+func Appversion(pack string) (val string) {
 
+	s := string(run("shell", "dumpsys package "+pack+" | grep versionName"))
+
+	i := strings.Split(s, "versionName=")[1]
+	// if i == -1 {
+	// 	return ""
+	// }
+	// s = s[i:]
+	// s = strings.Replace(s, "level: ", "", 1)
+	// return strings.Split(s, "\n")[0]
+	return i
 	//result1 := string(run("shell", "getprop ro.build.version.sdk"))
-	res2 := strings.ReplaceAll(string(run("shell", "getprop ro.build.version.sdk")), "\r\n", "")
+	// res2 := strings.ReplaceAll(string(run("shell", "dumpsys package "+pack+" | findstr versionName")), "\r\n", "")
 
-	return res2
+	// return res2
 
 }
 
@@ -54,11 +66,6 @@ func Androidversionapp() (val string) {
 
 }
 func Androidgpuuseage(names string) (val string) {
-	//run("shell", "getprop ro.build.version.release")
-	run("shell", "dumpsys gfxinfo "+names)
-
-	//	res2 :=run("shell", "dumpsys gfxinfo " +val)
-
 	s := strings.Index(string(run("shell", "dumpsys gfxinfo "+names)), "Total GPU memory usage:")
 	if s == -1 {
 		return
@@ -74,50 +81,249 @@ func Androidgpuuseage(names string) (val string) {
 	//	return string(run("shell", "dumpsys gfxinfo "+names))
 
 }
+func AndroidMemoryUsage(names string) (val string) {
+	s := string(run("shell", "dumpsys meminfo ", names))
+	var result string
+	v := strings.Index(s, "TOTAL")
+	s = s[v:]
+	s = strings.Replace(s, "TOTAL", "", -1)
+	data := strings.Split(s, " ")
+	for _, value := range data {
 
-func Androidcpuuseage(names string) (val string) {
-	//run("shell", "getprop ro.build.version.release")
-	//run("shell", "dumpsys gfxinfo "+names)
-
-	//	res2 :=run("shell", "dumpsys gfxinfo " +val)
-
-	s := strings.Index(string(run("shell", "top -n 1")), "Mem:")
-	if s == -1 {
-		return
+		if len(value) != 0 && value != " " {
+			result = value
+			break
+		}
 	}
-	s += len("Mem:")
-	e := strings.Index(string(run("shell", "top -n 1"))[s:], "total")
-	if e == -1 {
-		return
-	}
-	e += s + e - 1
-	return string(run("shell", "top -n 1"))[s:e]
+	fmt.Println("mydata" + result)
 
-	//	return string(run("shell", "dumpsys gfxinfo "+names))
+	return result
+
+}
+func AndroidAppPowerUsage(names string) (val string) {
+
+	s := string(run("shell", "ps | grep ", names))
+
+	if len(s) == 0 {
+		return "0"
+	}
+	uid := strings.Split(s, " ")[0]
+	if uid == "" {
+		return "0"
+	}
+	uid = strings.Replace(uid, "_", "", -1)
+
+	s = string(run("shell", "dumpsys batterystats ", names))
+
+	uidIndex := strings.Index(s, fmt.Sprintf("UID %s: ", uid))
+	if uidIndex == -1 {
+		return "0"
+	}
+	s = s[uidIndex:]
+	s = strings.Replace(s, fmt.Sprintf("UID %s: ", uid), "", 1)
+	return strings.Split(s, " ")[0]
+
+	//uidIndex := strings.Index(s, fmt.Sprintf("Computed drain: "))
+	//s = s[uidIndex:]
+	//s = strings.Replace(s, fmt.Sprintf("Computed drain: "), "", 1)
+	//return strings.Split(s, ", ")[0]
+}
+func Androidcpuarch(names string) (val string) {
+
+	s := string(run("shell", "getprop ro.product.cpu.abi"))
+
+	return strings.Split(s, "-")[0]
+
+}
+func AndroidUploadedData(names string) (val string) {
+	//uuid := Appnamenew()
+
+	s := string(run("shell", "dumpsys netstats detail ", names))
+	//data := strings.Split(s, "\n")
+	//s = `ident=[{type=17, subType=0, metered=true, defaultNetwork=true, oemManaged=0}] uid=10329 set=DEFAULT tag=0xffffff82
+	//  NetworkStatsHistory: bucketDuration=7200
+	//    st=1649080800 rb=127 rp=1 tb=63 tp=1 op=0
+	//    st=1649174400 rb=704 rp=5 tb=334 tp=5 op=0
+	//ident=[{type=17, subType=0, metered=true, defaultNetwork=true, oemManaged=0}] uid=10330 set=DEFAULT tag=0xffffff82
+	//  NetworkStatsHistory: bucketDuration=7200
+	//    st=1648915200 rb=141 rp=1 tb=61 tp=1 op=0
+	//ident=[{type=17, subType=0, metered=true, defaultNetwork=true, oemManaged=0}] uid=10331 set=DEFAULT tag=0xffffff82
+	//  NetworkStatsHistory: bucketDuration=7200
+	//    st=1648836000 rb=169 rp=1 tb=65 tp=1 op=0
+	//ident=[{type=17, subType=0, metered=true, defaultNetwork=true, oemManaged=0}] uid=10334 set=DEFAULT tag=0xffffff82
+	//  NetworkStatsHistory: bucketDuration=7200
+	//    st=1649080800 rb=89 rp=1 tb=73 tp=1 op=0`
+
+	fmt.Println(s)
+	//uidIndex := strings.Index(s, "uid=")
+	//strings.Replace(s, "uid=", "", 1)
+	data := strings.Split(s, "uid=")
+	result := 0
+	for k, eachUID := range data {
+		if k == 0 {
+			continue // skip first
+		}
+		uid := eachUID[:strings.Index(eachUID, " ")]
+		fmt.Println("UID: ", uid)
+
+		if strings.Contains(eachUID, "tb=") {
+			tbData := strings.Split(eachUID, "tb=")
+			totalUploaded := 0
+			for i, a := range tbData {
+				if i == 0 {
+					continue // skip first
+				}
+				uploaded := strings.Split(a, " ")[0]
+				//fmt.Println("Network:stats uploaded->", uploaded)
+				byt, _ := strconv.Atoi(uploaded)
+				totalUploaded += byt
+			}
+			fmt.Println("Network: total uploaded->", totalUploaded)
+			result += totalUploaded
+		}
+	}
+
+	return strconv.Itoa(result)
 
 }
 
-func Androidmemoryuseage(names string) (val string) {
-	//run("shell", "getprop ro.build.version.release")
-	//run("shell", "dumpsys gfxinfo "+names)
+func AndroidDownloadedData(names string) (val string) {
 
-	//	res2 :=run("shell", "dumpsys gfxinfo " +val)
+	s := string(run("shell", "dumpsys netstats detail ", names))
 
-	s := strings.Index(string(run("shell", "top -O PR -bn1")), "Mem:")
-	if s == -1 {
-		return
+	fmt.Println(s)
+	//uidIndex := strings.Index(s, "uid=")
+	//strings.Replace(s, "uid=", "", 1)
+	data := strings.Split(s, "uid=")
+	result := 0
+	for k, eachUID := range data {
+		if k == 0 {
+			continue // skip first
+		}
+		uid := eachUID[:strings.Index(eachUID, " ")]
+		fmt.Println("UID: ", uid)
+
+		if strings.Contains(eachUID, "rb=") {
+			tbData := strings.Split(eachUID, "rb=")
+			totalDownloaded := 0
+			for i, a := range tbData {
+				if i == 0 {
+					continue // skip first
+				}
+				downloaded := strings.Split(a, " ")[0]
+				//fmt.Println("Network:stats downloaded->", downloaded)
+				byt, _ := strconv.Atoi(downloaded)
+				totalDownloaded += byt
+			}
+			fmt.Println("Network: total downloaded->", totalDownloaded)
+			result += totalDownloaded
+		}
 	}
-	s += len("Mem:")
-	e := strings.Index(string(run("shell", "top -O PR -bn1"))[s:], "total")
-	if e == -1 {
-		return
-	}
-	e += s + e - 1
-	return string(run("shell", "top -O PR -bn1"))[s:e]
 
-	//	return string(run("shell", "dumpsys gfxinfo "+names))
+	return strconv.Itoa(result)
 
 }
+
+func AndroidCPUCores(names string) (val string) {
+
+	// shell command to get all processor information
+	s := string(run("shell", "cat /proc/cpuinfo"))
+
+	// this can also provide the count of cpu processors
+	// but to be sure we need below calculation
+	i := strings.Count(s, "processor")
+	if i == -1 {
+		return ""
+	}
+	s = strings.Replace(s, "processor", "", i-1)
+	in := strings.Index(s, "processor")
+	s = s[in:]
+	s = strings.Replace(s, "processor", "", -1)
+	s = strings.Replace(s, ":", "", -1)
+	s = strings.TrimSpace(s)
+
+	// last processor number gives the count
+	data := strings.Split(s, "\n")[0]
+	count, _ := strconv.Atoi(data)
+	return strconv.Itoa(count + 1) // as processors use 0-based index +1 for total count
+}
+
+func Battery(names string) (val string) {
+	s := string(run("shell", "dumpsys battery "))
+	i := strings.Index(s, "level: ")
+	if i == -1 {
+		return ""
+	}
+	s = s[i:]
+	s = strings.Replace(s, "level: ", "", 1)
+	return strings.Split(s, "\n")[0]
+
+}
+
+func AndroidCPUUsage(names string) (val string) {
+
+	// "grep" for linux and "findstr" for windows
+	s := string(run("shell", "dumpsys cpuinfo | grep ", names))
+	var result string
+	data := strings.Split(s, " ")
+	for _, value := range data {
+		if strings.Contains(value, "%") {
+			result = strings.Replace(value, "%", "", 1)
+			result = strings.TrimSpace(result)
+			break // we need only the first as other values are further distribution of this total value
+		}
+	}
+	return result
+}
+
+// Avg. Median FPS Usage
+
+func AndroidMedianFPS(names string) (val string) {
+
+	var result string
+	s := string(run("shell", "dumpsys gfxinfo "+names, " framestats"))
+
+	fs := s[strings.Index(s, "Total frames rendered: "):]
+	fs = strings.Replace(fs, "Total frames rendered: ", "", -1)
+	fs = strings.Split(fs, "\n")[0]
+	frames, _ := strconv.Atoi(fs)
+
+	sec := s[strings.Index(s, "Stats since: "):]
+	sec = strings.Replace(sec, "Stats since: ", "", -1)
+	sec = sec[:strings.Index(sec, "ns")]
+	t, _ := strconv.Atoi(sec)
+
+	result = fmt.Sprintf("%.2f", float64(frames*1000000000)/float64(t))
+
+	fmt.Println("Avg. Median FPS Usage Data ", result)
+
+	return result
+
+}
+
+// func Androidcpuuseage(names string) (val string) {
+// 	//run("shell", "getprop ro.build.version.release")
+// 	//run("shell", "dumpsys gfxinfo "+names)
+
+// 	//	res2 :=run("shell", "dumpsys gfxinfo " +val)
+
+// 	s := strings.Index(string(run("shell", "top -n 1")), "Mem:")
+// 	if s == -1 {
+// 		return
+// 	}
+// 	s += len("Mem:")
+// 	e := strings.Index(string(run("shell", "top -n 1"))[s:], "total")
+// 	if e == -1 {
+// 		return
+// 	}
+// 	e += s + e - 1
+// 	return string(run("shell", "top -n 1"))[s:e]
+
+// 	//	return string(run("shell", "dumpsys gfxinfo "+names))
+
+// }
+
+// adb shell dumpsys netstats detail
 
 func run(args ...string) (array []byte) {
 
@@ -133,4 +339,86 @@ func run(args ...string) (array []byte) {
 		return (stdout1)
 
 	}
+}
+
+func AndroidVariabilityIndex(names string) (val string) {
+
+	s := string(run("shell", "dumpsys gfxinfo ", names))
+
+	sec := s[strings.Index(s, "Stats since: "):]
+	sec = strings.Replace(sec, "Stats since: ", "", -1)
+	sec = sec[:strings.Index(s, "ns")]
+	//sec := ""
+	//return sec
+	//ns := strings.Replace(sec, "Stats since: ", "", -1)
+	t, _ := strconv.Atoi(sec)
+	//return strconv.Itoa(t)
+	//index1 := strings.Index(s, "GPU HISTOGRAM: ")
+	//index2 := strings.Index(s, "Pipeline=")
+	//fpsData := s[index1:index2]
+	//fpsData = strings.Replace(fpsData, "GPU HISTOGRAM: ", "", 1)
+	//data := strings.Split(fpsData, " ")
+	index1 := strings.Index(s, "HISTOGRAM: ")
+	index2 := strings.Index(s, "50th gpu percentile")
+	fpsData := s[index1:index2]
+	fpsData = strings.Replace(fpsData, "HISTOGRAM: ", "", 1)
+	data := strings.Split(fpsData, " ")
+
+	var result int64
+	var fps []int
+	var ssss string
+	//data := strings.Split(s, " ")
+	for i, value := range data {
+		//if strings.Contains(value, "%") {
+		// result = strings.Replace(value, "%", "", 1)
+		// result = strings.TrimSpace(result)
+		// break // we need only the first as other values are further distribution of this total value
+		//}
+		d := strings.Split(value, "=")[1]
+		di, _ := strconv.Atoi(d)
+		if di != 0 {
+			fps = append(fps, (di))
+		}
+		result += int64(di)
+		data[i] = d
+		ssss += d + " "
+	}
+	//return ssss
+	//return fmt.Sprintf("%s", strconv.Itoa(int(calculateVariance(fps[1:5], result, int64(t)))))
+	return fmt.Sprintf("%f", calculateVariance(fps, result, int64(t)))
+	return fmt.Sprintf("%.2f", calculateVariance(fps, result, int64(t)))
+}
+
+func calculateVariance(data []int, sum, t int64) float64 {
+
+	n := len(data)
+	//n := 1000 * 1000
+	//mean := float64(sum*1000000000) / float64(t*int64(n))
+	sort.Ints(data)
+	//summ := 0
+	//for _, i := range data[:len(data)-2] {
+	// summ += i
+	//}
+	mean := float64(sum) / float64(n)
+	//s := (strconv.Itoa(int(mean)))
+	//return s
+	//return mean
+	var result float64
+	var val int
+	small := float64(data[len(data)-1])
+	for _, value := range data {
+		//result += math.Pow(float64(int64(n)*value/t)-mean, 2)
+		//if len(s) == len(strconv.Itoa(int(value))) {
+		// result += math.Pow(float64(value)-mean, 2)
+		//}
+		//result += math.Pow(float64(value)-mean, 2)
+		diff := math.Abs(float64(value) - mean)
+		if small > diff {
+			small = diff
+			val = value
+		}
+	}
+	result += math.Pow(float64(val)-mean, 2)
+
+	return result / float64(n-1)
 }

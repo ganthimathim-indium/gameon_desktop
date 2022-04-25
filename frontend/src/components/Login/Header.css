@@ -1,4 +1,13 @@
-
+.header {
+  width: 100%;
+  height: 10vh;
+  background-color: #ffffff;
+  box-shadow: 4px 4px 20px #3939392b;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
 
 .dropdown-item {
   font-size: 14px;
@@ -9,36 +18,32 @@
 }
 
 .nav-link {
-  font-size: 14px
+  font-size: 14px;
 }
 
 .toggle {
   cursor: pointer;
 }
 
-.navbarX, .navbar {
+.navbarX,
+.navbar {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 999;
-  box-shadow: 0 0 10px 0 rgb(0 0 0 / 20%);
 }
 
 .searchJobs .active {
-  background-color: #ffffff !important;
-  color: #436FB6 !important;
+  color: #436fb6 !important;
 }
 
 .linkStyle {
-  border: 1px solid #cccccc;
   border-radius: 4px;
   padding: 0.3rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-
 
 .iconNavBar {
   font-size: 18px;
@@ -54,7 +59,7 @@
   min-width: 550px;
   border-radius: 2px;
   border: none;
-  box-shadow: 0px 0px 6px #a6a6a6;
+
   overflow: auto;
 }
 
@@ -69,9 +74,9 @@
 }
 
 .menu-title {
-  font-family: 'Exo', sans-serif;
+  font-family: "Exo", sans-serif;
   font-size: 22px;
-  color: #436FB6;
+  color: #436fb6;
   padding: 10px;
   margin: 0px;
 }
@@ -80,13 +85,13 @@
   width: 45%;
 }
 
-
 .notifications-wrapper {
   max-height: 73vh;
   padding: 10px 5px;
 }
 
-.notification-heading, .notification-footer {
+.notification-heading,
+.notification-footer {
   padding: 2px 5px;
 }
 
@@ -96,9 +101,7 @@
   color: #3a3a3a;
   text-decoration: none;
   padding: 8px 0px;
-  border-bottom: 1px solid #cccccc;
 }
-
 
 .item-main {
   font-size: 16px;
@@ -141,7 +144,6 @@
   text-decoration: none;
 }
 
-
 .headerElement {
   width: 50px;
   height: 100%;
@@ -162,7 +164,6 @@
   transform: translateX(-50%);
   cursor: pointer;
 }
-
 
 .headerElementToggle::after {
   display: none;

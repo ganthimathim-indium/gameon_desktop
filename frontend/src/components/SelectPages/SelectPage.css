@@ -1,0 +1,14 @@
+.page_container {
+  padding: 3%;
+  width: 70%;
+  height: 57%;
+  background: #278ef1;
+  border-radius: 30px;
+  margin-left: 15%;
+  margin-top: 10%;
+}
+
+.select {
+  background: #f2f8ff;
+  height: 100%;
+}
