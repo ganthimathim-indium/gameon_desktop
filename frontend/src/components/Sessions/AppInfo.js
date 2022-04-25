@@ -631,7 +631,7 @@ class AppData extends React.Component {
                         color: "#278EF1",
                       }}
                     >
-                      Average Metrics
+                      Average Metric
                     </p>
                   </div>
                   <hr />
