@@ -14,7 +14,7 @@ import stop from "../../asset/stop.svg";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useDispatch } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import { login } from "../../features/loginAuth/loginAuthSlice";
 
 // import { useSelector } from "react-redux";
@@ -425,6 +425,12 @@ class AppData extends React.Component {
   handleRedirect() {
     console.log(this.props.location.state, "find");
 
+    // this.dispatch(
+    //   login({
+    //     login: { ...this.props.location.state.user, backClick: true },
+    //   })
+    // );
+
     if (this.state.back) {
       let path = "/home";
       this.props.history.push(path);
@@ -637,17 +643,40 @@ class AppData extends React.Component {
                   <hr />
                   <div className="popup-div">
                     <p className="popup-p">
-                      Avg CPU value:{this.state.avgCPU + " "}%
+                      Avg CPU value:
+                      {Math.round(this.state.avgCPU * 100) / 100 + " "}%
                     </p>
-                    <p>Avg GPU value:{this.state.avgGPU + " "}MB</p>
+                    <p>
+                      Avg GPU value:
+                      {Math.round(this.state.avgGPU * 100) / 100 + " "}MB
+                    </p>
 
-                    <p>Avg memory :{this.state.avgMem + " "}MB</p>
+                    <p>
+                      Avg memory :
+                      {Math.round(this.state.avgMem * 100) / 100 + " "}MB
+                    </p>
 
-                    <p>Avg uploaded data:{this.state.avgUpload + " "}MiB</p>
-                    <p>Avg downloaded data:{this.state.avgDownload + " "}MiB</p>
-                    <p>Avg fps value:{this.state.avgfps_app_usage + " "}</p>
-                    <p>Avg power value:{this.state.avgAppPower + " "}%</p>
-                    <p>Avg App Power value:{this.state.avgPower + " "}mAh</p>
+                    <p>
+                      Avg uploaded data:
+                      {Math.round(this.state.avgUpload * 100) / 100 + " "}MiB
+                    </p>
+                    <p>
+                      Avg downloaded data:
+                      {Math.round(this.state.avgDownload * 100) / 100 + " "}MiB
+                    </p>
+                    <p>
+                      Avg fps value:
+                      {Math.round(this.state.avgfps_app_usage * 100) / 100 +
+                        " "}
+                    </p>
+                    <p>
+                      Avg power value:
+                      {Math.round(this.state.avgAppPower * 100) / 100 + " "}%
+                    </p>
+                    <p>
+                      Avg App Power value:
+                      {Math.round(this.state.avgPower * 100) / 100 + " "}mAh
+                    </p>
                   </div>
                   <div className="note">
                     <p>
@@ -668,4 +697,17 @@ class AppData extends React.Component {
     }
   }
 }
+
+// const mapStateToProps = (state) => {
+//   return {
+//     login: state.login,
+//   };
+// };
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     login: { ...dispatch, backClick: true },
+//   };
+// };
+// export default connect(mapStateToProps, mapDispatchToProps())(AppData);
 export default AppData;

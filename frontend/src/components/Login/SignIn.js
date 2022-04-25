@@ -186,15 +186,15 @@ const SignIn = () => {
     }
   }
 
-  // const handleClick = () =>
-  //   setState(({ type }) => ({
-  //     type: type === "text" ? "password" : "text",
-  //   }));
+  const handleClick = () =>
+    setState(({ type }) => ({
+      type: type === "text" ? "password" : "text",
+    }));
 
-  // const pwdhandleClick = () =>
-  //   setState(({ types }) => ({
-  //     types: types === "text" ? "password" : "text",
-  //   }));
+  const pwdhandleClick = () =>
+    setState(({ types }) => ({
+      types: types === "text" ? "password" : "text",
+    }));
 
   if (state.result) {
     return (
@@ -312,6 +312,7 @@ const SignIn = () => {
                             variant="standard"
                             value={state.password}
                             onChange={onPasswordChange}
+                            type="password"
                             style={{ position: "absolute", width: "23%" }}
                             placeholder="Enter Password"
                           />
@@ -328,7 +329,7 @@ const SignIn = () => {
                               marginLeft: "75%",
                               display: "inline",
                             }}
-                            // onClick={pwdhandleClick}
+                            onClick={pwdhandleClick}
                           >
                             {state.types === "text" ? (
                               <i>{eye}</i>
@@ -511,15 +512,15 @@ const SignIn = () => {
 //     }
 //   };
 
-//   handleClick = () =>
-//     setState(({ type }) => ({
-//       type: type === "text" ? "password" : "text",
-//     }));
+// handleClick = () =>
+//   setState(({ type }) => ({
+//     type: type === "text" ? "password" : "text",
+//   }));
 
-//   pwdhandleClick = () =>
-//     setState(({ types }) => ({
-//       types: types === "text" ? "password" : "text",
-//     }));
+// const pwdhandleClick = () =>
+//   setState(({ types }) => ({
+//     types: types === "text" ? "password" : "text",
+//   }));
 
 //   render() {
 //     if (state.result) {

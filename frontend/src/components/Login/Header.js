@@ -11,6 +11,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Logout } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/loginAuth/loginAuthSlice.js";
+import Popover from "@mui/material/Popover";
+
 import {
   MemoryRouter as Router,
   Redirect,
@@ -34,6 +36,17 @@ const LoginHeader = () => {
   const dispatch = useDispatch();
   console.log(user, "user");
   const history = useHistory();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
 
   const classes = Styles();
   const handleLogOut = () => {
@@ -102,8 +115,36 @@ const LoginHeader = () => {
         >
           GameOn
         </h2>
-
-        <AccountCircleIcon className={classes.circle} />
+        <div>
+          <AccountCircleIcon
+            className={classes.circle}
+            aria-describedby={id}
+            variant="contained"
+            onClick={handleClick}
+          />
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+          >
+            <button
+              onClick={handleLogOut}
+              style={{
+                width: "100%",
+                background: "blue",
+                color: "white",
+                borderRadius: "4px",
+              }}
+            >
+              Log out
+            </button>
+          </Popover>
+        </div>
         <p
           style={{
             float: "right",
@@ -115,7 +156,6 @@ const LoginHeader = () => {
         >
           Vivek
         </p>
-        <button onClick={handleLogOut}>Log out</button>
       </header>
     </div>
   );
