@@ -89,23 +89,26 @@ const BasicInfo = (props) => {
   useEffect(() => {
     console.log("hi");
     window.backend.basic().then((result) => {
-      console.log(result, "result");
-      var num2x;
-      const data = JSON.parse(result);
-      num2x = data.map((n) => {
-        const parsing = JSON.parse(n.applist);
-        parsing.map((n) => {});
-        setState((ps) => {
-          return {
-            ...ps,
-            osname: n.osname,
-            deviceid: n.devicename,
-            applist: parsing,
-            loading: false,
-          };
-        });
-      });
+      console.log(result, "result for execution");
     });
+    // window.backend.basic().then((result) => {
+    //   console.log(result, "result for execution");
+    //   var num2x;
+    //   const data = JSON.parse(result);
+    //   num2x = data.map((n) => {
+    //     const parsing = JSON.parse(n.applist);
+    //     parsing.map((n) => {});
+    //     setState((ps) => {
+    //       return {
+    //         ...ps,
+    //         osname: n.osname,
+    //         deviceid: n.devicename,
+    //         applist: parsing,
+    //         loading: false,
+    //       };
+    //     });
+    //   });
+    // });
   }, []);
 
   function ascorder() {
@@ -340,9 +343,9 @@ const BasicInfo = (props) => {
                   // position: "absolute",
                   width: "50%",
                   height: "50%",
-                  marginLeft: "25%",
+                  marginLeft: "23%",
                   // top: "20%",
-                }}
+                }} // apimain = "http://52.39.98.71:3000/"
               />
             </div>
             <div className="android-container">

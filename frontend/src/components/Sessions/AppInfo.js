@@ -425,14 +425,8 @@ class AppData extends React.Component {
   handleRedirect() {
     console.log(this.props.location.state, "find");
 
-    // this.dispatch(
-    //   login({
-    //     login: { ...this.props.location.state.user, backClick: true },
-    //   })
-    // );
-
     if (this.state.back) {
-      let path = "/home";
+      let path = "/select-page";
       this.props.history.push(path);
     }
   }
@@ -666,8 +660,7 @@ class AppData extends React.Component {
                     </p>
                     <p>
                       Avg fps value:
-                      {Math.round(this.state.avgfps_app_usage * 100) / 100 +
-                        " "}
+                      {Math.round(this.state.avgFps * 100) / 100 + " "}
                     </p>
                     <p>
                       Avg power value:
