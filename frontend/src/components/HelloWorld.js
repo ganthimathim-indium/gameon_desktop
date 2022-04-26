@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 
 function HelloWorld() {
@@ -14,6 +14,18 @@ function HelloWorld() {
   };
 
   const myJSON = JSON.stringify(persons);
+
+  useEffect(() => {
+
+    //window.backend.checkdevice().then((result) => setResult(result));
+
+    window.backend.checkdevice().then((result) => {
+      setResult(result);
+      console.log(result);
+      alert(result);
+    });
+
+  })
 
   const handleOpenModal = () => {
     setShowModal(true);

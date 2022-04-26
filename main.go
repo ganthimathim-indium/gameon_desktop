@@ -67,6 +67,7 @@ var Apppower_time string
 var AvgMedianFPS_useage string
 var AvgMedianFPS_deviations string
 var AvgMedianFPS_time string
+var deviceInfo string
 
 type Appinfo struct {
 	Osname     string `json:"osname"`
@@ -153,21 +154,27 @@ type results struct {
 func basic() string {
 
 	css = "./frontend/build/static/css/main.css"
-
 	js = "./frontend/build/static/js/main.js"
-
 	var clients []Appinfo
+	fmt.Println("deviceInfo:   ", deviceInfo)
+	if len(deviceInfo) == 0 {
+		deviceInfo = deviceinfonew()
+	}
 
 	var info = append(clients, Appinfo{
 		Osname:     "android",
-		Devicename: deviceinfonew(),
+		Devicename: deviceInfo,
 		Applist:    getlogin(),
 	})
+
 	out, err := json.Marshal(info)
 	if err != nil {
+		fmt.Println("err while running basic:", err)
 		panic(err)
 
 	}
+	fmt.Println("err while running basic:", err)
+
 	fmt.Println(string(out))
 	return string(out)
 }
@@ -723,8 +730,8 @@ func deviceinfonew() (val string) {
 		log.Fatal(err)
 	}
 	for _, device := range devices {
-		fmt.Printf("\t%+v\n", *device)
-		devicename = device.Product
+		// fmt.Printf("\t%+v\n", *device)
+		devicename = device.Model
 		deviceserial = device.Serial
 	}
 
