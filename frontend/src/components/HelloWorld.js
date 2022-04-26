@@ -16,7 +16,9 @@ function HelloWorld() {
   const myJSON = JSON.stringify(persons);
 
   useEffect(() => {
-    window.backend.basic().then((result) => {
+    //window.backend.checkdevice().then((result) => setResult(result));
+
+    window.backend.checkdevice().then((result) => {
       setResult(result);
       console.log(result);
       alert(result);
