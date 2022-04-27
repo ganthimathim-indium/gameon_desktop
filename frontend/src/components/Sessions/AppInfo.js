@@ -650,39 +650,44 @@ class AppData extends React.Component {
                   <div className="popup-div">
                     <p className="popup-p">
                       Avg CPU value :
-                      {Math.round(this.state.avgCPU * 100) / 100 + " "}%
+                      {" " + Math.round(this.state.avgCPU * 100) / 100 + " "}%
                     </p>
                     <p>
                       Avg GPU value :
-                      {Math.round(this.state.avgGPU * 100) / 100 + " "}MB
+                      {" " + Math.round(this.state.avgGPU * 100) / 100 + " "}MB
                     </p>
 
                     <p>
                       Avg memory :
-                      {Math.round(this.state.avgMem * 100) / 100 + " "}MB
+                      {" " + Math.round(this.state.avgMem * 100) / 100 + " "}MB
                     </p>
 
                     <p>
                       Avg uploaded data:
-                      {Math.round(this.state.avgUpload * 100) / 100 + " "}
+                      {" " + Math.round(this.state.avgUpload * 100) / 100 + " "}
                       MiB
                     </p>
                     <p>
                       Avg downloaded data :
-                      {Math.round(this.state.avgDownload * 100) / 100 + " "}
+                      {" " +
+                        Math.round(this.state.avgDownload * 100) / 100 +
+                        " "}
                       MiB
                     </p>
                     <p>
                       Avg fps value :
-                      {Math.round(this.state.avgFps * 100) / 100 + " "}
+                      {" " + Math.round(this.state.avgFps * 100) / 100 + " "}
                     </p>
                     <p>
                       Avg power value :
-                      {Math.round(this.state.avgAppPower * 100) / 100 + " "}%
+                      {" " +
+                        Math.round(this.state.avgAppPower * 100) / 100 +
+                        " "}
+                      %
                     </p>
                     <p>
                       Avg App Power value :
-                      {Math.round(this.state.avgPower * 100) / 100 + " "}
+                      {" " + Math.round(this.state.avgPower * 100) / 100 + " "}
                       mAh
                     </p>
                   </div>
@@ -706,7 +711,7 @@ class AppData extends React.Component {
   }
 }
 
-// const mapStateToProps = (state) => {
+// const mapStateToProps = (state) =>{" "+
 //   return {
 //     login: state.login,
 //   };
