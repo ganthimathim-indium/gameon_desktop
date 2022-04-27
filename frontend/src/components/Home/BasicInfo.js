@@ -88,27 +88,27 @@ const BasicInfo = (props) => {
 
   useEffect(() => {
     console.log("hi");
-    window.backend.basic().then((result) => {
-      console.log(result, "result for execution");
-    });
     // window.backend.basic().then((result) => {
     //   console.log(result, "result for execution");
-    //   var num2x;
-    //   const data = JSON.parse(result);
-    //   num2x = data.map((n) => {
-    //     const parsing = JSON.parse(n.applist);
-    //     parsing.map((n) => {});
-    //     setState((ps) => {
-    //       return {
-    //         ...ps,
-    //         osname: n.osname,
-    //         deviceid: n.devicename,
-    //         applist: parsing,
-    //         loading: false,
-    //       };
-    //     });
-    //   });
     // });
+    window.backend.basic().then((result) => {
+      console.log(result, "result for execution");
+      var num2x;
+      const data = JSON.parse(result);
+      num2x = data.map((n) => {
+        const parsing = JSON.parse(n.applist);
+        parsing.map((n) => {});
+        setState((ps) => {
+          return {
+            ...ps,
+            osname: n.osname,
+            deviceid: n.devicename,
+            applist: parsing,
+            loading: false,
+          };
+        });
+      });
+    });
   }, []);
 
   function ascorder() {
@@ -306,7 +306,7 @@ const BasicInfo = (props) => {
                 color: "white",
                 textAlign: "center",
                 display: "inline",
-                marginLeft: "22%",
+                marginLeft: "20%",
               }}
             >
               {state.deviceid}

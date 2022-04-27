@@ -36,6 +36,18 @@
   top: 10;
   z-index: 10;
 }
+.back-button-image-style {
+  width: 6px;
+  object-fit: contain;
+  position: absolute;
+  margin-right: 23%;
+  margin-top: -3px;
+  right: 0;
+  top: 10;
+  z-index: 10;
+}
+.back-image-style {
+}
 
 .container {
   margin-top: -1.5%;
@@ -77,11 +89,16 @@
   flex-wrap: wrap;
   padding: 3%;
 }
+.duration {
+  margin-left: 7%;
+}
 .popup-div p {
-  background: rgb(228, 219, 219);
+  background: rgb(153, 201, 233);
   width: 45%;
   margin-left: 2%;
+  padding: 4px;
   height: 5%;
+  color: rgb(36, 29, 29);
   border-radius: 5px;
   text-align: center;
 }
@@ -113,10 +130,17 @@
   color: white;
 }
 .backButton {
-  width: 8%;
-  height: 100%;
+  font-size: 15px;
+  width: 10%;
+  height: 70%;
+  padding: 3px;
   border-radius: 20px;
   float: right;
+  margin-right: 4%;
+
+  color: white;
+  position: absolute;
+  right: 0;
   color: #278ef1;
   border: 1px solid blue;
   margin-right: 16%;

@@ -15,53 +15,53 @@ export default class SelectPages extends Component {
     };
   }
 
-  async componentDidMount() {
-    const result = await window.backend.checkdevice();
-    console.log(result, "connectivity");
+  // async componentDidMount() {
+  //   const result = await window.backend.checkdevice();
+  //   console.log(result, "connectivity");
 
-    console.log("before execution");
-    const results = await window.backend.basic();
-    console.log(results, "await results");
-    if ((await result) === "Device Attached") {
-      await this.setState({
-        devicecheck: true,
-        devicetext: "Device Attached Successfully",
-      });
-    } else if ((await result) === "No Device Attached") {
-      await this.setState({
-        devicecheck: false,
-        devicetext: "No Device Attached Kindly Connect Your Device Properly",
-      });
-    }
-
-    console.log("after exexution");
-  }
-  // componentDidMount() {
-  //   window.backend.checkdevice().then((result) => {
-  //     console.log(result, "connectivity");
-  //     if (result === "Device Attached") {
-  //       this.setState({
-  //         devicecheck: true,
-  //         devicetext: "Device Attached Successfully",
-  //       });
-  //     } else if (result === "No Device Attached") {
-  //       this.setState({
-  //         devicecheck: false,
-  //         devicetext: "No Device Attached Kindly Connect Your Device Properly",
-  //       });
-  //     }
-  //   });
   //   console.log("before execution");
-  //   window.backend
-  //     .basic()
-  //     .then((result) => {
-  //       console.log(result, "basic func  result");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err, "error");
+  //   const results = await window.backend.basic();
+  //   console.log(results, "await results");
+  //   if ((await result) === "Device Attached") {
+  //     await this.setState({
+  //       devicecheck: true,
+  //       devicetext: "Device Attached Successfully",
   //     });
+  //   } else if ((await result) === "No Device Attached") {
+  //     await this.setState({
+  //       devicecheck: false,
+  //       devicetext: "No Device Attached Kindly Connect Your Device Properly",
+  //     });
+  //   }
+
   //   console.log("after exexution");
   // }
+  componentDidMount() {
+    window.backend.checkdevice().then((result) => {
+      console.log(result, "connectivity");
+      if (result === "Device Attached") {
+        this.setState({
+          devicecheck: true,
+          devicetext: "Device Attached Successfully",
+        });
+      } else if (result === "No Device Attached") {
+        this.setState({
+          devicecheck: false,
+          devicetext: "No Device Attached Kindly Connect Your Device Properly",
+        });
+      }
+    });
+    console.log("before execution");
+    // window.backend
+    //   .basic()
+    //   .then((result) => {
+    //     console.log(result, "basic func  result");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err, "error");
+    //   });
+    console.log("after exexution");
+  }
   async connectdevice() {
     const result = await window.backend.checkdevice();
     console.log(result, "device att");
@@ -82,9 +82,8 @@ export default class SelectPages extends Component {
     return (
       <div>
         {this.state.devicecheck == true ? (
-          <h1>Basic Info</h1>
+          <BasicInfo />
         ) : (
-          // <BasicInfo />
           <div className="select">
             <LoginHeader />
             <div className="page_container">

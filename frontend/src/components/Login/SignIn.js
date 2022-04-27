@@ -200,7 +200,7 @@ const SignIn = () => {
     return (
       <Redirect
         to={{
-          pathname: "/hello",
+          pathname: "/select-page",
           state: { name: state.name },
         }}
       />
@@ -324,8 +324,8 @@ const SignIn = () => {
                               border: "none",
                               cursor: "pointer",
                               postion: "relative",
-                              marginTop: "-2%",
-                              bottom: 1500,
+                              marginTop: "1%",
+                              bottom: 1498,
                               marginLeft: "75%",
                               display: "inline",
                             }}

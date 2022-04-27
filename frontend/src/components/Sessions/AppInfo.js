@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useDispatch, connect } from "react-redux";
 import { login } from "../../features/loginAuth/loginAuthSlice";
+import back from "../../asset/back.png";
 
 // import { useSelector } from "react-redux";
 // import { selectUser } from "../../features/loginAuth/loginAuthSlice";
@@ -26,7 +27,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
+  width: 650,
   bgcolor: "background.paper",
 
   boxShadow: 24,
@@ -105,6 +106,8 @@ class AppData extends React.Component {
       avgAppPower: "",
       avgUpload: "",
       avgDownload: "",
+      popDuration: "",
+      popsession_id: "",
     };
   }
 
@@ -418,6 +421,8 @@ class AppData extends React.Component {
         avgAppPower: data.average_values.apppower_app_usage,
         avgUpload: data.average_values.upload_data_usage,
         avgDownload: data.average_values.download_data_usage,
+        popDuration: data.total_duraton,
+        popsession_id: data.session_id,
       });
       console.log(data, "stop session");
     });
@@ -462,13 +467,15 @@ class AppData extends React.Component {
                   </button>
                 </div>
               )}
-
-              <button
-                className="backButton"
-                onClick={this.handleRedirect.bind(this)}
-              >
-                Back
-              </button>
+              <div className="start-div">
+                <img src={back} alt="" className="back-button-image-style" />
+                <button
+                  className="backButton"
+                  onClick={this.handleRedirect.bind(this)}
+                >
+                  Back
+                </button>
+              </div>
             </div>
 
             <div className="container">
@@ -510,7 +517,7 @@ class AppData extends React.Component {
                     value={this.state.Uploaddata}
                     text="Upload data"
                     unit="MiB"
-                    max={2048}
+                    max={3072}
                   />
                   <MetricUsage
                     value={this.state.DownloadData}
@@ -629,19 +636,24 @@ class AppData extends React.Component {
                         textAlign: "center",
                         fontSize: "19px",
                         color: "#278EF1",
+                        paddingTop: "1.3%",
                       }}
                     >
                       Average Metric
                     </p>
                   </div>
                   <hr />
+                  <div className="duration">
+                    <p>Session ID : {this.state.popsession_id}</p>
+                    <p>Total Duration : {this.state.popDuration} </p>
+                  </div>
                   <div className="popup-div">
                     <p className="popup-p">
-                      Avg CPU value:
+                      Avg CPU value :
                       {Math.round(this.state.avgCPU * 100) / 100 + " "}%
                     </p>
                     <p>
-                      Avg GPU value:
+                      Avg GPU value :
                       {Math.round(this.state.avgGPU * 100) / 100 + " "}MB
                     </p>
 
@@ -652,23 +664,26 @@ class AppData extends React.Component {
 
                     <p>
                       Avg uploaded data:
-                      {Math.round(this.state.avgUpload * 100) / 100 + " "}MiB
+                      {Math.round(this.state.avgUpload * 100) / 100 + " "}
+                      MiB
                     </p>
                     <p>
-                      Avg downloaded data:
-                      {Math.round(this.state.avgDownload * 100) / 100 + " "}MiB
+                      Avg downloaded data :
+                      {Math.round(this.state.avgDownload * 100) / 100 + " "}
+                      MiB
                     </p>
                     <p>
-                      Avg fps value:
+                      Avg fps value :
                       {Math.round(this.state.avgFps * 100) / 100 + " "}
                     </p>
                     <p>
-                      Avg power value:
+                      Avg power value :
                       {Math.round(this.state.avgAppPower * 100) / 100 + " "}%
                     </p>
                     <p>
-                      Avg App Power value:
-                      {Math.round(this.state.avgPower * 100) / 100 + " "}mAh
+                      Avg App Power value :
+                      {Math.round(this.state.avgPower * 100) / 100 + " "}
+                      mAh
                     </p>
                   </div>
                   <div className="note">

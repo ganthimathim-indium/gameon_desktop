@@ -45,7 +45,7 @@ function DeviceInfo(props) {
             <img src={osVersion} alt=" " className="device-info-image" />
           </div>
           <div className="device-info-text">
-            <p style={{ fontSize: "11px", fontWeight: "200" }}>
+            <p style={{ fontSize: "12px", fontWeight: "400" }}>
               {props.androidVersion}
             </p>
             <p style={{ marginTop: "-10px" }}>App Version</p>
@@ -57,7 +57,7 @@ function DeviceInfo(props) {
             <img src={charge} alt=" " className="device-info-image" />
           </div>
           <div className="device-info-text">
-            <p style={{ fontSize: "11px", fontWeight: "200" }}>
+            <p style={{ fontSize: "12px", fontWeight: "400" }}>
               {props.appName}
             </p>
             <p style={{ marginTop: "-10px" }}>App Name</p>
@@ -67,7 +67,7 @@ function DeviceInfo(props) {
 
       <div className="app-info-style">
         <div className="app-info-sub">
-          <p>Device Info</p>
+          <p className="device-para-style">Device Info</p>
         </div>
         <hr className="app-divider-style" />
         <div className="app-info-sub">
@@ -124,7 +124,7 @@ function DeviceInfo(props) {
             <img src={p2} alt=" " className="app-info-image" />
           </div>
           <div className="device-info-text">
-            <p style={{ fontSize: "12px", fontWeight: "200" }}>
+            <p style={{ fontSize: "12px", fontWeight: "400" }}>
               {props.cpuCores}
             </p>
             <p style={{ marginTop: "-10px" }}>CPU cores</p>

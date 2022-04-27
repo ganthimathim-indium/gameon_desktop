@@ -55,7 +55,7 @@ function MetricGraph(props) {
               xaxis: {
                 autorange: true,
                 title: {
-                  text: "Time",
+                  text: "seconds",
                   font: {
                     family: "Courier New, monospace",
                     size: 16,
