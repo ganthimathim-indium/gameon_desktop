@@ -130,7 +130,7 @@ const BasicInfo = (props) => {
     setState((ps) => {
       return { ...ps, SelectedList: list, openStatus: true };
     });
-    window.backend.openapp(list).then((result) => {});
+    window.backend.openApp(list).then((result) => {});
   };
 
   if (state.openStatus) {

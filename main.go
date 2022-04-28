@@ -9,7 +9,6 @@ import (
 	apidata "gameongo/api"
 	L "gameongo/lib"
 	"math"
-	"reflect"
 	"regexp"
 	"strconv"
 	"time"
@@ -24,147 +23,178 @@ import (
 
 var js string
 var css string
-var devicename string
-var deviceserial string
+var deviceName string
+var deviceSerial string
 var human2 []results
 
 var leadingInt = regexp.MustCompile(`^[-+]?\d+`)
 var ticker time.Ticker
-var timedata string
+var timeData string
 
-var cpu_useage string
-var cpu_deviations string
-var cpu_time string
+var cpuUsage string
+var cpuDeviations string
+var cpuTime string
 
-var Memory_useage string
-var Memory_deviations string
-var Memory_time string
+var memoryUsage string
+var memoryDeviations string
+var memoryTime string
 
-var gpuMetric_useage string
-var gpuMetric_deviations string
-var gpuMetric_time string
+var gpuMetricUsage string
+var gpuMetricDeviations string
+var gpuMetricTime string
 
-var Uploaddata_useage string
-var Uploaddata_deviations string
-var Uploaddata_time string
+var uploadDataUsage string
+var uploadDataDeviations string
+var uploadDataTime string
 
-var Downloadddata_useage string
-var Downloadddata_deviations string
-var Downloadddata_time string
+var downloadDataUsage string
+var downloadDataDeviations string
+var downloadDataTime string
 
-var CPUCores_useage string
-var CPUCores_deviations string
-var CPUCores_time string
+var CPUCoresUsage string
+var CPUCoresDeviations string
+var CPUCoresTime string
 
-var power_useage string
-var power_deviations string
-var power_time string
+var powerUsage string
+var powerDeviations string
+var powerTime string
 
-var Apppower_useage string
-var Apppower_deviations string
-var Apppower_time string
+var appPowerUsage string
+var appPowerDeviations string
+var appPowerTime string
 
-var AvgMedianFPS_useage string
-var AvgMedianFPS_deviations string
-var AvgMedianFPS_time string
+var avgMedianFPSUsage string
+var avgMedianFPSDeviations string
+var avgMedianFPSTime string
 var deviceInfo string
 
-type Appinfo struct {
-	Osname     string `json:"osname"`
-	Devicename string `json:"devicename"`
-	Applist    string `json:"applist"`
-}
-type Baseinfo struct {
-	Start_time      string `json:"start_time"`
-	Record_duration string `json:"total_duration"`
-	Device_id       string `json:"device_id"`
-	Device_name     string `json:"device_name"`
-	Android_version string `json:"android_version"`
-	Version_name    string `json:"version_name"`
-	App_name        string `json:"app_name"`
-}
-type Responseinfo struct {
-	Start_time      string `json:"start_time"`
-	App_name        string `json:"app_name"`
-	Device_name     string `json:"device_name"`
-	Version_name    string `json:"version_name"`
-	Total_duration  string `json:"total_duration"`
-	Device_id       string `json:"device_id"`
-	Android_version string `json:"android_version"`
-	Dataval         string `json:"results"`
+type AppInfo struct {
+	OSName     string `json:"osname"`
+	DeviceName string `json:"deviceName"`
+	AppList    string `json:"applist"`
 }
 
-type Sartdata struct {
-	Start_time      string `json:"start_time"`
-	App_name        string `json:"app_name"`
-	Device_name     string `json:"device_name"`
-	Version_name    string `json:"version_name"`
-	Device_id       string `json:"device_id"`
-	Android_version string `json:"android_version"`
+type BaseInfo struct {
+	StartTime      string `json:"start_time"`
+	RecordDuration string `json:"total_duration"`
+	DeviceId       string `json:"device_id"`
+	DeviceName     string `json:"device_name"`
+	AndroidVersion string `json:"android_version"`
+	VersionName    string `json:"version_name"`
+	AppName        string `json:"app_name"`
 }
 
-type Mystop struct {
-	End_time      string    `json:"end_time"`
+type ResponseInfo struct {
+	StartTime      string `json:"start_time"`
+	AppName        string `json:"app_name"`
+	DeviceName     string `json:"device_name"`
+	VersionName    string `json:"version_name"`
+	TotalDuration  string `json:"total_duration"`
+	DeviceId       string `json:"device_id"`
+	AndroidVersion string `json:"android_version"`
+	Dataval        string `json:"results"`
+}
+
+type StartData struct {
+	StartTime      string `json:"start_time"`
+	AppName        string `json:"app_name"`
+	DeviceName     string `json:"device_name"`
+	VersionName    string `json:"version_name"`
+	DeviceId       string `json:"device_id"`
+	AndroidVersion string `json:"android_version"`
+}
+
+type MyStop struct {
+	EndTime       string    `json:"end_time"`
 	Result        []results `json:"results"`
 	SessionID     string    `json:"sessionID"`
 	SessionUserID string    `json:"sessionUserID"`
 	UserRole      string    `json:"userRole"`
-	Device_id     string    `json:"device_id"`
+	DeviceId      string    `json:"device_id"`
 }
 
 type results struct {
-	Cpu_app_usage string `json:"cpu_app_usage"`
-	Cpu_time_val  string `json:"cpu_time"`
-	Cpu_deviation string `json:"cpu_deviation"`
+	CpuAppUsage  string `json:"cpu_app_usage"`
+	CpuTimeVal   string `json:"cpuTime"`
+	CpuDeviation string `json:"cpu_deviation"`
 
-	Memory_app_useage    string `json:"memory_app_useage"`
-	Memory_app_deviation string `json:"memory_app_deviation"`
-	Memory_app_time      string `json:"memory_app_time"`
+	MemoryAppUsage     string `json:"memory_app_useage"`
+	MemoryAppDeviation string `json:"memory_app_deviation"`
+	MemoryAppTime      string `json:"memory_app_time"`
 
-	Gpu_app_useage    string `json:"gpu_app_useage"`
-	Gpu_app_deviation string `json:"gpu_app_deviation"`
-	Gpu_app_time      string `json:"gpu_app_time"`
+	GpuAppUsage     string `json:"gpu_app_useage"`
+	GpuAppDeviation string `json:"gpu_app_deviation"`
+	GpuAppTime      string `json:"gpu_app_time"`
 
-	Uploaddata_app_useage    string `json:"uploaddata_app_useage"`
-	Uploaddata_app_deviation string `json:"uploaddata_app_deviation"`
-	Uploaddata_app_time      string `json:"uploaddata_app_time"`
+	UploadDataAppUsage     string `json:"uploaddata_app_useage"`
+	UploadDataAppDeviation string `json:"uploaddata_app_deviation"`
+	UploadDataAppTime      string `json:"uploaddata_app_time"`
 
-	Downloadddata_app_useage    string `json:"downloadddata_app_useage"`
-	Downloadddata_app_deviation string `json:"downloadddata_app_deviation"`
-	Downloadddata_app_time      string `json:"downloadddata_app_time"`
+	DownloadDataAppUsage     string `json:"downloadddata_app_useage"`
+	DownloadDataAppDeviation string `json:"downloadddata_app_deviation"`
+	DownloadDataAppTime      string `json:"downloadddata_app_time"`
 
-	CPUCores_app_useage    string `json:"cpucores_app_useage"`
-	CPUCores_app_deviation string `json:"cpucores_app_deviation"`
-	CPUCores_app_time      string `json:"cpucores_app_time"`
+	CpuCoresAppUsage     string `json:"cpucores_app_useage"`
+	CpuCoresAppDeviation string `json:"cpucores_app_deviation"`
+	CpuCoresAppTime      string `json:"cpucores_app_time"`
 
-	Power_app_useage    string `json:"power_app_useage"`
-	Power_app_deviation string `json:"power_app_deviation"`
-	Power_time          string `json:"power_app_time"`
+	PowerAppUsage     string `json:"power_app_useage"`
+	PowerAppDeviation string `json:"power_app_deviation"`
+	PowerTime         string `json:"power_app_time"`
 
-	Apppower_app_useage    string `json:"apppower_app_useage"`
-	Apppower_app_deviation string `json:"apppower_app_deviation"`
-	Apppower_time          string `json:"apppower_app_time"`
+	AppPowerAppUsage     string `json:"apppower_app_useage"`
+	AppPowerAppDeviation string `json:"apppower_app_deviation"`
+	AppPowerTime         string `json:"apppower_app_time"`
 
-	Avgfps_app_useage    string `json:"avgfps_app_useage"`
-	Avgfps_app_deviation string `json:"avgfps_app_deviation"`
-	Avgfps_time          string `json:"avgfps_app_time"`
+	AvgFpsAppUsage     string `json:"avgfps_app_useage"`
+	AvgFpsAppDeviation string `json:"avgfps_app_deviation"`
+	AvgFpsTime         string `json:"avgfps_app_time"`
+}
+
+// 1
+// login api
+func myLogin(req string) (val string) {
+	sec := map[string]string{}
+	if err := json.Unmarshal([]byte(req), &sec); err != nil {
+		panic(err)
+	}
+
+	return apidata.ApiHit(sec)
+
+}
+
+// 2
+// check device
+func checkDevice() (val string) {
+
+	if len(strings.TrimSpace(L.AppNameNew())) == 0 {
+		fmt.Println("No Device Attached")
+
+		return "No Device Attached"
+	} else {
+		fmt.Println("Device Attached")
+
+		return "Device Attached"
+	}
 }
 
 //3 basic info
 func basic() string {
 
 	css = "./frontend/build/static/css/main.css"
+
 	js = "./frontend/build/static/js/main.js"
-	var clients []Appinfo
+
+	var clients []AppInfo
 	fmt.Println("deviceInfo:   ", deviceInfo)
 	if len(deviceInfo) == 0 {
-		deviceInfo = deviceinfonew()
+		deviceInfo = deviceInfoNew()
 	}
 
-	var info = append(clients, Appinfo{
-		Osname:     "android",
-		Devicename: deviceInfo,
-		Applist:    getlogin(),
+	var info = append(clients, AppInfo{
+		OSName:     "android",
+		DeviceName: deviceInfo,
+		AppList:    getLogin(),
 	})
 
 	out, err := json.Marshal(info)
@@ -173,92 +203,43 @@ func basic() string {
 		panic(err)
 
 	}
-	fmt.Println("err while running basic:", err)
-
 	fmt.Println(string(out))
 	return string(out)
 }
 
-//1login api
-func mylogin(req string) (val string) {
+// 4 open app
+func openApp(appName string) (val string) {
+
+	return L.AppOpen(appName)
+}
+
+// basic information
+func basicInfo(appInfoData string) (val string) {
+
 	sec := map[string]string{}
-	if err := json.Unmarshal([]byte(req), &sec); err != nil {
+	if err := json.Unmarshal([]byte(appInfoData), &sec); err != nil {
 		panic(err)
 	}
-	fmt.Println(apidata.Apihit(sec))
-	//checkdevice()
-	return (apidata.Apihit(sec))
-
-}
-
-//2check device
-func checkdevice() (val string) {
-	//fmt.Println(len(L.Appnamenew()))
-	if len(strings.TrimSpace(L.Appnamenew())) == 0 {
-		fmt.Println("No Device Attached")
-
-		return "No Device Attached"
-	} else {
-		fmt.Println("Device Attached")
-
-		return "Device Attached"
-
-	}
-
-}
-
-//4 open app
-func openapp(appnames string) (val string) {
-
-	return L.Appopen(appnames)
-}
-
-//basic information
-func basiconfo(appinfodata string) (val string) {
-	//basic()
-	//var clients1 string
-	sec := map[string]string{}
-	if err := json.Unmarshal([]byte(appinfodata), &sec); err != nil {
-		panic(err)
-	}
-	fmt.Println(appinfodata)
+	fmt.Println(appInfoData)
 
 	//value := sec["id"]
 	appname := sec["appname"]
 	token := sec["token"]
 	fmt.Println(token)
 
-	//clients1 = "{" + "device_id:" + deviceserial + ",user_id:" + value + ",device_name:" + deviceinfonew() + ",android_version:" + L.Appversion() + ",start_time:" + "t" + ",end_time:" + "t" + ",version_name:" + L.Androidversionapp() + ",app_name:" + appname + ",record_duration:" + "t" + "}"
+	fmt.Println("app:" + L.AppVersion(appname))
 
-	// sec1 := map[string]string{}
-	// if err := json.Unmarshal([]byte(clients1), &sec1); err != nil {
-	// 	panic(err)
-	// }
-	fmt.Println("app:" + L.Appversion(appname))
-
-	//var clientss []Baseinfo
-	p := Baseinfo{
-		Device_name:     devicename,
-		Device_id:       deviceserial,
-		Android_version: L.Appversion(appname),
-		Start_time:      "15:25:34",
-		Version_name:    L.Androidversionapp(),
-		App_name:        appname,
-		Record_duration: "06:00",
+	//var clientss []BaseInfo
+	p := BaseInfo{
+		DeviceName:     deviceName,
+		DeviceId:       deviceSerial,
+		AndroidVersion: L.AppVersion(appname),
+		StartTime:      "15:25:34",
+		VersionName:    L.AndroidVersion(),
+		AppName:        appname,
+		RecordDuration: "06:00",
 	}
 
-	// var info1 = append(clientss, Baseinfo{
-	// 	Device_id:       deviceserial,
-	// 	User_id:         value,
-	// 	Device_name:     deviceinfonew(),
-	// 	Android_version: L.Appversion(),
-	// 	Start_time:      "r",
-	// 	End_time:        "r",
-	// 	Version_name:    L.Androidversionapp(),
-	// 	App_name:        appname,
-	// 	Record_duration: "r",
-	// })
-	fmt.Println(p)
 	modifiedBytes, _ := json.Marshal(p)
 	fmt.Println(string(modifiedBytes))
 
@@ -270,51 +251,23 @@ func basiconfo(appinfodata string) (val string) {
 	}
 	fmt.Println(sec1)
 
-	// //	fmt.Println(reflect.TypeOf(info1).Kind())
-	apidata.Apihitinfo(sec1, token)
-	return apidata.Apihitinfo(sec1, token)
+	apidata.ApiHitInfo(sec1, token)
+	return apidata.ApiHitInfo(sec1, token)
 
 }
 
-// boolValue, err := strconv.ParseBool(valdata)
-// if err != nil {
-// 	log.Fatal(err)
-// }
-
-// if boolValue == true {
-// 	gocron.Every(60).Second().Do(startscan(appnamee_test, valdata))
-// 	<-gocron.Start()
-// 	return "yes"
-
-// } else {
-// 	// gocron.Every(6).Second().Do(startscan(appnamee_test, valdata))
-// 	// <-gocron.Stop()
-// 	return "No"
-
-// }
-//return  startscan(appnamee_test, valdata)
-
-// func heartBeat(appnamee_test string) {
-// 	ticker := time.NewTicker(20 * time.Second)
-
-// 	for range ticker.C {
-
-// 	}
-// }
-//start scan
-func startscan(appnamee_test string, valdata string) (val string) {
-	//go heartBeat(appnamee_test)
-
-	//fmt.Printf("%s: %t\n", v, boolValue)
+// start scan
+func startScan(appNameTest string, valData string) (val string) {
+	//go heartBeat(appNameTest)
 
 	sec := map[string]string{}
-	if err := json.Unmarshal([]byte(appnamee_test), &sec); err != nil {
+	if err := json.Unmarshal([]byte(appNameTest), &sec); err != nil {
 		panic(err)
 	}
-	fmt.Println(appnamee_test)
+	fmt.Println(appNameTest)
 
 	//value := sec["id"]
-	appname := sec["appname"]
+	appName := sec["appName"]
 	token := sec["token"]
 
 	currentTime := time.Now()
@@ -329,13 +282,13 @@ func startscan(appnamee_test string, valdata string) (val string) {
 	}
 	fmt.Println("myvvv" + string(out7))
 
-	out5, err := json.Marshal(Sartdata{
-		Start_time:      currentTime.Format("3:4:5 pm"),
-		App_name:        appname,
-		Version_name:    L.Androidversionapp(),
-		Device_name:     devicename,
-		Device_id:       deviceserial,
-		Android_version: L.Appversion(appname),
+	out5, err := json.Marshal(StartData{
+		StartTime:      currentTime.Format("3:4:5 pm"),
+		AppName:        appName,
+		VersionName:    L.AndroidVersion(),
+		DeviceName:     deviceName,
+		DeviceId:       deviceSerial,
+		AndroidVersion: L.AppVersion(appName),
 	})
 
 	if err != nil {
@@ -354,137 +307,69 @@ func startscan(appnamee_test string, valdata string) (val string) {
 	}
 	fmt.Println(sec5)
 
-	//human2 = nil
 	human2 = nil
 
-	return apidata.Apihitstart(sec5, token)
-
-	//return string(out5)
-
+	return apidata.ApiHitStart(sec5, token)
 }
 
-//STOP SCAN
-func stopscan(appinfodata string, valdata string) (val string) {
+// stop scan
+func stopScan(appInfoData string, valData string) (val string) {
 	sec := map[string]string{}
-	if err := json.Unmarshal([]byte(appinfodata), &sec); err != nil {
+	if err := json.Unmarshal([]byte(appInfoData), &sec); err != nil {
 		panic(err)
 	}
-	fmt.Println(appinfodata)
+	fmt.Println(appInfoData)
 
-	//value := sec["id"]
-	//appname := sec["appname"]
 	currentTime := time.Now()
-	//currentTime.Format("3:4:5 pm")
+
 	token := sec["token"]
 	id := sec["id"]
 
 	userRole := sec["userRole"]
 
-	session_id := sec["session_id"]
+	sessionId := sec["sessionId"]
 
-	// out7, err := json.Marshal(human2)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	out5, err := json.Marshal(Mystop{
+	out5, err := json.Marshal(MyStop{
 		Result:        human2,
-		End_time:      currentTime.Format("3:4:5 pm"),
-		SessionID:     session_id,
+		EndTime:       currentTime.Format("3:4:5 pm"),
+		SessionID:     sessionId,
 		SessionUserID: id,
 		UserRole:      userRole,
-		Device_id:     deviceserial,
+		DeviceId:      deviceSerial,
 	})
 
 	if err != nil {
 		panic(err)
-
 	}
 
-	//currentTime := time.Now()
-	// t1 := time.Date(1984, time.November, 3, 13, 0, 0, 0, time.UTC)
-
-	// //do stuff
-
-	// ticker.Stop()
-	// t2 := time.Date(1984, time.November, 3, 10, 23, 34, 0, time.UTC)
-
-	// hs := t1.Sub(t2).Hours()
-
-	// hs, mf := math.Modf(hs)
-	// ms := mf * 60
-
-	// ms, sf := math.Modf(ms)
-	// ss := sf * 60
-
-	// fmt.Println(hs, "hours", ms, "minutes", ss, "seconds")
-	// s := strconv.FormatFloat(hs, 'E', -1, 64)
-	// s1 := strconv.FormatFloat(ms, 'E', -1, 64)
-	// s2 := strconv.FormatFloat(ss, 'E', -1, 64)
-
-	// timedata = s + "hours" + s1 + "minutes" + s2 + "seconds"
-
-	//	human3 := &
-	//	human3 := Responseinfo{start_time: "ff", app_name: "ff", device_name: "ff", version_name: "ff", total_duration: "fff", device_id: "ff", android_version: "ff"}
-
-	//fmt.Println(human3) // {"Name":"Bob","Age":10,"Active":true}
-	// resultt := results{Cpu_app_usage: "data", Time: currentTime.Format("3:4:5 pm"),
-	// 	Cpu_deviation: "Mainactivity"}
-	// human2 = append(human2, resultt)
-	fmt.Println(out5)
-
-	// out7, err := json.Marshal(human2)
-	// if err != nil {
-	// 	panic(err)
-
-	// }
-	fmt.Println("myvvv" + string(out5))
-
-	//	modifiedBytes, _ := json.Marshal(human3)
-
-	// Unmarshal or Decode the JSON to the interface.
-	// bodyBytes, err := ioutil.ReadAll()
-	// if err != nil {
-	// 	fmt.Print(err.Error())
-	// }
-
-	//	sec5 := map[string]string{}
-	// var decoded []interface{}
-	// err = json.Unmarshal([]byte(string(out5)), &decoded)
-
-	// // if err := json.Unmarshal([]byte(string(out5)), &sec5); err != nil {
-	// // 	panic(err)
-	// // }
-	// fmt.Println(decoded...)
-	fmt.Println(reflect.TypeOf(out5))
 	var valsss string
 
-	valsss = apidata.Apihitstop(out5, token)
+	valsss = apidata.ApiHitStop(out5, token)
 	return valsss
 
 }
 
-//1.cpu metric
-func cpumetric(appnamess string) (val string) {
-	res2 := L.AndroidCPUUsage(appnamess)
-	fmt.Println("tttt" + res2)
+// 1. cpu metric
+func cpuMetric(appNames string) (val string) {
+	res2 := L.AppCPUUsage(appNames)
+
 	var valsss string
 	currentTime := time.Now()
-	cpu_useage = ""
-	cpu_deviations = ""
-	cpu_time = ""
-	cpu_useage = L.AndroidCPUUsage(appnamess)
-	cpu_deviations = "Mainactivity"
-	cpu_time = currentTime.Format("3:4:5 pm")
+	cpuUsage = ""
+	cpuDeviations = ""
+	cpuTime = ""
+	cpuUsage = L.AppCPUUsage(appNames)
+	cpuDeviations = "Mainactivity"
+	cpuTime = currentTime.Format("3:4:5 pm")
 
 	valsss = "Total CPU Useage : " + res2
 	return valsss
 
 }
 
-//2.menory metric
-func memmetric(appnamess string) (val string) {
-	res2 := L.AndroidMemoryUsage(appnamess)
+// 2. memory metric
+func memoryMetric(appNames string) (val string) {
+	res2 := L.AppMemoryUsage(appNames)
 
 	var valsss string
 	var valsss1 string
@@ -500,44 +385,43 @@ func memmetric(appnamess string) (val string) {
 	valsss = fmt.Sprintf("Total Memory Usage : %v ", kBToMB(intVar))
 	valsss1 = fmt.Sprintf("%v", kBToMB(intVar))
 
-	Memory_useage = ""
-	Memory_deviations = ""
-	Memory_time = ""
-	Memory_useage = valsss1
-	Memory_deviations = "Mainactivity"
+	memoryUsage = ""
+	memoryDeviations = ""
+	memoryTime = ""
+	memoryUsage = valsss1
+	memoryDeviations = "Mainactivity"
 	currentTime := time.Now()
 
-	Memory_time = currentTime.Format("3:4:5 pm")
+	memoryTime = currentTime.Format("3:4:5 pm")
 
 	return valsss
-
 }
 
 // 3. gpuMetric
-func gpuMetric(appnamess string) (val string) {
-	L.Androidgpuuseage(appnamess)
-	res2 := L.Androidgpuuseage(appnamess)
+func gpuMetric(appNames string) (val string) {
+	L.AppGPUUsage(appNames)
+	res2 := L.AppGPUUsage(appNames)
 	res2 = strings.Split(res2, ",")[1]
 	res2 = strings.TrimSpace(res2)
 
-	gpuMetric_useage = ""
-	gpuMetric_deviations = ""
-	gpuMetric_time = ""
-	gpuMetric_useage = res2
-	gpuMetric_deviations = "Mainactivity"
+	gpuMetricUsage = ""
+	gpuMetricDeviations = ""
+	gpuMetricTime = ""
+	gpuMetricUsage = res2
+	gpuMetricDeviations = "Mainactivity"
 	currentTime := time.Now()
 
-	gpuMetric_time = currentTime.Format("3:4:5 pm")
+	gpuMetricTime = currentTime.Format("3:4:5 pm")
 
 	value := "Total Gpu Usage : " + res2
 	return value
 
 }
 
-//4.upload data
-func Uploaddata(appnames string) (val string) {
-	res2 := L.AndroidUploadedData(appnames)
-	fmt.Println("tttt" + res2)
+// 4. upload data
+func uploadData(appName string) (val string) {
+	res2 := L.AndroidUploadedData(appName)
+
 	var valsss string
 
 	intVar, _ := strconv.Atoi(res2)
@@ -548,23 +432,23 @@ func Uploaddata(appnames string) (val string) {
 
 	valsss1 = fmt.Sprintf("%.2f", bytesToMiB(intVar))
 
-	Uploaddata_useage = ""
-	Uploaddata_deviations = ""
-	Uploaddata_time = ""
-	Uploaddata_useage = valsss1
-	Uploaddata_deviations = "Mainactivity"
+	uploadDataUsage = ""
+	uploadDataDeviations = ""
+	uploadDataTime = ""
+	uploadDataUsage = valsss1
+	uploadDataDeviations = "Mainactivity"
 	currentTime := time.Now()
 
-	Uploaddata_time = currentTime.Format("3:4:5 pm")
+	uploadDataTime = currentTime.Format("3:4:5 pm")
 
 	return valsss
 
 }
 
-//5.download data
-func AndroidDownloadedData1(appnames string) (val string) {
-	res2 := L.AndroidDownloadedData(appnames)
-	fmt.Println("tttt" + res2)
+// 5. download data
+func downloadedData(appName string) (val string) {
+	res2 := L.AndroidDownloadedData(appName)
+
 	var valsss string
 	intVar, _ := strconv.Atoi(res2)
 
@@ -574,84 +458,82 @@ func AndroidDownloadedData1(appnames string) (val string) {
 
 	valsss1 = fmt.Sprintf("%.2f", bytesToMiB(intVar))
 
-	Downloadddata_useage = ""
-	Downloadddata_deviations = ""
-	Downloadddata_time = ""
-	Downloadddata_useage = valsss1
-	Downloadddata_deviations = "Mainactivity"
+	downloadDataUsage = ""
+	downloadDataDeviations = ""
+	downloadDataTime = ""
+	downloadDataUsage = valsss1
+	downloadDataDeviations = "Mainactivity"
 	currentTime := time.Now()
 
-	Downloadddata_time = currentTime.Format("3:4:5 pm")
+	downloadDataTime = currentTime.Format("3:4:5 pm")
 
 	return valsss
-
 }
 
-//6.cpu cores
-func AndroidCPUCores1(appnamess string) (val string) {
-	res2 := L.AndroidCPUCores(appnamess)
-	fmt.Println("tttt" + res2)
+// 6. cpu cores
+func cpuCores(appNames string) (val string) {
+	res2 := L.AndroidCPUCores(appNames)
+
 	var valsss string
 	valsss = "cpu Cores : " + res2
 
-	CPUCores_useage = ""
-	CPUCores_deviations = ""
-	CPUCores_time = ""
-	CPUCores_useage = res2
-	CPUCores_deviations = "Mainactivity"
+	CPUCoresUsage = ""
+	CPUCoresDeviations = ""
+	CPUCoresTime = ""
+	CPUCoresUsage = res2
+	CPUCoresDeviations = "Mainactivity"
 	currentTime := time.Now()
 
-	CPUCores_time = currentTime.Format("3:4:5 pm")
+	CPUCoresTime = currentTime.Format("3:4:5 pm")
 
 	return valsss
-
 }
 
-//7.power useage
-func powermetric(appnamess string) (val string) {
-	res2 := L.Battery(appnamess)
-	fmt.Println("tttt" + res2)
+// 7. power usage
+func powerMetric(appNames string) (val string) {
+	res2 := L.Battery(appNames)
+
 	var valsss string
 	valsss = "Total Battery Useage : " + res2
 
-	power_useage = ""
-	power_deviations = ""
-	power_time = ""
-	power_useage = res2
-	power_deviations = "Mainactivity"
+	powerUsage = ""
+	powerDeviations = ""
+	powerTime = ""
+	powerUsage = res2
+	powerDeviations = "Mainactivity"
 	currentTime := time.Now()
 
-	power_time = currentTime.Format("3:4:5 pm")
+	powerTime = currentTime.Format("3:4:5 pm")
 
 	return valsss
 
 }
 
-//8 App power metric
-func Apppowermetric(appnamess string) (val string) {
-	L.AndroidAppPowerUsage(appnamess)
-	res2 := L.AndroidAppPowerUsage(appnamess)
+// 8 App power metric
+func appPowerMetric(appNames string) (val string) {
+	L.AppPowerUsage(appNames)
+	res2 := L.AppPowerUsage(appNames)
 	fmt.Println("App usage" + res2)
 	var valsss string
 	valsss = "Total App Useage : " + res2
 
-	Apppower_useage = ""
-	Apppower_deviations = ""
-	Apppower_time = ""
-	Apppower_useage = res2
-	Apppower_deviations = "Mainactivity"
+	appPowerUsage = ""
+	appPowerDeviations = ""
+	appPowerTime = ""
+	appPowerUsage = res2
+	appPowerDeviations = "Mainactivity"
 	currentTime := time.Now()
 
-	Apppower_time = currentTime.Format("3:4:5 pm")
+	appPowerTime = currentTime.Format("3:4:5 pm")
 
 	return valsss
 
 }
 
-//9.CPU architecture
-func cpuarch(appnamess string) (val string) {
-	L.Androidcpuarch(appnamess)
-	res := L.Androidcpuarch(appnamess)
+// 9. CPU architecture
+func cpuArch(appNames string) (val string) {
+	L.AndroidCPUArch(appNames)
+	res := L.AndroidCPUArch(appNames)
 	var valsss string
 	valsss = "CPU architecture : " + res
 
@@ -660,31 +542,31 @@ func cpuarch(appnamess string) (val string) {
 
 // 10 Avg. Median FPS Usage
 
-func AvgMedianFPS(appnames string) (val string) {
+func AvgMedianFPS(appName string) (val string) {
 
-	res2 := L.AndroidMedianFPS(appnames)
+	res2 := L.AndroidMedianFPS(appName)
 
 	var valsss string
 
-	AvgMedianFPS_useage = ""
-	AvgMedianFPS_deviations = ""
-	AvgMedianFPS_time = ""
-	AvgMedianFPS_useage = res2
-	AvgMedianFPS_deviations = "Mainactivity"
+	avgMedianFPSUsage = ""
+	avgMedianFPSDeviations = ""
+	avgMedianFPSTime = ""
+	avgMedianFPSUsage = res2
+	avgMedianFPSDeviations = "Mainactivity"
 	currentTime := time.Now()
 
-	AvgMedianFPS_time = currentTime.Format("3:4:5 pm")
+	avgMedianFPSTime = currentTime.Format("3:4:5 pm")
 
 	result := results{
-		Cpu_app_usage: cpu_useage, Cpu_time_val: cpu_time, Cpu_deviation: cpu_deviations,
-		Memory_app_useage: Memory_useage, Memory_app_deviation: Memory_deviations, Memory_app_time: Memory_time,
-		Gpu_app_useage: gpuMetric_useage, Gpu_app_deviation: gpuMetric_deviations, Gpu_app_time: gpuMetric_time,
-		Uploaddata_app_useage: Uploaddata_useage, Uploaddata_app_deviation: Uploaddata_deviations, Uploaddata_app_time: Uploaddata_time,
-		Downloadddata_app_useage: Downloadddata_useage, Downloadddata_app_deviation: Downloadddata_deviations, Downloadddata_app_time: Downloadddata_time,
-		CPUCores_app_useage: CPUCores_useage, CPUCores_app_deviation: CPUCores_deviations, CPUCores_app_time: CPUCores_time,
-		Power_app_useage: power_useage, Power_app_deviation: power_deviations, Power_time: power_time,
-		Apppower_app_useage: Apppower_useage, Apppower_app_deviation: Apppower_deviations, Apppower_time: Apppower_time,
-		Avgfps_app_useage: AvgMedianFPS_useage, Avgfps_app_deviation: AvgMedianFPS_deviations, Avgfps_time: AvgMedianFPS_time}
+		CpuAppUsage: cpuUsage, CpuTimeVal: cpuTime, CpuDeviation: cpuDeviations,
+		MemoryAppUsage: memoryUsage, MemoryAppDeviation: memoryDeviations, MemoryAppTime: memoryTime,
+		GpuAppUsage: gpuMetricUsage, GpuAppDeviation: gpuMetricDeviations, GpuAppTime: gpuMetricTime,
+		UploadDataAppUsage: uploadDataUsage, UploadDataAppDeviation: uploadDataDeviations, UploadDataAppTime: uploadDataTime,
+		DownloadDataAppUsage: downloadDataUsage, DownloadDataAppDeviation: downloadDataDeviations, DownloadDataAppTime: downloadDataTime,
+		CpuCoresAppUsage: CPUCoresUsage, CpuCoresAppDeviation: CPUCoresDeviations, CpuCoresAppTime: CPUCoresTime,
+		PowerAppUsage: powerUsage, PowerAppDeviation: powerDeviations, PowerTime: powerTime,
+		AppPowerAppUsage: appPowerUsage, AppPowerAppDeviation: appPowerDeviations, AppPowerTime: appPowerTime,
+		AvgFpsAppUsage: avgMedianFPSUsage, AvgFpsAppDeviation: avgMedianFPSDeviations, AvgFpsTime: avgMedianFPSTime}
 
 	human2 = append(human2, result)
 	fmt.Println("myyyyyyyyyyyyyyyyyyyyyyyy")
@@ -695,6 +577,28 @@ func AvgMedianFPS(appnames string) (val string) {
 	return valsss
 
 }
+
+// 11 display dimension
+func display(appNames string) (val string) {
+	L.AndroidDisplay(appNames)
+	res := L.AndroidDisplay(appNames)
+
+	var value string
+	value = "display : " + res
+
+	return value
+}
+
+// 12 Mobile Network
+func mobileNetwork(appNames string) (val string) {
+	L.AndroidNetwork(appNames)
+	res := L.AndroidNetwork(appNames)
+	var valsss string
+
+	valsss = "Mobile Network : " + res
+	return valsss
+}
+
 func ParseLeadingInt(s string) (int64, error) {
 	s = leadingInt.FindString(s)
 	if s == "" { // add this if you don't want error on "xx" etc
@@ -703,7 +607,7 @@ func ParseLeadingInt(s string) (int64, error) {
 	return strconv.ParseInt(s, 10, 64)
 }
 
-func deviceinfonew() (val string) {
+func deviceInfoNew() (val string) {
 
 	var (
 		port = flag.Int("p", adb.AdbPort, "")
@@ -721,31 +625,27 @@ func deviceinfonew() (val string) {
 	}
 	client.StartServer()
 
-	// serverVersion, err := client.ServerVersion()
-	// if err != nil {
-	//     log.Fatal(err)
-	// }
 	devices, err := client.ListDevices()
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, device := range devices {
 		// fmt.Printf("\t%+v\n", *device)
-		devicename = device.Product
-		deviceserial = device.Serial
+		deviceName = device.Product
+		deviceSerial = device.Serial
 	}
 
-	return devicename
+	return deviceName
 
 }
 
-func getlogin() string {
+func getLogin() string {
 	css = "./frontend/build/static/css/main.css"
 	js = "./frontend/build/static/js/main.js"
-	// fmt.Println(deviceinfonew())
+	// fmt.Println(deviceInfoNew())
 	var appnamelist []string
-	//fmt.Println(L.Appname())
-	scanner := bufio.NewScanner(strings.NewReader(L.Appname()))
+	//fmt.Println(L.AppName())
+	scanner := bufio.NewScanner(strings.NewReader(L.AppName()))
 	for scanner.Scan() {
 		res2 := strings.ReplaceAll(scanner.Text(), "package:", "")
 
@@ -796,7 +696,7 @@ func main() {
 
 	//values := map[string]string{"email": "gm@gmail.com", "password": "password"}
 
-	//fmt.Println(apidata.Apihit(values))
+	//fmt.Println(apidata.ApiHit(values))
 	app := wails.CreateApp(&wails.AppConfig{
 		Width:  1024,
 		Height: 768,
@@ -807,22 +707,22 @@ func main() {
 	})
 
 	app.Bind(basic)
-	app.Bind(getlogin)
-	app.Bind(mylogin)
-	app.Bind(checkdevice)
-	app.Bind(openapp)
-	app.Bind(basiconfo)
-	app.Bind(cpumetric)
+	app.Bind(getLogin)
+	app.Bind(myLogin)
+	app.Bind(checkDevice)
+	app.Bind(openApp)
+	app.Bind(basicInfo)
+	app.Bind(cpuMetric)
 	app.Bind(gpuMetric)
-	app.Bind(memmetric)
-	app.Bind(startscan)
-	app.Bind(stopscan)
-	app.Bind(Uploaddata)
-	app.Bind(AndroidDownloadedData1)
-	app.Bind(AndroidCPUCores1)
-	app.Bind(powermetric)
-	app.Bind(Apppowermetric)
-	app.Bind(cpuarch)
+	app.Bind(memoryMetric)
+	app.Bind(startScan)
+	app.Bind(stopScan)
+	app.Bind(uploadData)
+	app.Bind(downloadedData)
+	app.Bind(cpuCores)
+	app.Bind(powerMetric)
+	app.Bind(appPowerMetric)
+	app.Bind(cpuArch)
 	app.Bind(AvgMedianFPS)
 
 	app.Run()

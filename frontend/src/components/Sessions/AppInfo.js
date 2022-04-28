@@ -125,7 +125,7 @@ class AppData extends React.Component {
     console.log(basicData, "basidata");
 
     window.backend
-      .basiconfo(basicData)
+      .basicInfo(basicData)
       .then((result) => {
         console.log(result, "result");
         const data = JSON.parse(result);
@@ -142,21 +142,19 @@ class AppData extends React.Component {
         console.log(err, "error");
       });
 
-    window.backend.cpuarch(this.props.location.state.value).then((result) => {
+    window.backend.cpuArch(this.props.location.state.value).then((result) => {
       console.log(result);
       let results = result.substring(result.indexOf(":") + 1);
       this.setState({ cpuArch: results });
       console.log(this.state.cpuArch);
     });
 
-    window.backend
-      .AndroidCPUCores1(this.props.location.state.value)
-      .then((result) => {
-        console.log(result);
-        let results = result.substring(result.indexOf(":") + 1);
-        this.setState({ cpuCores: results });
-        console.log(this.state.cpuCores);
-      });
+    window.backend.cpuCores(this.props.location.state.value).then((result) => {
+      console.log(result);
+      let results = result.substring(result.indexOf(":") + 1);
+      this.setState({ cpuCores: results });
+      console.log(this.state.cpuCores);
+    });
   }
 
   // componentDidUpdate(prevprops) {
@@ -181,7 +179,7 @@ class AppData extends React.Component {
         const myJson = JSON.stringify(this.state.basicInfo);
         this.setState({ loader: true });
 
-        window.backend.startscan(myJson, "false").then((result) => {
+        window.backend.startScan(myJson, "false").then((result) => {
           const data = JSON.parse(result);
           console.log(data, "start data result");
           this.session_id = data.data.session_id;
@@ -217,7 +215,7 @@ class AppData extends React.Component {
             });
           }
           window.backend
-            .cpumetric(this.props.location.state.value)
+            .cpuMetric(this.props.location.state.value)
             .then((result) => {
               let results = result.substr(18);
               this.setState({ cpuUsage: results });
@@ -270,7 +268,7 @@ class AppData extends React.Component {
               console.log(this.state.timeValues, "timeValues");
             });
           window.backend
-            .memmetric(this.props.location.state.value)
+            .memoryMetric(this.props.location.state.value)
             .then((result) => {
               let results = result.substring(result.indexOf(":") + 1);
               this.setState({ memoryUsage: results });
@@ -291,7 +289,7 @@ class AppData extends React.Component {
               console.log(this.state.memoryUsage, "memory");
             });
           window.backend
-            .Uploaddata(this.props.location.state.value)
+            .uploadData(this.props.location.state.value)
             .then((result) => {
               console.log(result);
               let results = result.substring(result.indexOf(":") + 1);
@@ -313,7 +311,7 @@ class AppData extends React.Component {
               }
             });
           window.backend
-            .AndroidDownloadedData1(this.props.location.state.value)
+            .downloadedData(this.props.location.state.value)
             .then((result) => {
               console.log(result);
               let results = result.substring(result.indexOf(":") + 1);
@@ -336,7 +334,7 @@ class AppData extends React.Component {
             });
 
           window.backend
-            .powermetric(this.props.location.state.value)
+            .powerMetric(this.props.location.state.value)
             .then((result) => {
               console.log(result);
               let results = result.substring(result.indexOf(":") + 1);
@@ -359,7 +357,7 @@ class AppData extends React.Component {
             });
 
           window.backend
-            .Apppowermetric(this.props.location.state.value)
+            .appPowerMetric(this.props.location.state.value)
             .then((result) => {
               console.log(result);
               let results = result.substring(result.indexOf(":") + 1);
@@ -416,7 +414,7 @@ class AppData extends React.Component {
     this.setState({ open: true });
     this.setState({ loader: false });
     clearInterval(this.timer);
-    this.setState({ timer: new Date(0).toISOString().substr(14, 5) });
+    // this.setState({ timer: new Date(0).toISOString().substr(14, 5) });
     let stopData = {
       appname: this.props.location.state.value,
       id: this.props.location.state.user.id.toString(),
@@ -426,7 +424,7 @@ class AppData extends React.Component {
     };
 
     let stopJSON = JSON.stringify(stopData);
-    window.backend.stopscan(stopJSON, "false").then((result) => {
+    window.backend.stopScan(stopJSON, "false").then((result) => {
       const data = JSON.parse(result);
       console.log(data, "data");
       console.log(data.average_values, "avaerage values");

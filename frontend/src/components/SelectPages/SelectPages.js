@@ -37,7 +37,7 @@ export default class SelectPages extends Component {
   //   console.log("after exexution");
   // }
   componentDidMount() {
-    window.backend.checkdevice().then((result) => {
+    window.backend.checkDevice().then((result) => {
       console.log(result, "connectivity");
       if (result === "Device Attached") {
         this.setState({
@@ -63,7 +63,7 @@ export default class SelectPages extends Component {
     console.log("after exexution");
   }
   async connectdevice() {
-    const result = await window.backend.checkdevice();
+    const result = await window.backend.checkDevice();
     console.log(result, "device att");
     if ((await result) === "Device Attached") {
       await this.setState({

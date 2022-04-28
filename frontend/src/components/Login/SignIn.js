@@ -142,7 +142,7 @@ const SignIn = () => {
         password: password,
       };
       const myJSON = JSON.stringify(data);
-      window.backend.mylogin(myJSON).then((result) => {
+      window.backend.myLogin(myJSON).then((result) => {
         const userObj = JSON.parse(result);
         console.log(userObj, "userObj");
         var data = [];
