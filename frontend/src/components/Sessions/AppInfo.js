@@ -87,6 +87,7 @@ class AppData extends React.Component {
       appPowerValues: [],
 
       timeSeconds: 0,
+      timerTimeSeconds: 0,
       timeValues: [],
       userInfo: null,
       power: 0,
@@ -108,6 +109,7 @@ class AppData extends React.Component {
       avgDownload: "",
       popDuration: "",
       popsession_id: "",
+      timer: "",
     };
   }
 
@@ -165,6 +167,13 @@ class AppData extends React.Component {
 
   handleCpuStart() {
     console.log(this.state.cpuStart, "cpustrtbefore");
+    // setInterval(() =>{
+    //   let time = new Date(this.state.timeSeconds * 1000)
+    //   .toISOString()
+    //   .substr(14, 5);
+    //    this.setState({timer:time})
+
+    // })
 
     this.setState({ cpuStart: !this.state.cpuStart, back: false }, () => {
       console.log(this.state.cpuStart, "cpustrt");
@@ -181,14 +190,22 @@ class AppData extends React.Component {
 
         // const persons1 = { "appname": "com.google.android.play.games", "id": "1", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidmluYXlAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjIzLCJpYXQiOjE2NDk3MDk3NDl9.ZsLXUGiTpUqQRUvYEcRzDsh5iWl4pVmoNSWm1HvWN3E", "session_id": data.data.session_id }
         // const myJSON1 = JSON.stringify(persons1);
+        this.timerTimeclock = setInterval(() => {
+          let timerTime = new Date(this.state.timeSeconds * 1000)
+            .toISOString()
+            .substr(14, 5);
+          this.setState({ timerTimeSeconds: this.state.timerTimeSeconds + 1 });
+        });
 
         this.timer = setInterval(() => {
           this.setState({
             timeSeconds: this.state.timeSeconds + 3,
           });
+
           let time = new Date(this.state.timeSeconds * 1000)
             .toISOString()
             .substr(14, 5);
+          // this.setState({ timer: timerTime });
           if (this.state.timeValues.length < 8) {
             this.setState({
               timeValues: [...this.state.timeValues, time],
@@ -399,6 +416,7 @@ class AppData extends React.Component {
     this.setState({ open: true });
     this.setState({ loader: false });
     clearInterval(this.timer);
+    this.setState({ timer: new Date(0).toISOString().substr(14, 5) });
     let stopData = {
       appname: this.props.location.state.value,
       id: this.props.location.state.user.id.toString(),
@@ -446,6 +464,7 @@ class AppData extends React.Component {
 
             <div className="appBar">
               <p style={{ float: "left" }}>Application Statistics</p>
+              {/* <p>{this.state.timerTime}</p> */}
               {this.state.cpuStart ? (
                 <div className="start-div">
                   <img src={stop} alt="" className="start-image-style" />
