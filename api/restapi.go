@@ -40,10 +40,16 @@ type data struct {
 type StopResponse struct {
 	// Message string `json:"message"`
 
-	Status string `json:"status"`
+	Status        string `json:"status"`
+	Session_id    string `json:"session_id"`
+	Date          string `json:"date"`
+	Start_time    string `json:"start_time"`
+	End_time      string `json:"end_time"`
+	Total_duraton string `json:"total_duraton"`
 	//Message string         `json:"message"`
 	Data averageValues `json:"average_values"`
 }
+
 type averageValues struct {
 	CpuUsage          string `json:"cpu_usage"`
 	MemoryUsage       string `json:"memory_usage"`
