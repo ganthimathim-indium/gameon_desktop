@@ -267,7 +267,7 @@ func startScan(appNameTest string, valData string) (val string) {
 	fmt.Println(appNameTest)
 
 	//value := sec["id"]
-	appName := sec["appName"]
+	appName := sec["appname"]
 	token := sec["token"]
 
 	currentTime := time.Now()
@@ -327,7 +327,7 @@ func stopScan(appInfoData string, valData string) (val string) {
 
 	userRole := sec["userRole"]
 
-	sessionId := sec["sessionId"]
+	sessionId := sec["session_id"]
 
 	out5, err := json.Marshal(MyStop{
 		Result:        human2,

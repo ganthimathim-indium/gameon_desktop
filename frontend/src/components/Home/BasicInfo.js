@@ -102,7 +102,7 @@ const BasicInfo = (props) => {
           return {
             ...ps,
             osname: n.osname,
-            deviceid: n.devicename,
+            deviceid: n.deviceName,
             applist: parsing,
             loading: false,
           };
