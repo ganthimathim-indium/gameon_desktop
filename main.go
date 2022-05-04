@@ -398,11 +398,30 @@ func memoryMetric(appNames string) (val string) {
 }
 
 // 3. gpuMetric
+// func gpuMetric(appNames string) (val string) {
+// 	L.AppGPUUsage(appNames)
+// 	res2 := L.AppGPUUsage(appNames)
+// 	res2 = strings.Split(res2, ",")[1]
+// 	res2 = strings.TrimSpace(res2)
+
+// 	gpuMetricUsage = ""
+// 	gpuMetricDeviations = ""
+// 	gpuMetricTime = ""
+// 	gpuMetricUsage = res2
+// 	gpuMetricDeviations = "Mainactivity"
+// 	currentTime := time.Now()
+
+// 	gpuMetricTime = currentTime.Format("3:4:5 pm")
+
+// 	value := "Total Gpu Usage : " + res2
+// 	return value
+
+// }
+
+// 3. gpuMetric
 func gpuMetric(appNames string) (val string) {
-	L.AppGPUUsage(appNames)
+	//L.AppGPUUsage(appNames)
 	res2 := L.AppGPUUsage(appNames)
-	res2 = strings.Split(res2, ",")[1]
-	res2 = strings.TrimSpace(res2)
 
 	gpuMetricUsage = ""
 	gpuMetricDeviations = ""
@@ -415,7 +434,6 @@ func gpuMetric(appNames string) (val string) {
 
 	value := "Total Gpu Usage : " + res2
 	return value
-
 }
 
 // 4. upload data
