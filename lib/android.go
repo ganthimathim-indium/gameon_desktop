@@ -58,19 +58,58 @@ func AndroidVersion() (val string) {
 	return res2
 }
 
+// func AppGPUUsage(packageName string) (val string) {
+// 	s := strings.Index(string(run("shell", "dumpsys gfxinfo "+packageName)), "Total GPU memory usage:")
+// 	if s == -1 {
+// 		return
+// 	}
+// 	s += len("Total GPU memory usage:")
+// 	e := strings.Index(string(run("shell", "dumpsys gfxinfo "+packageName))[s:], "bytes")
+// 	if e == -1 {
+// 		return
+// 	}
+// 	e += s + e - 1
+// 	return string(run("shell", "dumpsys gfxinfo "+packageName))[s:e]
+// }
+
 // AppGPUUsage calculates GPU usage for given package
+
 func AppGPUUsage(packageName string) (val string) {
-	s := strings.Index(string(run("shell", "dumpsys gfxinfo "+packageName)), "Total GPU memory usage:")
-	if s == -1 {
+
+	sub := string(run("shell", "dumpsys meminfo"))
+	ind := strings.Index(sub, "Total RAM: ")
+	if ind == -1 {
+		return "0"
+	}
+	sub = sub[ind:]
+	sub = strings.Replace(sub, "Total RAM: ", "", 1)
+	data := strings.Split(sub, " ")[0]
+	data = strings.Replace(data, "K", "", 1)
+	data = strings.Replace(data, ",", "", -1)
+	total, err := strconv.Atoi(data)
+	if err != nil {
+		return "0"
+	}
+
+	s := string(run("shell", "dumpsys gfxinfo "+packageName))
+	i := strings.Index(s, "Total GPU memory usage:")
+	if i == -1 {
 		return
 	}
-	s += len("Total GPU memory usage:")
-	e := strings.Index(string(run("shell", "dumpsys gfxinfo "+packageName))[s:], "bytes")
+	s = s[i:]
+	s = strings.Replace(s, "Total GPU memory usage:", "", 1)
+	e := strings.Index(s, "bytes")
 	if e == -1 {
 		return
 	}
-	e += s + e - 1
-	return string(run("shell", "dumpsys gfxinfo "+packageName))[s:e]
+	s = s[:e]
+	ss := strings.Replace(s, "\n", "", -1)
+	ss = strings.TrimSpace(ss)
+	used, err := strconv.Atoi(ss)
+	if err != nil {
+		return "0"
+	}
+	return fmt.Sprintf("%.2f", float64(used)/float64(total))
 }
 
 // AppMemoryUsage calculates memory usage for given package
