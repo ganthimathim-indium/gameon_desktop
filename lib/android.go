@@ -256,25 +256,85 @@ func AppCPUUsage(packageName string) (val string) {
 func AndroidMedianFPS(packageName string) (val string) {
 
 	var result string
-	s := string(run("shell", "dumpsys gfxinfo "+packageName, " framestats"))
+	s := string(run("shell", "dumpsys gfxinfo "+packageName, "framestats"))
 
-	fs := s[strings.Index(s, "Total frames rendered: "):]
-	fs = strings.Replace(fs, "Total frames rendered: ", "", -1)
-	fs = strings.Split(fs, "\n")[0]
-	frames, _ := strconv.Atoi(fs)
+	// get index of "FrameCompleted" and "IntendedVsync"
+	sub := s[strings.Index(s, "---PROFILEDATA---"):]
+	sub = strings.Replace(sub, "---PROFILEDATA---", "", 1)
+	sub = sub[:strings.Index(sub, "---PROFILEDATA---")]
 
-	sec := s[strings.Index(s, "Stats since: "):]
-	sec = strings.Replace(sec, "Stats since: ", "", -1)
-	sec = sec[:strings.Index(sec, "ns")]
-	t, _ := strconv.Atoi(sec)
+	subData := strings.Split(sub, "\n")
+	// second value will be column names
+	columnData1 := strings.Split(subData[1], ",")
 
-	result = fmt.Sprintf("%.2f", float64(frames*1000000000)/float64(t))
+	var ind1, ind2 int
+	for i := 0; i < len(columnData1); i++ {
+		if columnData1[i] == "FrameCompleted" {
+			ind1 = i
+		}
+		if columnData1[i] == "IntendedVsync" {
+			ind2 = i
+		}
+	}
+	var fpsData []float64
+	for i := 2; i < len(subData)-1; i++ {
+		columnData := strings.Split(subData[i], ",")
+		// string to float
+		fc, _ := strconv.ParseFloat(columnData[ind1], 64)
+		iv, _ := strconv.ParseFloat(columnData[ind2], 64)
+		//fc = toFixed(fc, 6)
+		//iv = toFixed(iv, 6)
+		//fmt.Printf("data %v %v\n", fc, iv)
+		//fmt.Println((float64(1) / (fc - iv)))
+		fpsData = append(fpsData, (float64(1) / (fc - iv)))
+	}
+	sort.Float64s(fpsData)
+	var temp int
+	for i := 0; i < len(fpsData); i++ {
+
+		val := fmt.Sprintf("%v", fpsData[i])
+		ii := strings.Index(val, "e")
+		fmt.Println(temp, val, "e  ", ii)
+
+		if ii != -1 {
+			val = val[:ii]
+		}
+		valF, _ := strconv.ParseFloat(val, 64)
+		intVal := int(valF)
+		if temp < intVal {
+			temp = intVal
+		}
+	}
+
+	result = fmt.Sprintf("%d", temp)
 
 	fmt.Println("Avg. Median FPS Usage Data ", result)
 
 	return result
-
 }
+
+// func AndroidMedianFPS(packageName string) (val string) {
+
+// 	var result string
+// 	s := string(run("shell", "dumpsys gfxinfo "+packageName, " framestats"))
+
+// 	fs := s[strings.Index(s, "Total frames rendered: "):]
+// 	fs = strings.Replace(fs, "Total frames rendered: ", "", -1)
+// 	fs = strings.Split(fs, "\n")[0]
+// 	frames, _ := strconv.Atoi(fs)
+
+// 	sec := s[strings.Index(s, "Stats since: "):]
+// 	sec = strings.Replace(sec, "Stats since: ", "", -1)
+// 	sec = sec[:strings.Index(sec, "ns")]
+// 	t, _ := strconv.Atoi(sec)
+
+// 	result = fmt.Sprintf("%.2f", float64(frames*1000000000)/float64(t))
+
+// 	fmt.Println("Avg. Median FPS Usage Data ", result)
+
+// 	return result
+
+// }
 
 // AndroidDisplay returns the device display specification
 func AndroidDisplay(packageName string) (val string) {
