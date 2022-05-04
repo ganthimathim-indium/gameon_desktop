@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
+import { Link } from "react-router-dom";
+
+// import axios from 'axios'
+// import fileDownload from 'js-file-download'
 
 function HelloWorld() {
   const [showModal, setShowModal] = useState(false);
@@ -27,6 +31,7 @@ function HelloWorld() {
 
   const handleOpenModal = () => {
     setShowModal(true);
+
     //	window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
     //window.backend.memmetric("com.android.chrome").then((result) => setResult(result));
     //window.backend.gpuMetric("com.android.chrome").then((result) => setResult(result));
@@ -51,29 +56,29 @@ function HelloWorld() {
 
     // }.bind(this), 4000)
     // //start
-    setTimeout(function () {
-      window.backend.startScan(myJSON, "false").then((result) => {
-        const data = JSON.parse(result)
-        //setdeviceId(data.data.session_id)
+    // setTimeout(function () {
+    //   window.backend.startScan(myJSON, "false").then((result) => {
+    //     const data = JSON.parse(result)
+    //     //setdeviceId(data.data.session_id)
 
-        const persons1 = { "appname": "com.google.android.play.games", "id": "1", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidmluYXlAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjIzLCJpYXQiOjE2NDk3MDk3NDl9.ZsLXUGiTpUqQRUvYEcRzDsh5iWl4pVmoNSWm1HvWN3E", "session_id": data.data.session_id }
-        const myJSON1 = JSON.stringify(persons1);
+    //     const persons1 = { "appname": "com.google.android.play.games", "id": "1", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidmluYXlAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjIzLCJpYXQiOjE2NDk3MDk3NDl9.ZsLXUGiTpUqQRUvYEcRzDsh5iWl4pVmoNSWm1HvWN3E", "session_id": data.data.session_id }
+    //     const myJSON1 = JSON.stringify(persons1);
 
-        setResult(myJSON1)
-        setTimeout(function () {
-          window.backend.AvgMedianFPS("com.android.chrome").then((result) => setResult(result));
+    //     setResult(myJSON1)
+    //     setTimeout(function () {
+    //       window.backend.AvgMedianFPS("com.android.chrome").then((result) => setResult(result));
 
-          setTimeout(function () {
+    //       setTimeout(function () {
 
-            window.backend.stopScan(myJSON1, "false").then((result) => setResult(result));
+    //         window.backend.stopScan(myJSON1, "false").then((result) => setResult(result));
 
-          }.bind(this), 2000)
+    //       }.bind(this), 2000)
 
-        }.bind(this), 2000)
+    //     }.bind(this), 2000)
 
-      })
+    //   })
 
-    }.bind(this), 2000)
+    // }.bind(this), 2000)
 
     // //end
 
@@ -92,19 +97,33 @@ function HelloWorld() {
     setShowModal(false);
   };
 
+  // const handleDownload = (url, filename) => {
+  //   axios.get(url, {
+  //     responseType: 'blob',
+  //   })
+  //     .then((res) => {
+  //       fileDownload(res.data, filename)
+  //     })
+  // };
+
   return (
     <div className="App">
       <button onClick={() => handleOpenModal()} type="button">
         Scan
       </button>
+      {/* 
+      <button onClick={() => handleDownload('http://52.39.98.71:3000/getReport?sessionID=7.865380848899273', 'test-download.jpg')
+      }>Download Image</button>
+
       <Modal
         appElement={document.getElementById("app")}
         isOpen={showModal}
         contentLabel="Minimal Modal Example"
       >
         <p>{result}</p>
+
         <button onClick={() => handleCloseModal()}>Close Modal</button>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
