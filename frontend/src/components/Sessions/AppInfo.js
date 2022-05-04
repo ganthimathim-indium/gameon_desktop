@@ -17,6 +17,8 @@ import Modal from "@mui/material/Modal";
 import { useDispatch, connect } from "react-redux";
 import { login } from "../../features/loginAuth/loginAuthSlice";
 import back from "../../asset/back.png";
+import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // import { useSelector } from "react-redux";
 // import { selectUser } from "../../features/loginAuth/loginAuthSlice";
@@ -110,6 +112,7 @@ class AppData extends React.Component {
       popDuration: "",
       popsession_id: "",
       timer: "",
+      timerClock: "",
     };
   }
 
@@ -189,11 +192,14 @@ class AppData extends React.Component {
         // const persons1 = { "appname": "com.google.android.play.games", "id": "1", "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoidmluYXlAZ21haWwuY29tIiwidXNlcl9yb2xlIjoidXNlciIsInVzZXJfaWQiOjIzLCJpYXQiOjE2NDk3MDk3NDl9.ZsLXUGiTpUqQRUvYEcRzDsh5iWl4pVmoNSWm1HvWN3E", "session_id": data.data.session_id }
         // const myJSON1 = JSON.stringify(persons1);
         this.timerTimeclock = setInterval(() => {
-          let timerTime = new Date(this.state.timeSeconds * 1000)
+          this.setState({ timerTimeSeconds: this.state.timerTimeSeconds + 1 });
+          console.log(this.state.timerTimeSeconds);
+          let timerTime = new Date(this.state.timerTimeSeconds * 1000)
             .toISOString()
             .substr(14, 5);
-          this.setState({ timerTimeSeconds: this.state.timerTimeSeconds + 1 });
-        });
+          this.setState({ timerClock: timerTime });
+          console.log(this.state.timerClock);
+        }, 1000);
 
         this.timer = setInterval(() => {
           this.setState({
@@ -413,6 +419,7 @@ class AppData extends React.Component {
     });
     this.setState({ open: true });
     this.setState({ loader: false });
+    clearInterval(this.timerTimeclock);
     clearInterval(this.timer);
     // this.setState({ timer: new Date(0).toISOString().substr(14, 5) });
     let stopData = {
@@ -452,6 +459,26 @@ class AppData extends React.Component {
     }
   }
 
+  handleDownload() {
+    console.log("buton clicked");
+    console.log(this.state.popsession_id);
+    let baseURL = "http://52.39.98.71:3000/getReport?sessionID=";
+
+    // axios
+    //   .get({
+    //     url: `http://52.39.98.71:3000/getReport?sessionID=${this.state.popsession_id}`,
+    //     responseType: "blob",
+    //   })
+    //   .then((response) => {
+    //     console.log(response, "report");
+    //     const url = window.URL.createObjectURL(new Blob([response.data]));
+    //     const link = document.createElement("a");
+    //     link.href = url;
+    //     document.body.appendChild(link);
+    //     link.click();
+    //   });
+  }
+
   render() {
     console.log(this.props.location.state.value);
     if (!this.props.location.state.user.backClick) {
@@ -462,7 +489,20 @@ class AppData extends React.Component {
 
             <div className="appBar">
               <p style={{ float: "left" }}>Application Statistics</p>
-              {/* <p>{this.state.timerTime}</p> */}
+
+              <p className="timerPara">{this.state.timerClock}</p>
+              <FontAwesomeIcon icon="fa-solid fa-down-to-line" />
+              <button
+                // onClick={this.handleDownload.bind(this)}
+                onClick={() =>
+                  window.open(
+                    `http://52.39.98.71:3000/getReport?sessionID=${this.state.popsession_id}`
+                  )
+                }
+                className="export"
+              >
+                export
+              </button>
               {this.state.cpuStart ? (
                 <div className="start-div">
                   <img src={stop} alt="" className="start-image-style" />

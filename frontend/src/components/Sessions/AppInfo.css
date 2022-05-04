@@ -10,6 +10,30 @@
   display: flex;
   justify-content: space-around;
 }
+.export {
+  font-size: 14px;
+  width: 10%;
+  height: 70%;
+  padding: 3px;
+  border-radius: 20px;
+  float: right;
+  margin-right: 30%;
+
+  position: absolute;
+  right: 0;
+}
+.timerPara {
+  font-size: 18px;
+  width: 10%;
+  height: 70%;
+  padding: 3px;
+
+  float: right;
+  margin-right: 70%;
+
+  position: absolute;
+  right: 0;
+}
 
 .Iconwhite2 {
   font-size: 50px;
