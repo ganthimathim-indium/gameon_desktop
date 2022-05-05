@@ -99,6 +99,7 @@ class AppData extends React.Component {
       devicetext: " ",
       devicecheck: false,
       open: false,
+      openTitle: false,
       openBack: false,
       back: true,
       avgCPU: "",
@@ -110,13 +111,48 @@ class AppData extends React.Component {
       avgUpload: "",
       avgDownload: "",
       popDuration: "",
+      sessionName: "",
       popsession_id: "",
       timer: "",
       timerClock: "",
+      sessionTitle: "",
     };
   }
 
   handleClose = () => this.setState({ open: false });
+  handleTitleClose = () => {
+    let stopData = {
+      appname: this.props.location.state.value,
+      id: this.props.location.state.user.id.toString(),
+      token: this.props.location.state.user.token,
+      session_id: this.session_id,
+      userRole: "user",
+      sessionname: this.state.sessionTitle,
+    };
+
+    let stopJSON = JSON.stringify(stopData);
+    window.backend.stopScan(stopJSON, "false").then((result) => {
+      const data = JSON.parse(result);
+      console.log(data, "data");
+      console.log(data.average_values, "avaerage values");
+      this.setState({
+        avgCPU: data.average_values.cpu_usage,
+        avgGPU: data.average_values.gpu_usage,
+        avgMem: data.average_values.memory_usage,
+        avgFps: data.average_values.avgfps_app_usage,
+        avgPower: data.average_values.power_usage,
+        avgAppPower: data.average_values.apppower_app_usage,
+        avgUpload: data.average_values.upload_data_usage,
+        avgDownload: data.average_values.download_data_usage,
+        popDuration: data.total_duraton,
+        popsession_id: data.session_id,
+        sessionName: data.sessionname,
+      });
+      console.log(data, "stop session");
+    });
+
+    this.setState({ openTitle: false, open: true });
+  };
   // handleBackClose = () => this.setState({ openBack: false });
 
   componentDidMount() {
@@ -417,38 +453,11 @@ class AppData extends React.Component {
       cpuStart: !this.state.cpuStart,
       back: true,
     });
-    this.setState({ open: true });
+    this.setState({ openTitle: true });
     this.setState({ loader: false });
     clearInterval(this.timerTimeclock);
     clearInterval(this.timer);
     // this.setState({ timer: new Date(0).toISOString().substr(14, 5) });
-    let stopData = {
-      appname: this.props.location.state.value,
-      id: this.props.location.state.user.id.toString(),
-      token: this.props.location.state.user.token,
-      session_id: this.session_id,
-      userRole: "user",
-    };
-
-    let stopJSON = JSON.stringify(stopData);
-    window.backend.stopScan(stopJSON, "false").then((result) => {
-      const data = JSON.parse(result);
-      console.log(data, "data");
-      console.log(data.average_values, "avaerage values");
-      this.setState({
-        avgCPU: data.average_values.cpu_usage,
-        avgGPU: data.average_values.gpu_usage,
-        avgMem: data.average_values.memory_usage,
-        avgFps: data.average_values.avgfps_app_usage,
-        avgPower: data.average_values.power_usage,
-        avgAppPower: data.average_values.apppower_app_usage,
-        avgUpload: data.average_values.upload_data_usage,
-        avgDownload: data.average_values.download_data_usage,
-        popDuration: data.total_duraton,
-        popsession_id: data.session_id,
-      });
-      console.log(data, "stop session");
-    });
   }
   handleRedirect() {
     console.log(this.props.location.state, "find");
@@ -477,6 +486,11 @@ class AppData extends React.Component {
     //     document.body.appendChild(link);
     //     link.click();
     //   });
+  }
+
+  handleTitleChange(e) {
+    var sessionTitle = e.target.value;
+    this.setState({ sessionTitle: e.target.value });
   }
 
   render() {
@@ -678,6 +692,28 @@ class AppData extends React.Component {
               </Modal>
             </div>
           )} */}
+
+          {this.state.openTitle && (
+            <div>
+              <Modal
+                open={this.state.openTitle}
+                onClose={this.handleTitleClose.bind(this)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <p>Session Title</p>
+                  <input
+                    type="name"
+                    placeholder="Session Title"
+                    onChange={this.handleTitleChange.bind(this)}
+                  />
+                  <button onClick={this.handleTitleClose.bind(this)}>ok</button>
+                </Box>
+              </Modal>
+            </div>
+          )}
+
           {this.state.open && (
             <div>
               <Modal
@@ -701,6 +737,7 @@ class AppData extends React.Component {
                   </div>
                   <hr />
                   <div className="duration">
+                    <p>Session Title: {this.state.sessionTitle}</p>
                     <p>Session ID : {this.state.popsession_id}</p>
                     <p>Total Duration : {this.state.popDuration} </p>
                   </div>
