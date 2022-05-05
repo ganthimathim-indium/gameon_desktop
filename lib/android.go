@@ -109,7 +109,8 @@ func AppGPUUsage(packageName string) (val string) {
 	if err != nil {
 		return "0"
 	}
-	return fmt.Sprintf("%.2f", float64(used)/float64(total))
+	//return fmt.Sprintf("%.2f", float64(used)/float64(total))
+	return fmt.Sprintf("%.2f", float64(used)/float64(total*10))
 }
 
 // AppMemoryUsage calculates memory usage for given package

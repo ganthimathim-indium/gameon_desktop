@@ -111,6 +111,7 @@ type MyStop struct {
 	SessionUserID string    `json:"sessionUserID"`
 	UserRole      string    `json:"userRole"`
 	DeviceId      string    `json:"device_id"`
+	Sessionname   string    `json:"sessionname"`
 }
 
 type results struct {
@@ -325,6 +326,8 @@ func stopScan(appInfoData string, valData string) (val string) {
 	token := sec["token"]
 	id := sec["id"]
 
+	sessiondata := sec["sessionname"]
+
 	userRole := sec["userRole"]
 
 	sessionId := sec["session_id"]
@@ -336,6 +339,7 @@ func stopScan(appInfoData string, valData string) (val string) {
 		SessionUserID: id,
 		UserRole:      userRole,
 		DeviceId:      deviceSerial,
+		Sessionname:   sessiondata,
 	})
 
 	if err != nil {
