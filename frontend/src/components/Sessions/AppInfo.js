@@ -554,15 +554,19 @@ class AppData extends React.Component {
                   </button>
                 </div>
               )}
-              <div className="start-div">
-                <img src={back} alt="" className="back-button-image-style" />
-                <button
-                  className="backButton"
-                  onClick={this.handleRedirect.bind(this)}
-                >
-                  Back
-                </button>
-              </div>
+
+              {!this.state.cpuStart && (
+                <div className="start-div">
+                  <img src={back} alt="" className="back-button-image-style" />
+                  <button
+                    className="backButton"
+                    onClick={this.handleRedirect.bind(this)}
+                  >
+                    Back
+                  </button>
+                </div>
+              )}
+
               <img src={timer} alt="" className="timerImg" />
             </div>
 

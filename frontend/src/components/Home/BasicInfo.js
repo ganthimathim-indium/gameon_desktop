@@ -283,12 +283,15 @@ const BasicInfo = (props) => {
                           className="basic-info-image"
                         />
                       </div>
-                      <div>
+                      <div style={{ overflow: " hidden" }}>
                         <p
                           style={{
                             display: "inline",
                             color: "#3B3B3B",
                             marginTop: "-1%",
+                            marginLeft: "10%",
+                            // textOverflow: "ellipsis",
+                            // maxWidth: "50px",
                           }}
                         >
                           {list.replace(
