@@ -750,7 +750,7 @@ class AppData extends React.Component {
                     </p>
                     <p>
                       Avg GPU value :
-                      {" " + Math.round(this.state.avgGPU * 100) / 100 + " "}MB
+                      {" " + Math.round(this.state.avgGPU * 100) / 100 + " "}%
                     </p>
 
                     <p>
@@ -774,13 +774,7 @@ class AppData extends React.Component {
                       Avg fps value :
                       {" " + Math.round(this.state.avgFps * 100) / 100 + " "}
                     </p>
-                    <p>
-                      Avg power value :
-                      {" " +
-                        Math.round(this.state.avgAppPower * 100) / 100 +
-                        " "}
-                      %
-                    </p>
+
                     <p>
                       Avg App Power value :
                       {" " + Math.round(this.state.avgPower * 100) / 100 + " "}
