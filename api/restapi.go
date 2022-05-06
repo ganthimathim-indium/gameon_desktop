@@ -65,50 +65,43 @@ type averageValues struct {
 }
 
 func ApiHit(val map[string]string) string {
-	//(response Response)
+
 	fmt.Println("Calling API...")
 	client := &http.Client{}
-	//values := map[string]string{"username": "vv", "password": "v"}
 
-	jsonValue, _ := json.Marshal(val)
-	fmt.Println(bytes.NewBuffer(jsonValue))
+	jsonValue, err := json.Marshal(val)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling: %v", err)
+	}
 
 	req, err := http.NewRequest("POST", apiconfig.API("login"), bytes.NewBuffer(jsonValue))
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("error logging in: %v", err)
 	}
+
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("error logging in: %v", err)
 	}
 	defer resp.Body.Close()
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("error reading response body: %v", err)
 	}
-
-	//	var responseObject Response
-
-	//	json.Unmarshal(bodyBytes, &responseObject)
 
 	var responseObject Response
-
 	if err := json.Unmarshal(bodyBytes, &responseObject); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling: %v", err)
 	}
-	fmt.Printf("%+v\n", responseObject.Name)
+
 	out, err := json.Marshal(responseObject)
 	if err != nil {
-		panic(err)
-
+		return fmt.Sprintf("error while marshalling: %v", err)
 	}
 
-	fmt.Println(string(out))
-
-	return string(string(out))
-
+	return string(out)
 }
 
 func ApiHitInfo(val map[string]string, token string) string {
@@ -119,37 +112,36 @@ func ApiHitInfo(val map[string]string, token string) string {
 
 	req, err := http.NewRequest("POST", apiconfig.API("report/basic_info"), bytes.NewBuffer(jsonValue))
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("HTTP call failed: %v", err)
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("token", "Bearer "+token)
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("HTTP call failed: %v", err)
 	}
 	defer resp.Body.Close()
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("error reading response body: %v", err)
 	}
 
 	fmt.Println(resp.StatusCode)
 	var responseObject ResponseInfo
 
 	if err := json.Unmarshal(bodyBytes, &responseObject); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling response data: %v", err)
 	}
 	fmt.Printf("%+v\n", responseObject.Status)
 
 	out, err := json.Marshal(responseObject)
 	if err != nil {
-		panic(err)
+		return fmt.Sprintf("error while marshalling: %v", err)
 
 	}
 
 	return string(out)
-
 }
 
 type StartResponse struct {
@@ -161,25 +153,24 @@ type StartResponse struct {
 func ApiHitStart(val map[string]string, token string) string {
 	fmt.Println("Calling API...")
 	client := &http.Client{}
-	//values := map[string]string{"username": "vv", "password": "v"}
 
 	jsonValue, _ := json.Marshal(val)
 
 	req, err := http.NewRequest("POST", apiconfig.API("report/basic_info"), bytes.NewBuffer(jsonValue))
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("HTTP call failed: %v", err)
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("token", "Bearer "+token)
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("HTTP call failed: %v", err)
 	}
 	defer resp.Body.Close()
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("error reading response body: %v", err)
 	}
 
 	fmt.Println(resp.StatusCode)
@@ -187,13 +178,13 @@ func ApiHitStart(val map[string]string, token string) string {
 	var responseObject StartResponse
 
 	if err := json.Unmarshal(bodyBytes, &responseObject); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling response data: %v", err)
 	}
 	fmt.Printf("%+v\n", responseObject.Status)
 
 	out, err := json.Marshal(responseObject)
 	if err != nil {
-		panic(err)
+		return fmt.Sprintf("error while marshalling: %v", err)
 
 	}
 
@@ -207,33 +198,32 @@ func ApiHitStop(val []uint8, token string) string {
 
 	req, err := http.NewRequest("POST", apiconfig.API("report/cpu_detail"), bytes.NewBuffer(val))
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("HTTP call failed: %v", err)
 	}
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("token", "Bearer "+token)
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("HTTP call failed: %v", err)
 	}
 	defer resp.Body.Close()
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Print(err.Error())
+		return fmt.Sprintf("error reading response body: %v", err)
 	}
 
 	fmt.Println(resp.StatusCode)
 	var responseObject StopResponse
 
 	if err := json.Unmarshal(bodyBytes, &responseObject); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling response data: %v", err)
 	}
 	fmt.Printf("%+v\n", responseObject.Status)
 
 	out, err := json.Marshal(responseObject)
 	if err != nil {
-		panic(err)
-
+		return fmt.Sprintf("error while marshalling: %v", err)
 	}
 
 	return string(out)
