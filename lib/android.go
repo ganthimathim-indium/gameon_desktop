@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"os/exec"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -58,28 +59,25 @@ func AndroidVersion() (val string) {
 	return res2
 }
 
-// func AppGPUUsage(packageName string) (val string) {
-// 	s := strings.Index(string(run("shell", "dumpsys gfxinfo "+packageName)), "Total GPU memory usage:")
-// 	if s == -1 {
-// 		return
-// 	}
-// 	s += len("Total GPU memory usage:")
-// 	e := strings.Index(string(run("shell", "dumpsys gfxinfo "+packageName))[s:], "bytes")
-// 	if e == -1 {
-// 		return
-// 	}
-// 	e += s + e - 1
-// 	return string(run("shell", "dumpsys gfxinfo "+packageName))[s:e]
-// }
-
 // AppGPUUsage calculates GPU usage for given package
-
 func AppGPUUsage(packageName string) (val string) {
+
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AppGPUUsage error: %v\n", r)
+			}
+		}
+	}()
 
 	sub := string(run("shell", "dumpsys meminfo"))
 	ind := strings.Index(sub, "Total RAM: ")
 	if ind == -1 {
-		return "0"
+		return val
 	}
 	sub = sub[ind:]
 	sub = strings.Replace(sub, "Total RAM: ", "", 1)
@@ -88,36 +86,50 @@ func AppGPUUsage(packageName string) (val string) {
 	data = strings.Replace(data, ",", "", -1)
 	total, err := strconv.Atoi(data)
 	if err != nil {
-		return "0"
+		return val
 	}
 
 	s := string(run("shell", "dumpsys gfxinfo "+packageName))
 	i := strings.Index(s, "Total GPU memory usage:")
 	if i == -1 {
-		return
+		return val
 	}
 	s = s[i:]
 	s = strings.Replace(s, "Total GPU memory usage:", "", 1)
 	e := strings.Index(s, "bytes")
 	if e == -1 {
-		return
+		return val
 	}
 	s = s[:e]
 	ss := strings.Replace(s, "\n", "", -1)
 	ss = strings.TrimSpace(ss)
 	used, err := strconv.Atoi(ss)
 	if err != nil {
-		return "0"
+		return val
 	}
-	//return fmt.Sprintf("%.2f", float64(used)/float64(total))
-	return fmt.Sprintf("%.2f", float64(used)/float64(total*10))
+	val = fmt.Sprintf("%.2f", float64(used)/float64(total*10))
+	return val
 }
 
 // AppMemoryUsage calculates memory usage for given package
 func AppMemoryUsage(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AppMemoryUsage error: %v\n", r)
+			}
+		}
+	}()
 	s := string(run("shell", "dumpsys meminfo ", packageName))
 	var result string
 	v := strings.Index(s, "TOTAL")
+	if v == -1 {
+		return val
+	}
 	s = s[v:]
 	s = strings.Replace(s, "TOTAL", "", -1)
 	data := strings.Split(s, " ")
@@ -135,9 +147,19 @@ func AppMemoryUsage(packageName string) (val string) {
 
 // AppPowerUsage calculates power usage for given package
 func AppPowerUsage(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AppPowerUsage error: %v\n", r)
+			}
+		}
+	}()
 
 	s := string(run("shell", "ps | grep ", packageName))
-
 	if len(s) == 0 {
 		return "0"
 	}
@@ -168,6 +190,17 @@ func AndroidCPUArch(packageName string) (val string) {
 
 // AndroidUploadedData calculates uploaded data for a package
 func AndroidUploadedData(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AndroidUploadedData error: %v\n", r)
+			}
+		}
+	}()
 
 	s := string(run("shell", "dumpsys netstats detail ", packageName))
 	data := strings.Split(s, "uid=")
@@ -201,6 +234,17 @@ func AndroidUploadedData(packageName string) (val string) {
 
 // AndroidDownloadedData calculates downloaded data for a package
 func AndroidDownloadedData(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AndroidDownloadedData error: %v\n", r)
+			}
+		}
+	}()
 
 	s := string(run("shell", "dumpsys netstats detail ", packageName))
 
@@ -239,6 +283,17 @@ func AndroidDownloadedData(packageName string) (val string) {
 
 // AndroidCPUCores returns the number of CPU cores
 func AndroidCPUCores(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AndroidCPUCores error: %v\n", r)
+			}
+		}
+	}()
 
 	// shell command to get all processor information
 	s := string(run("shell", "cat /proc/cpuinfo"))
@@ -277,6 +332,17 @@ func Battery(packageName string) (val string) {
 
 // AppCPUUsage returns CPU usage for a package
 func AppCPUUsage(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AppCPUUsage error: %v\n", r)
+			}
+		}
+	}()
 
 	// "grep" for linux and "findstr" for windows
 	s := string(run("shell", "dumpsys cpuinfo | grep ", packageName))
@@ -294,6 +360,17 @@ func AppCPUUsage(packageName string) (val string) {
 
 // AndroidMedianFPS calcuates
 func AndroidMedianFPS(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AndroidMedianFPS error: %v\n", r)
+			}
+		}
+	}()
 
 	var result string
 	s := string(run("shell", "dumpsys gfxinfo "+packageName, "framestats"))
@@ -353,29 +430,6 @@ func AndroidMedianFPS(packageName string) (val string) {
 	return result
 }
 
-// func AndroidMedianFPS(packageName string) (val string) {
-
-// 	var result string
-// 	s := string(run("shell", "dumpsys gfxinfo "+packageName, " framestats"))
-
-// 	fs := s[strings.Index(s, "Total frames rendered: "):]
-// 	fs = strings.Replace(fs, "Total frames rendered: ", "", -1)
-// 	fs = strings.Split(fs, "\n")[0]
-// 	frames, _ := strconv.Atoi(fs)
-
-// 	sec := s[strings.Index(s, "Stats since: "):]
-// 	sec = strings.Replace(sec, "Stats since: ", "", -1)
-// 	sec = sec[:strings.Index(sec, "ns")]
-// 	t, _ := strconv.Atoi(sec)
-
-// 	result = fmt.Sprintf("%.2f", float64(frames*1000000000)/float64(t))
-
-// 	fmt.Println("Avg. Median FPS Usage Data ", result)
-
-// 	return result
-
-// }
-
 // AndroidDisplay returns the device display specification
 func AndroidDisplay(packageName string) (val string) {
 	return string(run("shell", "wm size | awk -e 'sub(/^.*: /, \"\")'"))
@@ -393,6 +447,17 @@ func AndroidNetwork(packageName string) (val string) {
 
 // AndroidVariabilityIndex calculate Variability Index of frames generated in a second
 func AndroidVariabilityIndex(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AndroidVariabilityIndex error: %v\n", r)
+			}
+		}
+	}()
 
 	s := string(run("shell", "dumpsys gfxinfo ", packageName))
 
@@ -410,7 +475,13 @@ func AndroidVariabilityIndex(packageName string) (val string) {
 	//fpsData = strings.Replace(fpsData, "GPU HISTOGRAM: ", "", 1)
 	//data := strings.Split(fpsData, " ")
 	index1 := strings.Index(s, "HISTOGRAM: ")
+	if index1 == -1 {
+		return ""
+	}
 	index2 := strings.Index(s, "50th gpu percentile")
+	if index2 == -1 {
+		return ""
+	}
 	fpsData := s[index1:index2]
 	fpsData = strings.Replace(fpsData, "HISTOGRAM: ", "", 1)
 	data := strings.Split(fpsData, " ")

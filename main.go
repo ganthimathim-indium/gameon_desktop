@@ -13,7 +13,6 @@ import (
 	"strconv"
 	"time"
 
-	"log"
 	"strings"
 
 	"github.com/wailsapp/wails"
@@ -157,11 +156,10 @@ type results struct {
 func myLogin(req string) (val string) {
 	sec := map[string]string{}
 	if err := json.Unmarshal([]byte(req), &sec); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling data: %v", err)
 	}
 
 	return apidata.ApiHit(sec)
-
 }
 
 // 2
@@ -200,9 +198,7 @@ func basic() string {
 
 	out, err := json.Marshal(info)
 	if err != nil {
-		fmt.Println("err while running basic:", err)
-		panic(err)
-
+		return fmt.Sprintf("error while marshalling data: %v", err)
 	}
 	fmt.Println(string(out))
 	return string(out)
@@ -219,7 +215,7 @@ func basicInfo(appInfoData string) (val string) {
 
 	sec := map[string]string{}
 	if err := json.Unmarshal([]byte(appInfoData), &sec); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling data: %v", err)
 	}
 	fmt.Println(appInfoData)
 
@@ -248,7 +244,7 @@ func basicInfo(appInfoData string) (val string) {
 
 	sec1 := map[string]string{}
 	if err := json.Unmarshal([]byte(string(modifiedBytes)), &sec1); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling data: %v", err)
 	}
 	fmt.Println(sec1)
 
@@ -263,7 +259,7 @@ func startScan(appNameTest string, valData string) (val string) {
 
 	sec := map[string]string{}
 	if err := json.Unmarshal([]byte(appNameTest), &sec); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling data: %v", err)
 	}
 	fmt.Println(appNameTest)
 
@@ -278,8 +274,7 @@ func startScan(appNameTest string, valData string) (val string) {
 	fmt.Println(human2)
 	out7, err := json.Marshal(human2)
 	if err != nil {
-		panic(err)
-
+		return fmt.Sprintf("error while marshalling data: %v", err)
 	}
 	fmt.Println("myvvv" + string(out7))
 
@@ -291,22 +286,15 @@ func startScan(appNameTest string, valData string) (val string) {
 		DeviceId:       deviceSerial,
 		AndroidVersion: L.AppVersion(appName),
 	})
-
 	if err != nil {
-		panic(err)
-
+		return fmt.Sprintf("error while marshalling data: %v", err)
 	}
-
-	//	modifiedBytes, _ := json.Marshal(human3)
-	fmt.Println("mtval" + string(out5))
 
 	// Unmarshal or Decode the JSON to the interface.
-
 	sec5 := map[string]string{}
 	if err := json.Unmarshal([]byte(string(out5)), &sec5); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling data: %v", err)
 	}
-	fmt.Println(sec5)
 
 	human2 = nil
 
@@ -317,7 +305,7 @@ func startScan(appNameTest string, valData string) (val string) {
 func stopScan(appInfoData string, valData string) (val string) {
 	sec := map[string]string{}
 	if err := json.Unmarshal([]byte(appInfoData), &sec); err != nil {
-		panic(err)
+		return fmt.Sprintf("error while unmarshalling data: %v", err)
 	}
 	fmt.Println(appInfoData)
 
@@ -341,9 +329,8 @@ func stopScan(appInfoData string, valData string) (val string) {
 		DeviceId:      deviceSerial,
 		Sessionname:   sessiondata,
 	})
-
 	if err != nil {
-		panic(err)
+		return fmt.Sprintf("error while marshalling data: %v", err)
 	}
 
 	var valsss string
@@ -382,7 +369,7 @@ func memoryMetric(appNames string) (val string) {
 	valss = strings.TrimSpace(res2)
 	intVar, err := strconv.Atoi(strings.TrimSpace(valss))
 	if err != nil {
-		fmt.Println(err)
+		return fmt.Sprintf("error in data conversion: %v", err)
 	}
 
 	fmt.Println(intVar)
@@ -643,13 +630,14 @@ func deviceInfoNew() (val string) {
 		Port: *port,
 	})
 	if err != nil {
-		log.Fatal(err)
+		//log.Fatal(err)
+		return fmt.Sprintf("error while creating new adb client with config: %v", err)
 	}
 	client.StartServer()
 
 	devices, err := client.ListDevices()
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Sprintf("error in listing devices attached: %v", err)
 	}
 	for _, device := range devices {
 		// fmt.Printf("\t%+v\n", *device)
@@ -677,12 +665,10 @@ func getLogin() string {
 	// fmt.Println(appnamelist)
 	out, err := json.Marshal(appnamelist)
 	if err != nil {
-		panic(err)
-
+		return fmt.Sprintf("error while marshalling data: %v", err)
 	}
 
 	return string(out)
-
 }
 
 func kBToMB(kB int) float64 {
