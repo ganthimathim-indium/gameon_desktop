@@ -19,6 +19,9 @@ import { login } from "../../features/loginAuth/loginAuthSlice";
 import back from "../../asset/back.png";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import download from "../../asset/download.png";
+import timer from "../../asset/timer.png";
+import TextField from "@mui/material/TextField";
 
 // import { useSelector } from "react-redux";
 // import { selectUser } from "../../features/loginAuth/loginAuthSlice";
@@ -31,6 +34,17 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 650,
   bgcolor: "background.paper",
+
+  boxShadow: 24,
+};
+const style1 = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 350,
+  bgcolor: "background.paper",
+  padding: 4,
 
   boxShadow: 24,
 };
@@ -453,10 +467,11 @@ class AppData extends React.Component {
       cpuStart: !this.state.cpuStart,
       back: true,
     });
-    this.setState({ openTitle: true });
-    this.setState({ loader: false });
     clearInterval(this.timerTimeclock);
     clearInterval(this.timer);
+    this.setState({ openTitle: true });
+    this.setState({ loader: false });
+
     // this.setState({ timer: new Date(0).toISOString().substr(14, 5) });
   }
   handleRedirect() {
@@ -504,19 +519,20 @@ class AppData extends React.Component {
             <div className="appBar">
               <p style={{ float: "left" }}>Application Statistics</p>
 
+              <img
+                src={download}
+                alt=""
+                className="downloadImg"
+                onClick={() => {
+                  if (this.state.popsession_id !== "") {
+                    window.open(
+                      `http://52.39.98.71:3000/getReport?sessionID=${this.state.popsession_id}`
+                    );
+                  }
+                }}
+              />
               <p className="timerPara">{this.state.timerClock}</p>
-              <FontAwesomeIcon icon="fa-solid fa-down-to-line" />
-              <button
-                // onClick={this.handleDownload.bind(this)}
-                onClick={() =>
-                  window.open(
-                    `http://52.39.98.71:3000/getReport?sessionID=${this.state.popsession_id}`
-                  )
-                }
-                className="export"
-              >
-                export
-              </button>
+
               {this.state.cpuStart ? (
                 <div className="start-div">
                   <img src={stop} alt="" className="start-image-style" />
@@ -547,6 +563,7 @@ class AppData extends React.Component {
                   Back
                 </button>
               </div>
+              <img src={timer} alt="" className="timerImg" />
             </div>
 
             <div className="container">
@@ -581,7 +598,7 @@ class AppData extends React.Component {
                   <MetricUsage
                     value={this.state.GpuUsage}
                     text="Total GPU Usage"
-                    unit="MB"
+                    unit="%"
                     max={100}
                   />
                   <MetricUsage
@@ -624,7 +641,7 @@ class AppData extends React.Component {
                       metTime={this.state.timeValues}
                       metValues={this.state.gpuValues}
                       text="GPU Usage"
-                      unit="MB"
+                      unit="%"
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
@@ -668,30 +685,6 @@ class AppData extends React.Component {
             </div>
             {console.log(this.state.gpuValues)}
           </div>
-          {/* {this.state.openBack && (
-            <div>
-              <Modal
-                open={this.state.openBack}
-                onClose={this.handleBackClose.bind(this)}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                 
-  
-                  <div className="note">
-                    <p>
-                      If you want to look for the detailed session details check{" "}
-                    </p>
-                  </div>
-                  <hr />
-                  <div className="ok">
-                    <button onClick={this.handleBackClose.bind(this)}>Ok</button>
-                  </div>
-                </Box>
-              </Modal>
-            </div>
-          )} */}
 
           {this.state.openTitle && (
             <div>
@@ -701,14 +694,23 @@ class AppData extends React.Component {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                <Box sx={style}>
-                  <p>Session Title</p>
-                  <input
+                <Box sx={style1}>
+                  <p style={{ color: "#278ef1", fontSize: "17px" }}>
+                    Session Title
+                  </p>
+                  <TextField
+                    id="standard-basic"
+                    variant="standard"
                     type="name"
                     placeholder="Session Title"
                     onChange={this.handleTitleChange.bind(this)}
+                    sx={{ width: "100%", marginBottom: 2 }}
                   />
-                  <button onClick={this.handleTitleClose.bind(this)}>ok</button>
+                  <div className="ok">
+                    <button onClick={this.handleTitleClose.bind(this)}>
+                      Ok
+                    </button>
+                  </div>
                 </Box>
               </Modal>
             </div>
@@ -737,7 +739,7 @@ class AppData extends React.Component {
                   </div>
                   <hr />
                   <div className="duration">
-                    <p>Session Title: {this.state.sessionTitle}</p>
+                    <p>Session Title : {this.state.sessionTitle}</p>
                     <p>Session ID : {this.state.popsession_id}</p>
                     <p>Total Duration : {this.state.popDuration} </p>
                   </div>

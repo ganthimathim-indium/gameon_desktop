@@ -7,6 +7,16 @@
 .mini-card button {
   margin-left: 4%;
 }
+.refreshImg {
+  width: 2.2%;
+  object-fit: contain;
+  margin-left: 1%;
+  border: 1px solid #278ef1;
+  padding: 2px 6px 2px 6px;
+  background: #d9dde2;
+
+  border-radius: 5px;
+}
 
 .big-container {
   display: flex;

@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/loginAuth/loginAuthSlice";
 import sort from "../../asset/sort.png";
 import loader from "../../asset/loader.png";
+import refresh from "../../asset/refresh.png";
 import appVersion from "../../asset/appVersion.png";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -61,6 +62,7 @@ const BasicInfo = (props) => {
     SelectedList: "",
     openStatus: false,
     loading: true,
+    refresh: true,
   });
   const [sortby, setSortby] = useState();
 
@@ -109,7 +111,7 @@ const BasicInfo = (props) => {
         });
       });
     });
-  }, []);
+  }, [state.refresh]);
 
   function ascorder() {
     setSortby(
@@ -118,6 +120,12 @@ const BasicInfo = (props) => {
       })
     );
   }
+
+  const refreshPage = () => {
+    setState((ps) => {
+      return { ...ps, refresh: !state.refresh };
+    });
+  };
   const openApp = (list) => {
     dispatch(
       login({
@@ -161,6 +169,12 @@ const BasicInfo = (props) => {
 
         <div style={{ marginLeft: "9.8%", marginTop: "4%", fontWeight: 600 }}>
           List of Applications
+          <img
+            src={refresh}
+            alt=""
+            className="refreshImg"
+            onClick={refreshPage}
+          />
         </div>
 
         <div className="nolist">
