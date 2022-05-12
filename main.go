@@ -551,6 +551,16 @@ func cpuArch(appNames string) (val string) {
 
 // 10 Avg. Median FPS Usage
 
+func AvgFPSStablity(appName string) (val string) {
+	res2 := L.AndroidFPSStablity(appName)
+	var valsss string
+
+	valsss = "Avg. FPS Stablity : " + res2 +" %"
+
+	return valsss
+
+}
+
 func AvgMedianFPS(appName string) (val string) {
 
 	res2 := L.AndroidMedianFPS(appName)
@@ -732,6 +742,7 @@ func main() {
 	app.Bind(appPowerMetric)
 	app.Bind(cpuArch)
 	app.Bind(AvgMedianFPS)
+	app.Bind(AvgFPSStablity)
 
 	app.Run()
 

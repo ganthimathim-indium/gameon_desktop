@@ -41,18 +41,16 @@ function HelloWorld() {
     //window.backend.powermetric("com.android.chrome").then((result) => setResult(result));
     //window.backend.Apppowermetric("com.android.chrome").then((result) => setResult(result));
     //window.backend.cpuarch("com.android.chrome").then((result) => setResult(result));
-    // window.backend
-    //   .AvgMedianFPS("com.action.survival.craft.rpg")
-    //   .then((result) => setResult(result));
+    // window.backend.AvgMedianFPS("com.action.survival.craft.rpg").then((result) => setResult(result));
+
+
     //	window.backend.checkdevice().then((result) => setResult(result));
     //window.backend.openapp("com.android.chrome").then((result) => setResult(result));
+    window.backend.AvgFPSStablity("com.king.candycrushsaga").then((result) => setResult(result));
 
     // setTimeout(function () {
-    // 	window.backend.cpumetric("com.android.chrome").then((result) => setResult(result));
-    // 	setTimeout(function () {
-    // 		window.backend.AvgMedianFPS("com.android.chrome").then((result) => setResult(result));
 
-    // 	}.bind(this), 4000)
+    // }.bind(this), 4000)
 
     // }.bind(this), 4000)
     // //start
@@ -111,9 +109,9 @@ function HelloWorld() {
       <button onClick={() => handleOpenModal()} type="button">
         Scan
       </button>
-      {/* 
-      <button onClick={() => handleDownload('http://52.39.98.71:3000/getReport?sessionID=7.865380848899273', 'test-download.jpg')
-      }>Download Image</button>
+
+      {/* <button onClick={() => handleDownload('http://52.39.98.71:3000/getReport?sessionID=7.865380848899273', 'test-download.jpg')
+      }>Download Image</button> */}
 
       <Modal
         appElement={document.getElementById("app")}
@@ -123,7 +121,7 @@ function HelloWorld() {
         <p>{result}</p>
 
         <button onClick={() => handleCloseModal()}>Close Modal</button>
-      </Modal> */}
+      </Modal>
     </div>
   );
 }

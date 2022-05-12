@@ -124,6 +124,8 @@ func AppMemoryUsage(packageName string) (val string) {
 			}
 		}
 	}()
+	fmt.Println(err)
+
 	s := string(run("shell", "dumpsys meminfo ", packageName))
 	var result string
 	v := strings.Index(s, "TOTAL")
@@ -158,6 +160,7 @@ func AppPowerUsage(packageName string) (val string) {
 			}
 		}
 	}()
+	fmt.Println(err)
 
 	s := string(run("shell", "ps | grep ", packageName))
 	if len(s) == 0 {
@@ -201,6 +204,7 @@ func AndroidUploadedData(packageName string) (val string) {
 			}
 		}
 	}()
+	fmt.Println(err)
 
 	s := string(run("shell", "dumpsys netstats detail ", packageName))
 	data := strings.Split(s, "uid=")
@@ -245,6 +249,7 @@ func AndroidDownloadedData(packageName string) (val string) {
 			}
 		}
 	}()
+	fmt.Println(err)
 
 	s := string(run("shell", "dumpsys netstats detail ", packageName))
 
@@ -294,6 +299,7 @@ func AndroidCPUCores(packageName string) (val string) {
 			}
 		}
 	}()
+	fmt.Println(err)
 
 	// shell command to get all processor information
 	s := string(run("shell", "cat /proc/cpuinfo"))
@@ -343,10 +349,26 @@ func AppCPUUsage(packageName string) (val string) {
 			}
 		}
 	}()
+	fmt.Println(err)
 
-	// "grep" for linux and "findstr" for windows
-	s := string(run("shell", "dumpsys cpuinfo | grep ", packageName))
 	var result string
+	s := string(run("shell", "ps | grep ", packageName))
+	if len(s) == 0 {
+		result = "0"
+		s = string(run("shell", "dumpsys cpuinfo | grep ", packageName))
+		data := strings.Split(s, " ")
+		for _, value := range data {
+			if strings.Contains(value, "%") {
+				result = strings.Replace(value, "%", "", 1)
+				result = strings.TrimSpace(result)
+				break // we need only the first as other values are further distribution of this total value
+			}
+		}
+		return result
+	}
+	// "grep" for linux and "findstr" for windows
+	s = string(run("shell", "dumpsys cpuinfo | grep TOTAL"))
+	//var result string
 	data := strings.Split(s, " ")
 	for _, value := range data {
 		if strings.Contains(value, "%") {
@@ -371,63 +393,114 @@ func AndroidMedianFPS(packageName string) (val string) {
 			}
 		}
 	}()
+	fmt.Println(err)
 
 	var result string
 	s := string(run("shell", "dumpsys gfxinfo "+packageName, "framestats"))
 
-	// get index of "FrameCompleted" and "IntendedVsync"
-	sub := s[strings.Index(s, "---PROFILEDATA---"):]
-	sub = strings.Replace(sub, "---PROFILEDATA---", "", 1)
-	sub = sub[:strings.Index(sub, "---PROFILEDATA---")]
+	// // get index of "FrameCompleted" and "IntendedVsync"
+	// sub := s[strings.Index(s, "---PROFILEDATA---"):]
+	// sub = strings.Replace(sub, "---PROFILEDATA---", "", 1)
+	// sub = sub[:strings.Index(sub, "---PROFILEDATA---")]
 
-	subData := strings.Split(sub, "\n")
-	// second value will be column names
-	columnData1 := strings.Split(subData[1], ",")
+	// subData := strings.Split(sub, "\n")
+	// // second value will be column names
+	// columnData1 := strings.Split(subData[1], ",")
 
-	var ind1, ind2 int
-	for i := 0; i < len(columnData1); i++ {
-		if columnData1[i] == "FrameCompleted" {
-			ind1 = i
-		}
-		if columnData1[i] == "IntendedVsync" {
-			ind2 = i
-		}
+	// var ind1, ind2 int
+	// for i := 0; i < len(columnData1); i++ {
+	// 	if columnData1[i] == "FrameCompleted" {
+	// 		ind1 = i
+	// 	}
+	// 	if columnData1[i] == "IntendedVsync" {
+	// 		ind2 = i
+	// 	}
+	// }
+	// var fpsData []float64
+	// for i := 2; i < len(subData)-1; i++ {
+	// 	columnData := strings.Split(subData[i], ",")
+	// 	// string to float
+	// 	fc, _ := strconv.ParseFloat(columnData[ind1], 64)
+	// 	iv, _ := strconv.ParseFloat(columnData[ind2], 64)
+	// 	//fc = toFixed(fc, 6)
+	// 	//iv = toFixed(iv, 6)
+	// 	//fmt.Printf("data %v %v\n", fc, iv)
+	// 	//fmt.Println((float64(1) / (fc - iv)))
+	// 	fpsData = append(fpsData, (float64(1) / (fc - iv)))
+	// }
+	// sort.Float64s(fpsData)
+	// var temp int
+	// for i := 0; i < len(fpsData); i++ {
+
+	// 	val := fmt.Sprintf("%v", fpsData[i])
+	// 	ii := strings.Index(val, "e")
+	// 	fmt.Println(temp, val, "e  ", ii)
+
+	// 	if ii != -1 {
+	// 		val = val[:ii]
+	// 	}
+	// 	valF, _ := strconv.ParseFloat(val, 64)
+	// 	intVal := int(valF)
+	// 	if temp < intVal {
+	// 		temp = intVal
+	// 	}
+	// }
+
+	// result = fmt.Sprintf("%d", temp)
+
+	// fmt.Println("Avg. Median FPS Usage Data ", result)
+
+	i := strings.Index(s, "Total frames rendered: ")
+	if i == -1 {
+		return ""
 	}
-	var fpsData []float64
-	for i := 2; i < len(subData)-1; i++ {
-		columnData := strings.Split(subData[i], ",")
-		// string to float
-		fc, _ := strconv.ParseFloat(columnData[ind1], 64)
-		iv, _ := strconv.ParseFloat(columnData[ind2], 64)
-		//fc = toFixed(fc, 6)
-		//iv = toFixed(iv, 6)
-		//fmt.Printf("data %v %v\n", fc, iv)
-		//fmt.Println((float64(1) / (fc - iv)))
-		fpsData = append(fpsData, (float64(1) / (fc - iv)))
-	}
-	sort.Float64s(fpsData)
-	var temp int
-	for i := 0; i < len(fpsData); i++ {
-
-		val := fmt.Sprintf("%v", fpsData[i])
-		ii := strings.Index(val, "e")
-		fmt.Println(temp, val, "e  ", ii)
-
-		if ii != -1 {
-			val = val[:ii]
-		}
-		valF, _ := strconv.ParseFloat(val, 64)
-		intVal := int(valF)
-		if temp < intVal {
-			temp = intVal
-		}
-	}
-
-	result = fmt.Sprintf("%d", temp)
-
-	fmt.Println("Avg. Median FPS Usage Data ", result)
+	s = s[i:]
+	s = strings.Replace(s, "Total frames rendered: ", "", 1)
+	return strings.Split(s, "\n")[0]
 
 	return result
+}
+
+//fps stablity
+
+func AndroidFPSStablity(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AndroidMedianFPS error: %v\n", r)
+			}
+		}
+	}()
+	fmt.Println(err)
+	var result string
+
+	s := string(run("shell", "dumpsys gfxinfo "+packageName, " framestats"))
+
+	fs := s[strings.Index(s, "Total frames rendered: "):]
+	fs = strings.Replace(fs, "Total frames rendered: ", "", -1)
+	fs = strings.Split(fs, "\n")[0]
+	fs = strings.TrimSpace(fs)
+	fmt.Println(fs)
+
+	frames, _ := strconv.Atoi(fs)
+	fmt.Println(frames)
+
+	sec := s[strings.Index(s, "Stats since: "):]
+	sec = strings.Replace(sec, "Stats since: ", "", -1)
+	sec = sec[:strings.Index(sec, "ns")]
+	t, _ := strconv.Atoi(sec)
+	fmt.Println(t)
+
+	result = fmt.Sprintf("%.0f", (float64(frames)*1000000000/float64(t))*float64(100))
+
+	fmt.Println("Avg.  FPS Stablity   ", result)
+
+	return result
+
 }
 
 // AndroidDisplay returns the device display specification
@@ -458,6 +531,7 @@ func AndroidVariabilityIndex(packageName string) (val string) {
 			}
 		}
 	}()
+	fmt.Println(err)
 
 	s := string(run("shell", "dumpsys gfxinfo ", packageName))
 
