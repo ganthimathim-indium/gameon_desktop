@@ -111,6 +111,7 @@ type MyStop struct {
 	UserRole      string    `json:"userRole"`
 	DeviceId      string    `json:"device_id"`
 	Sessionname   string    `json:"sessionname"`
+	Totaltime     string    `json:"totaltime"`
 }
 
 type results struct {
@@ -313,7 +314,7 @@ func stopScan(appInfoData string, valData string) (val string) {
 
 	token := sec["token"]
 	id := sec["id"]
-
+	avgtime := sec["Avg_time"]
 	sessiondata := sec["sessionname"]
 
 	userRole := sec["userRole"]
@@ -328,6 +329,7 @@ func stopScan(appInfoData string, valData string) (val string) {
 		UserRole:      userRole,
 		DeviceId:      deviceSerial,
 		Sessionname:   sessiondata,
+		Totaltime:     avgtime,
 	})
 	if err != nil {
 		return fmt.Sprintf("error while marshalling data: %v", err)
@@ -555,7 +557,7 @@ func AvgFPSStablity(appName string) (val string) {
 	res2 := L.AndroidFPSStablity(appName)
 	var valsss string
 
-	valsss = "Avg. FPS Stablity : " + res2 +" %"
+	valsss = "Avg. FPS Stablity : " + res2 + " %"
 
 	return valsss
 
