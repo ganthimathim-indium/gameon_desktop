@@ -40,17 +40,21 @@ type data struct {
 type StopResponse struct {
 	// Message string `json:"message"`
 
-	Status      string `json:"status"`
-	Session_id  string `json:"session_id"`
-	Date        string `json:"date"`
-	Start_time  string `json:"start_time"`
-	End_time    string `json:"end_time"`
-	sessionname string `json:"sessionname"`
-	Totaltime     string    `json:"totaltime"`
+	Status        string `json:"status"`
+	Session_id    string `json:"session_id"`
+	Date          string `json:"date"`
+	Start_time    string `json:"start_time"`
+	End_time      string `json:"end_time"`
+	sessionname   string `json:"sessionname"`
+	Totaltime     string `json:"totaltime"`
 	Total_duraton string `json:"total_duraton"`
+
+	Fps_stabliy string `json:"fps_stabliy"`
+
+	Peak_memory string `json:"peak_memory"`
+
 	//Message string         `json:"message"`
 	Data averageValues `json:"average_values"`
-
 }
 
 type averageValues struct {

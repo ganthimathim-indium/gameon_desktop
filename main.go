@@ -65,6 +65,15 @@ var appPowerTime string
 var avgMedianFPSUsage string
 var avgMedianFPSDeviations string
 var avgMedianFPSTime string
+
+var StablityFpsAppUsage1 string
+var StablityFpsAppDeviation1 string
+var StablityFpsTime1 string
+
+var PeakMemoryAppUsage1 string
+var PeakMemoryAppDeviation1 string
+var PeakMemoryAppTime1 string
+
 var deviceInfo string
 
 type AppInfo struct {
@@ -150,6 +159,14 @@ type results struct {
 	AvgFpsAppUsage     string `json:"avgfps_app_useage"`
 	AvgFpsAppDeviation string `json:"avgfps_app_deviation"`
 	AvgFpsTime         string `json:"avgfps_app_time"`
+
+	StablityFpsAppUsage     string `json:"stablityfps_app_useage"`
+	StablityFpsAppDeviation string `json:"stablityfps_app_deviation"`
+	StablityFpsTime         string `json:"stablityfps_app_time"`
+
+	PeakMemoryAppUsage     string `json:"peakmemory_app_useage"`
+	PeakMemoryAppDeviation string `json:"peakmemory_app_deviation"`
+	PeakMemoryAppTime      string `json:"peakmemory_app_time"`
 }
 
 // 1
@@ -559,6 +576,34 @@ func AvgFPSStablity(appName string) (val string) {
 
 	valsss = "Avg. FPS Stablity : " + res2 + " %"
 
+	StablityFpsAppUsage1 = ""
+	StablityFpsAppDeviation1 = ""
+	StablityFpsTime1 = ""
+	StablityFpsAppUsage1 = res2
+	StablityFpsAppDeviation1 = "Mainactivity"
+	currentTime := time.Now()
+
+	StablityFpsTime1 = currentTime.Format("3:4:5 pm")
+
+	return valsss
+
+}
+
+func Peakmomery(appName string) (val string) {
+	res2 := L.AndroidFPSStablity(appName)
+	var valsss string
+
+	valsss = "Avg. Peak Memory Useage Value : " + res2 + " %"
+
+	PeakMemoryAppUsage1 = ""
+	PeakMemoryAppDeviation1 = ""
+	PeakMemoryAppTime1 = ""
+	PeakMemoryAppUsage1 = res2
+	PeakMemoryAppDeviation1 = "Mainactivity"
+	currentTime := time.Now()
+
+	PeakMemoryAppTime1 = currentTime.Format("3:4:5 pm")
+
 	return valsss
 
 }
@@ -587,7 +632,8 @@ func AvgMedianFPS(appName string) (val string) {
 		CpuCoresAppUsage: CPUCoresUsage, CpuCoresAppDeviation: CPUCoresDeviations, CpuCoresAppTime: CPUCoresTime,
 		PowerAppUsage: powerUsage, PowerAppDeviation: powerDeviations, PowerTime: powerTime,
 		AppPowerAppUsage: appPowerUsage, AppPowerAppDeviation: appPowerDeviations, AppPowerTime: appPowerTime,
-		AvgFpsAppUsage: avgMedianFPSUsage, AvgFpsAppDeviation: avgMedianFPSDeviations, AvgFpsTime: avgMedianFPSTime}
+		AvgFpsAppUsage: avgMedianFPSUsage, AvgFpsAppDeviation: avgMedianFPSDeviations, AvgFpsTime: avgMedianFPSTime, StablityFpsAppUsage: StablityFpsAppUsage1, StablityFpsAppDeviation: StablityFpsAppDeviation1, StablityFpsTime: StablityFpsTime1,
+		PeakMemoryAppUsage: PeakMemoryAppUsage1, PeakMemoryAppDeviation: PeakMemoryAppDeviation1, PeakMemoryAppTime: PeakMemoryAppTime1}
 
 	human2 = append(human2, result)
 	fmt.Println("myyyyyyyyyyyyyyyyyyyyyyyy")
