@@ -206,7 +206,10 @@ func AndroidUploadedData(packageName string) (val string) {
 	}()
 	fmt.Println(err)
 
-	s := string(run("shell", "dumpsys netstats detail ", packageName))
+	s1 := string(run("shell", "dumpsys package", packageName, " | grep userId="))
+	userId := strings.Split(s1, "=")[1]
+	userId = strings.Replace(userId, "\n", "", -1)
+	s := string(run("shell", "dumpsys netstats detail ", userId))
 	data := strings.Split(s, "uid=")
 	result := 0
 	for k, eachUID := range data {
@@ -232,6 +235,7 @@ func AndroidUploadedData(packageName string) (val string) {
 			result += totalUploaded
 		}
 	}
+	fmt.Println(result)
 
 	return strconv.Itoa(result)
 }
@@ -250,8 +254,11 @@ func AndroidDownloadedData(packageName string) (val string) {
 		}
 	}()
 	fmt.Println(err)
+	s1 := string(run("shell", "dumpsys package", packageName, " | grep userId="))
+	userId := strings.Split(s1, "=")[1]
+	userId = strings.Replace(userId, "\n", "", -1)
 
-	s := string(run("shell", "dumpsys netstats detail ", packageName))
+	s := string(run("shell", "dumpsys netstats detail ", userId))
 
 	fmt.Println(s)
 	//uidIndex := strings.Index(s, "uid=")

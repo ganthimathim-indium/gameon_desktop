@@ -437,11 +437,11 @@ func uploadData(appName string) (val string) {
 
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total Data Uploaded : %.2f", bytesToMiB(intVar))
+	valsss = fmt.Sprintf("Total Data Uploaded : %.2f", bytesToMB(intVar))
 
 	var valsss1 string
 
-	valsss1 = fmt.Sprintf("%.2f", bytesToMiB(intVar))
+	valsss1 = fmt.Sprintf("%.2f", intVar)
 
 	uploadDataUsage = ""
 	uploadDataDeviations = ""
@@ -463,11 +463,11 @@ func downloadedData(appName string) (val string) {
 	var valsss string
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total Download data : %.2f", bytesToMiB(intVar))
+	valsss = fmt.Sprintf("Total Download data : %.2f", bytesToMB(intVar))
 
 	var valsss1 string
 
-	valsss1 = fmt.Sprintf("%.2f", bytesToMiB(intVar))
+	valsss1 = fmt.Sprintf("%.2f", intVar)
 
 	downloadDataUsage = ""
 	downloadDataDeviations = ""
