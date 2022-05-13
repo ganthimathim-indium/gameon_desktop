@@ -46,7 +46,7 @@ function HelloWorld() {
 
     //	window.backend.checkdevice().then((result) => setResult(result));
     //window.backend.openapp("com.android.chrome").then((result) => setResult(result));
-    window.backend.downloadedData("com.king.candycrushsaga").then((result) => setResult(result));
+    window.backend.gpuMetric("com.king.candycrushsaga").then((result) => setResult(result));
 
     // setTimeout(function () {
 

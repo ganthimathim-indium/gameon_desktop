@@ -590,15 +590,25 @@ func AvgFPSStablity(appName string) (val string) {
 }
 
 func Peakmomery(appName string) (val string) {
-	res2 := L.AndroidFPSStablity(appName)
+	res2 := L.AppPeakMemoryUsage(appName)
 	var valsss string
 
-	valsss = "Avg. Peak Memory Useage Value : " + res2 + " %"
+	var valsss1 string
+	b2, _ := strconv.ParseFloat(res2, 64)
+	fmt.Println(b2)
+	var intVar int = int(b2)
+	fmt.Println(intVar)
+
+	fmt.Println(intVar)
+
+	valsss = fmt.Sprintf("Avg. Peak Memory Useage Value : %v ", kBToMB(intVar))
+
+	valsss1 = fmt.Sprintf("%v", kBToMB(intVar))
 
 	PeakMemoryAppUsage1 = ""
 	PeakMemoryAppDeviation1 = ""
 	PeakMemoryAppTime1 = ""
-	PeakMemoryAppUsage1 = res2
+	PeakMemoryAppUsage1 = valsss1
 	PeakMemoryAppDeviation1 = "Mainactivity"
 	currentTime := time.Now()
 
@@ -791,6 +801,7 @@ func main() {
 	app.Bind(cpuArch)
 	app.Bind(AvgMedianFPS)
 	app.Bind(AvgFPSStablity)
+	app.Bind(Peakmomery)
 
 	app.Run()
 

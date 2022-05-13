@@ -65,51 +65,70 @@ func AppGPUUsage(packageName string) (val string) {
 	var err error
 	val = "0"
 	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(runtime.Error)
-			if ok {
-				fmt.Printf("AppGPUUsage error: %v\n", r)
-			}
-		}
+	   if r := recover(); r != nil {
+		  var ok bool
+		  err, ok = r.(runtime.Error)
+		  if ok {
+			 fmt.Printf("AppGPUUsage error: %v\n", r)
+		  }
+	   }
 	}()
-
+ 
+	//sub := string(run("shell", "cat /proc/meminfo"))
+	//ind := strings.Index(sub, "GPUTotalUsed:")
+	//if ind == -1 {
+	// return val
+	//}
+	//sub = sub[ind:]
+	//sub = strings.Replace(sub, "GPUTotalUsed:", "", 1)
+	//sub = strings.Replace(sub, "\t", "", -1)
+	//sub = strings.TrimSpace(sub)
+	//data := strings.Split(sub, " ")[0]
+	//total, err := strconv.Atoi(data)
+	//if err != nil {
+	// return val
+	//}
 	sub := string(run("shell", "dumpsys meminfo"))
-	ind := strings.Index(sub, "Total RAM: ")
+	ind := strings.Index(sub, "Tuning:")
 	if ind == -1 {
-		return val
+	   return val
 	}
 	sub = sub[ind:]
-	sub = strings.Replace(sub, "Total RAM: ", "", 1)
-	data := strings.Split(sub, " ")[0]
-	data = strings.Replace(data, "K", "", 1)
-	data = strings.Replace(data, ",", "", -1)
-	total, err := strconv.Atoi(data)
+	//return sub
+	//sub = strings.Replace(sub, "Tuning:", "", 1)
+	//sub = strings.Replace(sub, "\t", "", -1)
+	data := strings.Split(sub, " ")
+	t := data[len(data)-2]
+	t = strings.TrimSpace(t)
+	//return t
+	t = strings.Replace(t, "K", "", -1)
+	t = strings.Replace(t, ",", "", -1)
+	total, err := strconv.Atoi(t)
 	if err != nil {
-		return val
+	   return val
 	}
-
+	//return fmt.Sprintf("%d", total)
 	s := string(run("shell", "dumpsys gfxinfo "+packageName))
 	i := strings.Index(s, "Total GPU memory usage:")
 	if i == -1 {
-		return val
+	   return val
 	}
 	s = s[i:]
 	s = strings.Replace(s, "Total GPU memory usage:", "", 1)
 	e := strings.Index(s, "bytes")
 	if e == -1 {
-		return val
+	   return val
 	}
 	s = s[:e]
 	ss := strings.Replace(s, "\n", "", -1)
 	ss = strings.TrimSpace(ss)
 	used, err := strconv.Atoi(ss)
 	if err != nil {
-		return val
+	   return val
 	}
 	val = fmt.Sprintf("%.2f", float64(used)/float64(total*10))
 	return val
-}
+ }
 
 // AppMemoryUsage calculates memory usage for given package
 func AppMemoryUsage(packageName string) (val string) {
@@ -624,6 +643,65 @@ func calculateVariance(data []int, sum, t int64) float64 {
 	return result / float64(n-1)
 }
 
+
+// AppPeakMemoryUsage calculates peak memory usage for given package
+func AppPeakMemoryUsage(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+	   if r := recover(); r != nil {
+		  var ok bool
+		  err, ok = r.(runtime.Error)
+		  if ok {
+			 fmt.Printf("AppMemoryUsage error: %v\n", r)
+		  }
+	   }
+	}()
+ 
+	s := string(run("shell", "top -n 1 | grep Mem"))
+	s = strings.Split(s, "total")[0]
+	s = strings.Replace(s, "Mem:", "", -1)
+	s = strings.Replace(s, "K", "", -1)
+	s = strings.Replace(s, "\t", "", -1)
+	s = strings.TrimSpace(s) // in Kb
+	total, err := strconv.Atoi(s)
+	if err != nil {
+	   return val
+	}
+ 
+	var processId string
+	s = string(run("shell", "ps | grep ", packageName))
+	data := strings.Split(s, " ")
+	for i, e := range data {
+	   if i == 0 {
+		  continue
+	   }
+	   if len(e) != 0 {
+		  processId = e
+		  break
+	   }
+	}
+	s = string(run("shell", "top -n 1 | grep ", processId))
+	data = strings.Split(s, " ")
+	counter := 0
+	var usage string
+	for _, e := range data {
+	   if len(e) != 0 {
+		  counter += 1
+		  if counter == 10 {
+			 usage = e
+			 break
+		  }
+	   }
+	}
+ 
+	u, err := strconv.ParseFloat(usage, 64)
+	if err != nil {
+	   return val
+	}
+	return fmt.Sprintf("%.2f", (u*float64(total))/float64(100)) // this is in Kb
+ }
+ 
 // run forms the shell command by joining passed arguments,
 // executes it
 // and returns the result
