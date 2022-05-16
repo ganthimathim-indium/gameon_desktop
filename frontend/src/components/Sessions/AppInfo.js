@@ -97,10 +97,12 @@ class AppData extends React.Component {
       gpuValues: [],
       memValues: [],
       fpsValues: [],
+      fpsStabilityValues: [],
       uploadValues: [],
       downloadValues: [],
       powerValues: [],
       appPowerValues: [],
+      peakMemoryValues: [],
 
       timeSeconds: 0,
       timerTimeSeconds: 0,
@@ -108,6 +110,8 @@ class AppData extends React.Component {
       userInfo: null,
       power: 0,
       appPower: 0,
+      fpsStability: 0,
+      peakMemory: 0,
       cpuArch: "",
       avgMedianFPS: 0,
       devicetext: " ",
@@ -121,6 +125,8 @@ class AppData extends React.Component {
       avgMem: "",
       avgFps: "",
       avgPower: "",
+      AvgFpsStability: "",
+      avgPeakMemory: "",
       avgAppPower: "",
       avgUpload: "",
       avgDownload: "",
@@ -130,6 +136,7 @@ class AppData extends React.Component {
       timer: "",
       timerClock: "",
       sessionTitle: "",
+      totalTime: "",
     };
   }
 
@@ -142,6 +149,7 @@ class AppData extends React.Component {
       session_id: this.session_id,
       userRole: "user",
       sessionname: this.state.sessionTitle,
+      Avg_time: this.state.timerClock,
     };
 
     let stopJSON = JSON.stringify(stopData);
@@ -161,6 +169,9 @@ class AppData extends React.Component {
         popDuration: data.total_duraton,
         popsession_id: data.session_id,
         sessionName: data.sessionname,
+        totalTime: data.totaltime,
+        // avgPeakMemory: data.peak_memory,
+        avgFpsStability: data.fps_stabliy,
       });
       console.log(data, "stop session");
     });
@@ -457,6 +468,58 @@ class AppData extends React.Component {
                 });
               }
             });
+
+          // window.backend
+          //   .Peakmomery(this.props.location.state.value)
+          //   .then((result) => {
+          //     console.log(result, "fps result");
+          //     let results = result.substring(result.indexOf(":") + 1);
+          //     this.setState({ peakMemory: results });
+          //     console.log(this.state.peakMemory, "fps value");
+          //     if (this.state.peakMemoryValues.length < 8) {
+          //       this.setState({
+          //         peakMemoryValues: [...this.state.peakMemoryValues, results],
+          //         // timeValues: [...this.state.timeValues, time],
+          //       });
+          //       console.log(time, "timeeeeeeeeeeeeeeeeee");
+          //     } else {
+          //       this.state.peakMemoryValues.shift();
+          //       // this.state.timeValues.shift();
+          //       this.setState({
+          //         peakMemoryValues: [...this.state.peakMemoryValues, results],
+          //         // timeValues: [...this.state.timeValues, time],
+          //       });
+          //     }
+          //   });
+
+          window.backend
+            .AvgFPSStablity(this.props.location.state.value)
+            .then((result) => {
+              console.log(result, "fps stability result");
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ fpsStability: results });
+              console.log(this.state.fpsStability, "fps value");
+              if (this.state.fpsStabilityValues.length < 8) {
+                this.setState({
+                  fpsStabilityValues: [
+                    ...this.state.fpsStabilityValues,
+                    results,
+                  ],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.fpsStabilityValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  fpsStabilityValues: [
+                    ...this.state.fpsStabilityValues,
+                    results,
+                  ],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+            });
         }, 3000);
       }
     });
@@ -617,12 +680,12 @@ class AppData extends React.Component {
                     unit="MiB"
                     max={100000}
                   />
-                  <MetricUsage
+                  {/* <MetricUsage
                     value={this.state.power}
                     text="Power"
                     unit="%"
                     max={100}
-                  />
+                  /> */}
                   <MetricUsage
                     value={this.state.appPower}
                     text="App power"
@@ -633,6 +696,17 @@ class AppData extends React.Component {
                     value={this.state.avgMedianFPS}
                     text="Avg Median FPS"
                     max={1}
+                  />
+                  {/* <MetricUsage
+                    value={this.state.peakMemory}
+                    text="Avg Peak Memory"
+                    max={1}
+                  /> */}
+                  <MetricUsage
+                    value={this.state.fpsStability}
+                    text="FPS Stability"
+                    unit=""
+                    max={100}
                   />
                   <div class="graphs">
                     <MetricGraph
@@ -653,12 +727,12 @@ class AppData extends React.Component {
                       text="Memory Usage"
                       unit="MB"
                     />
-                    <MetricGraph
+                    {/* <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.powerValues}
                       text="Power Usage"
                       unit="%"
-                    />
+                    /> */}
                     <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.appPowerValues}
@@ -682,6 +756,18 @@ class AppData extends React.Component {
                       metValues={this.state.fpsValues}
                       text="Median FPS"
                       unit=""
+                    />
+                    {/* <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.peakMemoryValues}
+                      text="Peak Memory"
+                      unit=""
+                    /> */}
+                    <MetricGraph
+                      metTime={this.state.timeValues}
+                      metValues={this.state.fpsStabilityValues}
+                      text="FPS Stablity"
+                      unit="%"
                     />
                   </div>
                 </div>
@@ -745,7 +831,7 @@ class AppData extends React.Component {
                   <div className="duration">
                     <p>Session Title : {this.state.sessionTitle}</p>
                     <p>Session ID : {this.state.popsession_id}</p>
-                    <p>Total Duration : {this.state.popDuration} </p>
+                    <p>Total Duration : {this.state.totalTime} </p>
                   </div>
                   <div className="popup-div">
                     <p className="popup-p">
@@ -783,6 +869,18 @@ class AppData extends React.Component {
                       Avg App Power value :
                       {" " + Math.round(this.state.avgPower * 100) / 100 + " "}
                       mAh
+                    </p>
+                    {/* <p>
+                      Avg Peak Memory value :
+                      {" " +
+                        Math.round(this.state.avgPeakMemory * 100) / 100 +
+                        " "}
+                    </p> */}
+                    <p>
+                      Avg FPS Stablity value :
+                      {" " +
+                        Math.round(this.state.AvgFpsStability * 100) / 100 +
+                        " "}
                     </p>
                   </div>
                   <div className="note">
