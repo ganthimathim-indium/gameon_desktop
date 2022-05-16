@@ -170,7 +170,7 @@ class AppData extends React.Component {
         popsession_id: data.session_id,
         sessionName: data.sessionname,
         totalTime: data.totaltime,
-        // avgPeakMemory: data.peak_memory,
+        avgPeakMemory: data.peak_memory,
         avgFpsStability: data.fps_stabliy,
       });
       console.log(data, "stop session");
@@ -447,6 +447,29 @@ class AppData extends React.Component {
             });
 
           window.backend
+            .Peakmomery(this.props.location.state.value)
+            .then((result) => {
+              console.log(result, "fps result");
+              let results = result.substring(result.indexOf(":") + 1);
+              this.setState({ peakMemory: results });
+              console.log(this.state.peakMemory, "fps value");
+              if (this.state.peakMemoryValues.length < 8) {
+                this.setState({
+                  peakMemoryValues: [...this.state.peakMemoryValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                console.log(time, "timeeeeeeeeeeeeeeeeee");
+              } else {
+                this.state.peakMemoryValues.shift();
+                // this.state.timeValues.shift();
+                this.setState({
+                  peakMemoryValues: [...this.state.peakMemoryValues, results],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+              }
+            });
+
+          window.backend
             .AvgMedianFPS(this.props.location.state.value)
             .then((result) => {
               console.log(result, "fps result");
@@ -469,29 +492,6 @@ class AppData extends React.Component {
               }
             });
 
-          // window.backend
-          //   .Peakmomery(this.props.location.state.value)
-          //   .then((result) => {
-          //     console.log(result, "fps result");
-          //     let results = result.substring(result.indexOf(":") + 1);
-          //     this.setState({ peakMemory: results });
-          //     console.log(this.state.peakMemory, "fps value");
-          //     if (this.state.peakMemoryValues.length < 8) {
-          //       this.setState({
-          //         peakMemoryValues: [...this.state.peakMemoryValues, results],
-          //         // timeValues: [...this.state.timeValues, time],
-          //       });
-          //       console.log(time, "timeeeeeeeeeeeeeeeeee");
-          //     } else {
-          //       this.state.peakMemoryValues.shift();
-          //       // this.state.timeValues.shift();
-          //       this.setState({
-          //         peakMemoryValues: [...this.state.peakMemoryValues, results],
-          //         // timeValues: [...this.state.timeValues, time],
-          //       });
-          //     }
-          //   });
-
           window.backend
             .AvgFPSStablity(this.props.location.state.value)
             .then((result) => {
@@ -505,7 +505,6 @@ class AppData extends React.Component {
                     ...this.state.fpsStabilityValues,
                     results,
                   ],
-                  // timeValues: [...this.state.timeValues, time],
                 });
                 console.log(time, "timeeeeeeeeeeeeeeeeee");
               } else {
@@ -671,13 +670,13 @@ class AppData extends React.Component {
                   <MetricUsage
                     value={this.state.Uploaddata}
                     text="Upload data"
-                    unit="MiB"
+                    unit="MB"
                     max={3072}
                   />
                   <MetricUsage
                     value={this.state.DownloadData}
                     text="Download data"
-                    unit="MiB"
+                    unit="MB"
                     max={100000}
                   />
                   {/* <MetricUsage
@@ -695,17 +694,18 @@ class AppData extends React.Component {
                   <MetricUsage
                     value={this.state.avgMedianFPS}
                     text="Avg Median FPS"
-                    max={1}
+                    max={200}
                   />
-                  {/* <MetricUsage
+                  <MetricUsage
                     value={this.state.peakMemory}
                     text="Avg Peak Memory"
-                    max={1}
-                  /> */}
+                    unit="MB"
+                    max={1024}
+                  />
                   <MetricUsage
                     value={this.state.fpsStability}
                     text="FPS Stability"
-                    unit=""
+                    unit="%"
                     max={100}
                   />
                   <div class="graphs">
@@ -743,13 +743,13 @@ class AppData extends React.Component {
                       metTime={this.state.timeValues}
                       metValues={this.state.uploadValues}
                       text="Upload Data"
-                      unit="MiB"
+                      unit="MB"
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.downloadValues}
                       text="Download Data"
-                      unit="MiB"
+                      unit="MB"
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
@@ -757,12 +757,12 @@ class AppData extends React.Component {
                       text="Median FPS"
                       unit=""
                     />
-                    {/* <MetricGraph
+                    <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.peakMemoryValues}
                       text="Peak Memory"
-                      unit=""
-                    /> */}
+                      unit="MB"
+                    />
                     <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.fpsStabilityValues}
@@ -851,14 +851,14 @@ class AppData extends React.Component {
                     <p>
                       Avg uploaded data:
                       {" " + Math.round(this.state.avgUpload * 100) / 100 + " "}
-                      MiB
+                      MB
                     </p>
                     <p>
                       Avg downloaded data :
                       {" " +
                         Math.round(this.state.avgDownload * 100) / 100 +
                         " "}
-                      MiB
+                      MB
                     </p>
                     <p>
                       Avg fps value :
@@ -870,17 +870,19 @@ class AppData extends React.Component {
                       {" " + Math.round(this.state.avgPower * 100) / 100 + " "}
                       mAh
                     </p>
-                    {/* <p>
+                    <p>
                       Avg Peak Memory value :
                       {" " +
                         Math.round(this.state.avgPeakMemory * 100) / 100 +
                         " "}
-                    </p> */}
+                      MB
+                    </p>
                     <p>
                       Avg FPS Stablity value :
                       {" " +
                         Math.round(this.state.AvgFpsStability * 100) / 100 +
                         " "}
+                      %
                     </p>
                   </div>
                   <div className="note">

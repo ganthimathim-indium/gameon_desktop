@@ -484,7 +484,7 @@ func downloadedData(appName string) (val string) {
 
 	var valsss1 string
 
-	valsss1 = fmt.Sprintf("%.2f", intVar)
+	valsss1 = fmt.Sprintf("%.2f", bytesToMB(intVar))
 
 	downloadDataUsage = ""
 	downloadDataDeviations = ""
@@ -571,10 +571,26 @@ func cpuArch(appNames string) (val string) {
 // 10 Avg. Median FPS Usage
 
 func AvgFPSStablity(appName string) (val string) {
-	res2 := L.AndroidFPSStablity(appName)
+	// res2 := L.AndroidFPSStablity(appName)
+	res2 := L.AndroidMedianFPS(appName)
 	var valsss string
 
-	valsss = "Avg. FPS Stablity : " + res2 + " %"
+	intVal, _ := strconv.Atoi(res2)
+	// var frames = "0"
+
+	if intVal >= 70 {
+		res2 = "100"
+
+	} else if intVal < 60 {
+		if intVal == 0 {
+			res2 = "0"
+		} else {
+			res2 = "50"
+		}
+
+	}
+
+	valsss = "Avg. FPS Stablity : " + res2
 
 	StablityFpsAppUsage1 = ""
 	StablityFpsAppDeviation1 = ""
@@ -590,15 +606,25 @@ func AvgFPSStablity(appName string) (val string) {
 }
 
 func Peakmomery(appName string) (val string) {
-	res2 := L.AndroidFPSStablity(appName)
+	res2 := L.AppPeakMemoryUsage(appName)
 	var valsss string
 
-	valsss = "Avg. Peak Memory Useage Value : " + res2 + " %"
+	var valsss1 string
+	b2, _ := strconv.ParseFloat(res2, 64)
+	fmt.Println(b2)
+	var intVar int = int(b2)
+	fmt.Println(intVar)
+
+	fmt.Println(intVar)
+
+	valsss = fmt.Sprintf("Avg. Peak Memory Useage Value : %v ", kBToMB(intVar))
+
+	valsss1 = fmt.Sprintf("%v", kBToMB(intVar))
 
 	PeakMemoryAppUsage1 = ""
 	PeakMemoryAppDeviation1 = ""
 	PeakMemoryAppTime1 = ""
-	PeakMemoryAppUsage1 = res2
+	PeakMemoryAppUsage1 = valsss1
 	PeakMemoryAppDeviation1 = "Mainactivity"
 	currentTime := time.Now()
 
@@ -791,6 +817,7 @@ func main() {
 	app.Bind(cpuArch)
 	app.Bind(AvgMedianFPS)
 	app.Bind(AvgFPSStablity)
+	app.Bind(Peakmomery)
 
 	app.Run()
 

@@ -74,21 +74,40 @@ func AppGPUUsage(packageName string) (val string) {
 		}
 	}()
 
+	//sub := string(run("shell", "cat /proc/meminfo"))
+	//ind := strings.Index(sub, "GPUTotalUsed:")
+	//if ind == -1 {
+	// return val
+	//}
+	//sub = sub[ind:]
+	//sub = strings.Replace(sub, "GPUTotalUsed:", "", 1)
+	//sub = strings.Replace(sub, "\t", "", -1)
+	//sub = strings.TrimSpace(sub)
+	//data := strings.Split(sub, " ")[0]
+	//total, err := strconv.Atoi(data)
+	//if err != nil {
+	// return val
+	//}
 	sub := string(run("shell", "dumpsys meminfo"))
-	ind := strings.Index(sub, "Total RAM: ")
+	ind := strings.Index(sub, "Tuning:")
 	if ind == -1 {
 		return val
 	}
 	sub = sub[ind:]
-	sub = strings.Replace(sub, "Total RAM: ", "", 1)
-	data := strings.Split(sub, " ")[0]
-	data = strings.Replace(data, "K", "", 1)
-	data = strings.Replace(data, ",", "", -1)
-	total, err := strconv.Atoi(data)
+	//return sub
+	//sub = strings.Replace(sub, "Tuning:", "", 1)
+	//sub = strings.Replace(sub, "\t", "", -1)
+	data := strings.Split(sub, " ")
+	t := data[len(data)-2]
+	t = strings.TrimSpace(t)
+	//return t
+	t = strings.Replace(t, "K", "", -1)
+	t = strings.Replace(t, ",", "", -1)
+	total, err := strconv.Atoi(t)
 	if err != nil {
 		return val
 	}
-
+	//return fmt.Sprintf("%d", total)
 	s := string(run("shell", "dumpsys gfxinfo "+packageName))
 	i := strings.Index(s, "Total GPU memory usage:")
 	if i == -1 {
@@ -401,71 +420,43 @@ func AndroidMedianFPS(packageName string) (val string) {
 		}
 	}()
 	fmt.Println(err)
+	// var result string
 
-	var result string
-	s := string(run("shell", "dumpsys gfxinfo "+packageName, "framestats"))
+	s := string(run("shell", "dumpsys display ", packageName, " | grep fps"))
+	fs := s[strings.Index(s, "modeId"):]
 
-	// // get index of "FrameCompleted" and "IntendedVsync"
-	// sub := s[strings.Index(s, "---PROFILEDATA---"):]
-	// sub = strings.Replace(sub, "---PROFILEDATA---", "", 1)
-	// sub = sub[:strings.Index(sub, "---PROFILEDATA---")]
+	modeId := strings.Split(fs, " ")[1]
 
-	// subData := strings.Split(sub, "\n")
-	// // second value will be column names
-	// columnData1 := strings.Split(subData[1], ",")
+	modeId = strings.Replace(modeId, ",", "", -1)
 
-	// var ind1, ind2 int
-	// for i := 0; i < len(columnData1); i++ {
-	// 	if columnData1[i] == "FrameCompleted" {
-	// 		ind1 = i
-	// 	}
-	// 	if columnData1[i] == "IntendedVsync" {
-	// 		ind2 = i
-	// 	}
-	// }
-	// var fpsData []float64
-	// for i := 2; i < len(subData)-1; i++ {
-	// 	columnData := strings.Split(subData[i], ",")
-	// 	// string to float
-	// 	fc, _ := strconv.ParseFloat(columnData[ind1], 64)
-	// 	iv, _ := strconv.ParseFloat(columnData[ind2], 64)
-	// 	//fc = toFixed(fc, 6)
-	// 	//iv = toFixed(iv, 6)
-	// 	//fmt.Printf("data %v %v\n", fc, iv)
-	// 	//fmt.Println((float64(1) / (fc - iv)))
-	// 	fpsData = append(fpsData, (float64(1) / (fc - iv)))
-	// }
-	// sort.Float64s(fpsData)
-	// var temp int
-	// for i := 0; i < len(fpsData); i++ {
+	m := map[string]string{}
 
-	// 	val := fmt.Sprintf("%v", fpsData[i])
-	// 	ii := strings.Index(val, "e")
-	// 	fmt.Println(temp, val, "e  ", ii)
+	for strings.Index(fs, "DisplayModeRecord") != -1 {
 
-	// 	if ii != -1 {
-	// 		val = val[:ii]
-	// 	}
-	// 	valF, _ := strconv.ParseFloat(val, 64)
-	// 	intVal := int(valF)
-	// 	if temp < intVal {
-	// 		temp = intVal
-	// 	}
-	// }
+		mode := fs[strings.Index(fs, "DisplayModeRecord"):]
+		fs = fs[strings.Index(fs, "DisplayModeRecord")+len("DisplayModeRecord"):]
 
-	// result = fmt.Sprintf("%d", temp)
+		mode_id := mode[strings.Index(mode, "id="):]
+		mode_id = strings.Replace(mode_id, "id=", "", -1)
 
-	// fmt.Println("Avg. Median FPS Usage Data ", result)
+		mode_id = strings.Split(mode_id, ",")[0]
 
-	i := strings.Index(s, "Total frames rendered: ")
-	if i == -1 {
-		return ""
+		mode_fps := mode[strings.Index(mode, "fps="):]
+
+		mode_fps = strings.Replace(mode_fps, "fps=", "", 1)
+
+		val := strings.Split(mode_fps, ".")[0]
+
+		m[mode_id] = val
+
 	}
-	s = s[i:]
-	s = strings.Replace(s, "Total frames rendered: ", "", 1)
-	return strings.Split(s, "\n")[0]
+	var frames = "30"
 
-	return result
+	frames = m[modeId] // } else if fs == "2" {
+	// 	frames = 60
+	// }
+	return frames
+
 }
 
 //fps stablity
@@ -478,35 +469,56 @@ func AndroidFPSStablity(packageName string) (val string) {
 			var ok bool
 			err, ok = r.(runtime.Error)
 			if ok {
-				fmt.Printf("AndroidMedianFPS error: %v\n", r)
+				fmt.Printf("AndroidFPSStablity error: %v\n", r)
 			}
 		}
 	}()
 	fmt.Println(err)
-	var result string
+	// var result string
 
-	s := string(run("shell", "dumpsys gfxinfo "+packageName, " framestats"))
+	s := string(run("shell", "dumpsys display ", packageName, " | grep fps"))
+	fs := s[strings.Index(s, "modeId"):]
 
-	fs := s[strings.Index(s, "Total frames rendered: "):]
-	fs = strings.Replace(fs, "Total frames rendered: ", "", -1)
-	fs = strings.Split(fs, "\n")[0]
-	fs = strings.TrimSpace(fs)
-	fmt.Println(fs)
+	modeId := strings.Split(fs, " ")[1]
 
-	frames, _ := strconv.Atoi(fs)
-	fmt.Println(frames)
+	modeId = strings.Replace(modeId, ",", "", -1)
+	// intVal, _ := strconv.Atoi(modeId)
+	// var frames = "0"
 
-	sec := s[strings.Index(s, "Stats since: "):]
-	sec = strings.Replace(sec, "Stats since: ", "", -1)
-	sec = sec[:strings.Index(sec, "ns")]
-	t, _ := strconv.Atoi(sec)
-	fmt.Println(t)
+	// if intVal == 2 {
+	// 	frames = "50"
 
-	result = fmt.Sprintf("%.0f", (float64(frames)*1000000000/float64(t))*float64(100))
+	// } else if intVal == 1 {
+	// 	frames = "100"
+	// }
 
-	fmt.Println("Avg.  FPS Stablity   ", result)
+	m := map[string]string{}
 
-	return result
+	for strings.Index(fs, "DisplayModeRecord") != -1 {
+
+		mode := fs[strings.Index(fs, "DisplayModeRecord"):]
+		fs = fs[strings.Index(fs, "DisplayModeRecord")+len("DisplayModeRecord"):]
+
+		mode_id := mode[strings.Index(mode, "id="):]
+		mode_id = strings.Replace(mode_id, "id=", "", -1)
+
+		mode_id = strings.Split(mode_id, ",")[0]
+
+		mode_fps := mode[strings.Index(mode, "fps="):]
+
+		mode_fps = strings.Replace(mode_fps, "fps=", "", 1)
+
+		val := strings.Split(mode_fps, ".")[0]
+
+		m[mode_id] = val
+
+	}
+	var frames = "30"
+
+	frames = m[modeId] // } else if fs == "2" {
+	// 	frames = 60
+	// }
+	return frames
 
 }
 
@@ -622,6 +634,64 @@ func calculateVariance(data []int, sum, t int64) float64 {
 	result += math.Pow(float64(val)-mean, 2)
 
 	return result / float64(n-1)
+}
+
+// AppPeakMemoryUsage calculates peak memory usage for given package
+func AppPeakMemoryUsage(packageName string) (val string) {
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AppMemoryUsage error: %v\n", r)
+			}
+		}
+	}()
+
+	s := string(run("shell", "top -n 1 | grep Mem"))
+	s = strings.Split(s, "total")[0]
+	s = strings.Replace(s, "Mem:", "", -1)
+	s = strings.Replace(s, "K", "", -1)
+	s = strings.Replace(s, "\t", "", -1)
+	s = strings.TrimSpace(s) // in Kb
+	total, err := strconv.Atoi(s)
+	if err != nil {
+		return val
+	}
+
+	var processId string
+	s = string(run("shell", "ps | grep ", packageName))
+	data := strings.Split(s, " ")
+	for i, e := range data {
+		if i == 0 {
+			continue
+		}
+		if len(e) != 0 {
+			processId = e
+			break
+		}
+	}
+	s = string(run("shell", "top -n 1 | grep ", processId))
+	data = strings.Split(s, " ")
+	counter := 0
+	var usage string
+	for _, e := range data {
+		if len(e) != 0 {
+			counter += 1
+			if counter == 10 {
+				usage = e
+				break
+			}
+		}
+	}
+
+	u, err := strconv.ParseFloat(usage, 64)
+	if err != nil {
+		return val
+	}
+	return fmt.Sprintf("%.2f", (u*float64(total))/float64(100)) // this is in Kb
 }
 
 // run forms the shell command by joining passed arguments,
