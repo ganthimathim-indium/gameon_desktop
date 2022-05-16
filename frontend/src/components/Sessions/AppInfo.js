@@ -472,13 +472,30 @@ class AppData extends React.Component {
           window.backend
             .AvgMedianFPS(this.props.location.state.value)
             .then((result) => {
-              console.log(result, "fps result");
-              let results = result.substring(result.indexOf(":") + 1);
-              this.setState({ avgMedianFPS: results });
+              console.log(result, "fps results");
+              // let result1 = result.substring(result.indexOf(":") + 1);
+              let results = JSON.parse(result);
+              console.log(results.median_fps, "median_fps");
+              console.log(results.fps_stablity, "fps_stabiltiy");
+
+              this.setState({
+                avgMedianFPS: results.median_fps,
+              });
+              this.setState({
+                fpsStability: results.fps_stablity,
+              });
               console.log(this.state.avgMedianFPS, "fps value");
               if (this.state.fpsValues.length < 8) {
                 this.setState({
-                  fpsValues: [...this.state.fpsValues, results],
+                  fpsValues: [...this.state.fpsValues, results.median_fps],
+
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                this.setState({
+                  fpsStabilityValues: [
+                    ...this.state.fpsStabilityValues,
+                    results.fps_stablity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
                 console.log(time, "timeeeeeeeeeeeeeeeeee");
@@ -486,39 +503,51 @@ class AppData extends React.Component {
                 this.state.fpsValues.shift();
                 // this.state.timeValues.shift();
                 this.setState({
-                  fpsValues: [...this.state.fpsValues, results],
+                  fpsValues: [...this.state.fpsValues, results.median_fps],
+                  // fpsStabilityValues: [
+                  //   ...this.state.fpsStabilityValues,
+                  //   results.fps_stablity,
+                  // ],
+                  // timeValues: [...this.state.timeValues, time],
+                });
+                this.setState({
+                  // fpsValues: [...this.state.fpsValues, results.median_fps],
+                  fpsStabilityValues: [
+                    ...this.state.fpsStabilityValues,
+                    results.fps_stablity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
               }
             });
 
-          window.backend
-            .AvgFPSStablity(this.props.location.state.value)
-            .then((result) => {
-              console.log(result, "fps stability result");
-              let results = result.substring(result.indexOf(":") + 1);
-              this.setState({ fpsStability: results });
-              console.log(this.state.fpsStability, "fps value");
-              if (this.state.fpsStabilityValues.length < 8) {
-                this.setState({
-                  fpsStabilityValues: [
-                    ...this.state.fpsStabilityValues,
-                    results,
-                  ],
-                });
-                console.log(time, "timeeeeeeeeeeeeeeeeee");
-              } else {
-                this.state.fpsStabilityValues.shift();
-                // this.state.timeValues.shift();
-                this.setState({
-                  fpsStabilityValues: [
-                    ...this.state.fpsStabilityValues,
-                    results,
-                  ],
-                  // timeValues: [...this.state.timeValues, time],
-                });
-              }
-            });
+          // window.backend
+          //   .AvgFPSStablity(this.props.location.state.value)
+          //   .then((result) => {
+          //     console.log(result, "fps stability result");
+          //     let results = result.substring(result.indexOf(":") + 1);
+          //     this.setState({ fpsStability: results });
+          //     console.log(this.state.fpsStability, "fps value");
+          //     if (this.state.fpsStabilityValues.length < 8) {
+          //       this.setState({
+          //         fpsStabilityValues: [
+          //           ...this.state.fpsStabilityValues,
+          //           results,
+          //         ],
+          //       });
+          //       console.log(time, "timeeeeeeeeeeeeeeeeee");
+          //     } else {
+          //       this.state.fpsStabilityValues.shift();
+          //       // this.state.timeValues.shift();
+          //       this.setState({
+          //         fpsStabilityValues: [
+          //           ...this.state.fpsStabilityValues,
+          //           results,
+          //         ],
+          //         // timeValues: [...this.state.timeValues, time],
+          //       });
+          //     }
+          //   });
         }, 3000);
       }
     });

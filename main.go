@@ -463,7 +463,7 @@ func uploadData(appName string) (val string) {
 
 	var valsss1 string
 
-	valsss1 = fmt.Sprintf("%.2f", intVar)
+	valsss1 = fmt.Sprintf("%.2f", bytesToMB(intVar))
 
 	uploadDataUsage = ""
 	uploadDataDeviations = ""
