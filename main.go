@@ -82,6 +82,11 @@ type AppInfo struct {
 	AppList    string `json:"applist"`
 }
 
+type FpsInfo struct {
+	Median_fps   string `json:"median_fps"`
+	Fps_stablity string `json:"fps_stablity"`
+}
+
 type BaseInfo struct {
 	StartTime      string `json:"start_time"`
 	RecordDuration string `json:"total_duration"`
@@ -636,14 +641,44 @@ func Peakmomery(appName string) (val string) {
 
 func AvgMedianFPS(appName string) (val string) {
 
-	res2 := L.AndroidMedianFPS(appName)
+	res21 := L.AndroidMedianFPS(appName)
 
-	var valsss string
+	var valsss11 string
+
+	intVal1, _ := strconv.Atoi(res21)
+	valsss11 = "0"
+
+	if intVal1 >= 70 {
+		valsss11 = "100"
+
+	} else if intVal1 <= 60 {
+		if intVal1 == 0 {
+			valsss11 = "0"
+		} else {
+			valsss11 = "50"
+		}
+
+	}
+
+	//valsss11 = "Avg. FPS Stablity : " + res21
+
+	StablityFpsAppUsage1 = ""
+	StablityFpsAppDeviation1 = ""
+	StablityFpsTime1 = ""
+	StablityFpsAppUsage1 = valsss11
+	StablityFpsAppDeviation1 = "Mainactivity"
+	currentTime1 := time.Now()
+
+	StablityFpsTime1 = currentTime1.Format("3:4:5 pm")
+
+	//return valsss11
+
+	//	res2 := L.AndroidMedianFPS(appName)
 
 	avgMedianFPSUsage = ""
 	avgMedianFPSDeviations = ""
 	avgMedianFPSTime = ""
-	avgMedianFPSUsage = res2
+	avgMedianFPSUsage = res21
 	avgMedianFPSDeviations = "Mainactivity"
 	currentTime := time.Now()
 
@@ -665,9 +700,22 @@ func AvgMedianFPS(appName string) (val string) {
 	fmt.Println("myyyyyyyyyyyyyyyyyyyyyyyy")
 	fmt.Println(human2) // {"Name":"Bob","Age":10,"Active":true}
 
-	valsss = "Avg. Median FPS Usage : " + res2
+	//valsss = "Avg. Median FPS Usage : " + res21
 
-	return valsss
+	var info = FpsInfo{
+		Median_fps:   res21,
+		Fps_stablity: valsss11,
+	}
+
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println(string(out))
+	return string(out)
+
+	//return valsss
 
 }
 

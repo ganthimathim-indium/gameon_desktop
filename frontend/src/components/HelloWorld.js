@@ -39,7 +39,7 @@ function HelloWorld() {
     //window.backend.downloadedData("com.android.chrome").then((result) => setResult(result));
     //window.backend.AndroidCPUCores1("com.android.chrome").then((result) => setResult(result));
     //window.backend.powerMetric("com.android.chrome").then((result) => setResult(result));
-    window.backend.appPowerMetric("com.android.chrome").then((result) => setResult(result));
+    //  window.backend.appPowerMetric("com.android.chrome").then((result) => setResult(result));
     //window.backend.cpuArch("com.android.chrome").then((result) => setResult(result));
     // window.backend.AvgMedianFPS("com.action.survival.craft.rpg").then((result) => setResult(result));
 
@@ -49,7 +49,7 @@ function HelloWorld() {
     //	window.backend.checkdevice().then((result) => setResult(result));
     // window.backend.Peakmomery("com.android.chrome").then((result) => setResult(result));
     //  window.backend.AvgFPSStablity("com.king.candycrushsaga").then((result) => setResult(result));
-    // window.backend.AvgMedianFPS("com.king.candycrushsaga").then((result) => setResult(result));
+    window.backend.AvgMedianFPS("com.king.candycrushsaga").then((result) => setResult(result));
 
 
 
