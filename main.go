@@ -357,6 +357,8 @@ func stopScan(appInfoData string, valData string) (val string) {
 		return fmt.Sprintf("error while marshalling data: %v", err)
 	}
 
+	fmt.Println(string(out5))
+
 	var valsss string
 
 	valsss = apidata.ApiHitStop(out5, token)

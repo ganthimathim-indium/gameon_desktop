@@ -125,7 +125,7 @@ class AppData extends React.Component {
       avgMem: "",
       avgFps: "",
       avgPower: "",
-      AvgFpsStability: "",
+      avgFpsStability: "",
       avgPeakMemory: "",
       avgAppPower: "",
       avgUpload: "",
@@ -908,10 +908,7 @@ class AppData extends React.Component {
                     </p>
                     <p>
                       Avg FPS Stablity value :
-                      {" " +
-                        Math.round(this.state.AvgFpsStability * 100) / 100 +
-                        " "}
-                      %
+                      {" " + this.state.avgFpsStability + " "}%
                     </p>
                   </div>
                   <div className="note">
