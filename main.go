@@ -833,6 +833,9 @@ func toFixed(num float64, precision int) float64 {
 }
 
 func main() {
+	css = "./frontend/build/static/css/main.css"
+
+	js = "./frontend/build/static/js/main.js"
 
 	//values := map[string]string{"email": "gm@gmail.com", "password": "password"}
 

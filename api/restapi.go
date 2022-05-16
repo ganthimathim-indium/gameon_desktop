@@ -49,9 +49,6 @@ type StopResponse struct {
 	Totaltime     string `json:"totaltime"`
 	Total_duraton string `json:"total_duraton"`
 
-	Fps_stabliy string `json:"fps_stabliy"`
-
-	Peak_memory string `json:"peak_memory"`
 
 	//Message string         `json:"message"`
 	Data averageValues `json:"average_values"`
@@ -67,6 +64,10 @@ type averageValues struct {
 	CpuCoresAppUsage  string `json:"cpucores_app_usage"`
 	AppPowerAppUsage  string `json:"apppower_app_usage"`
 	AvgFpsAppUsage    string `json:"avgfps_app_usage"`
+	Fps_stabliy string `json:"fps_stabliy"`
+
+	Peak_memory string `json:"peak_memory"`
+
 }
 
 func ApiHit(val map[string]string) string {
