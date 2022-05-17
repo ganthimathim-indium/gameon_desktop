@@ -38,6 +38,16 @@ func AppOpen(packageName string) (val string) {
 	return result1
 }
 
+// AppClose launches an app using its package name
+
+func Closeapp(packageName string) (val string) {
+
+	result1 := string(run("shell", "am force-stop "+packageName))
+
+	return result1
+
+}
+
 // AppVersion returns the package version
 func AppVersion(packageName string) (val string) {
 

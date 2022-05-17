@@ -140,7 +140,10 @@ class AppData extends React.Component {
     };
   }
 
-  handleClose = () => this.setState({ open: false });
+  handleClose = () => {
+    this.setState({ open: false });
+    // window.location.reload(false);
+  };
   handleTitleClose = () => {
     let stopData = {
       appname: this.props.location.state.value,
@@ -170,8 +173,8 @@ class AppData extends React.Component {
         popsession_id: data.session_id,
         sessionName: data.sessionname,
         totalTime: data.totaltime,
-        avgPeakMemory: data.peak_memory,
-        avgFpsStability: data.fps_stabliy,
+        avgPeakMemory: data.average_values.peak_memory,
+        avgFpsStability: data.average_values.fps_stabliy,
       });
       console.log(data, "stop session");
     });
@@ -699,14 +702,14 @@ class AppData extends React.Component {
                   <MetricUsage
                     value={this.state.Uploaddata}
                     text="Upload data"
-                    unit="MB"
-                    max={3072}
+                    unit="MiB"
+                    max={100}
                   />
                   <MetricUsage
                     value={this.state.DownloadData}
                     text="Download data"
-                    unit="MB"
-                    max={100000}
+                    unit="MiB"
+                    max={100}
                   />
                   {/* <MetricUsage
                     value={this.state.power}
@@ -772,13 +775,13 @@ class AppData extends React.Component {
                       metTime={this.state.timeValues}
                       metValues={this.state.uploadValues}
                       text="Upload Data"
-                      unit="MB"
+                      unit="MiB"
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.downloadValues}
                       text="Download Data"
-                      unit="MB"
+                      unit="MiB"
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
@@ -880,14 +883,14 @@ class AppData extends React.Component {
                     <p>
                       Avg uploaded data:
                       {" " + Math.round(this.state.avgUpload * 100) / 100 + " "}
-                      MB
+                      MiB
                     </p>
                     <p>
                       Avg downloaded data :
                       {" " +
                         Math.round(this.state.avgDownload * 100) / 100 +
                         " "}
-                      MB
+                      MiB
                     </p>
                     <p>
                       Avg fps value :

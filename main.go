@@ -342,6 +342,7 @@ func stopScan(appInfoData string, valData string) (val string) {
 	userRole := sec["userRole"]
 
 	sessionId := sec["session_id"]
+	appnamedata := sec["appname"]
 
 	out5, err := json.Marshal(MyStop{
 		Result:        human2,
@@ -362,6 +363,7 @@ func stopScan(appInfoData string, valData string) (val string) {
 	var valsss string
 
 	valsss = apidata.ApiHitStop(out5, token)
+	L.Closeapp(appnamedata)
 	return valsss
 
 }
@@ -461,11 +463,11 @@ func uploadData(appName string) (val string) {
 
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total Data Uploaded : %.2f", bytesToMB(intVar))
+	valsss = fmt.Sprintf("Total Data Uploaded : %.2f", bytesToMB(intVar)/1024)
 
 	var valsss1 string
 
-	valsss1 = fmt.Sprintf("%.2f", bytesToMB(intVar))
+	valsss1 = fmt.Sprintf("%.2f", bytesToMB(intVar)/1024)
 
 	uploadDataUsage = ""
 	uploadDataDeviations = ""
@@ -487,11 +489,11 @@ func downloadedData(appName string) (val string) {
 	var valsss string
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total Download data : %.2f", bytesToMB(intVar))
+	valsss = fmt.Sprintf("Total Download data : %.2f", bytesToMB(intVar)/1024)
 
 	var valsss1 string
 
-	valsss1 = fmt.Sprintf("%.2f", bytesToMB(intVar))
+	valsss1 = fmt.Sprintf("%.2f", bytesToMB(intVar)/1024)
 
 	downloadDataUsage = ""
 	downloadDataDeviations = ""
