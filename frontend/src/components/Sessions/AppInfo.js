@@ -429,8 +429,9 @@ class AppData extends React.Component {
           window.backend
             .appPowerMetric(this.props.location.state.value)
             .then((result) => {
-              console.log(result);
+              console.log(result, "app power result");
               let results = result.substring(result.indexOf(":") + 1);
+              console.log(results, "app power results");
               this.setState({ appPower: results });
               console.log(this.state.appPower);
               if (this.state.appPowerValues.length < 8) {
@@ -617,6 +618,7 @@ class AppData extends React.Component {
                 src={download}
                 alt=""
                 className="downloadImg"
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   if (this.state.popsession_id !== "") {
                     window.open(
@@ -725,7 +727,7 @@ class AppData extends React.Component {
                   />
                   <MetricUsage
                     value={this.state.avgMedianFPS}
-                    text="Avg Median FPS"
+                    text="Median FPS"
                     max={200}
                   />
                   <MetricUsage
@@ -899,7 +901,9 @@ class AppData extends React.Component {
 
                     <p>
                       Avg App Power value :
-                      {" " + Math.round(this.state.avgPower * 100) / 100 + " "}
+                      {" " +
+                        Math.round(this.state.avgAppPower * 100) / 100 +
+                        " "}
                       mAh
                     </p>
                     <p>
