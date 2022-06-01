@@ -32,7 +32,7 @@ function HelloWorld() {
   const handleOpenModal = () => {
     setShowModal(true);
 
-    //	window.backend.cpuMetric("com.android.chrome").then((result) => setResult(result));
+    	window.backend.cpuMetric("com.android.chrome").then((result) => setResult(result));
     // window.backend.memoryMetric("com.android.chrome").then((result) => setResult(result));
     // window.backend.gpuMetric("com.android.chrome").then((result) => setResult(result));
     //window.backend.uploadData("com.android.chrome").then((result) => setResult(result));
@@ -49,7 +49,7 @@ function HelloWorld() {
     //	window.backend.checkdevice().then((result) => setResult(result));
     // window.backend.Peakmomery("com.android.chrome").then((result) => setResult(result));
     //  window.backend.AvgFPSStablity("com.king.candycrushsaga").then((result) => setResult(result));
-    window.backend.AvgMedianFPS("com.king.candycrushsaga").then((result) => setResult(result));
+  //  window.backend.AvgMedianFPS("com.king.candycrushsaga").then((result) => setResult(result));
 
 
 

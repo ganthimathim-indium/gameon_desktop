@@ -416,6 +416,41 @@ func AppCPUUsage(packageName string) (val string) {
 	return result
 }
 
+
+// GetCurrentActivity returns the current activity on screen
+
+func GetCurrentActivity(packageName string) (val string) {
+
+	var err error
+	val = "0"
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			err, ok = r.(runtime.Error)
+			if ok {
+				fmt.Printf("AppCPUActivity error: %v\n", r)
+			}
+		}
+	}()
+	fmt.Println(err)
+
+
+	var result string
+	
+	str := string(run("shell", "dumpsys window | grep mCurrentFocus"))
+	
+	data := strings.Split(str, ".")
+	
+	result = data[len(data)-1]
+	
+	result = strings.Replace(result, "}", "", -1)
+	
+	
+	
+	return result
+	
+	}
+
 // AndroidMedianFPS calcuates
 func AndroidMedianFPS(packageName string) (val string) {
 	var err error

@@ -34,7 +34,7 @@ function App() {
   // console.log(user, "message");
   return (
     <div className="app">
-      {/* <BrowserHistory.Provider value={history}>
+      <BrowserHistory.Provider value={history}>
         <Router>
           <Switch>
             {user ? (
@@ -49,12 +49,12 @@ function App() {
             )}
           </Switch>
         </Router>
-      </BrowserHistory.Provider> */}
+      </BrowserHistory.Provider>
       {/* <Route exact path="/app-info" component={AppInf} /> */}
 
       {/* <Route exact path="/home" component={BasicInfo} /> */}
 
-      <SignIn></SignIn>
+      {/* <Heloo></Heloo> */}
     </div>
   );
 }

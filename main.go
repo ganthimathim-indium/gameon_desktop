@@ -87,6 +87,12 @@ type FpsInfo struct {
 	Fps_stablity string `json:"fps_stablity"`
 }
 
+type CPUInfo struct {
+	CPU_metric   string `json:"cpu_metric"`
+	Cpu_Activity string `json:"cpu_activity"`
+}
+
+
 type BaseInfo struct {
 	StartTime      string `json:"start_time"`
 	RecordDuration string `json:"total_duration"`
@@ -371,18 +377,30 @@ func stopScan(appInfoData string, valData string) (val string) {
 // 1. cpu metric
 func cpuMetric(appNames string) (val string) {
 	res2 := L.AppCPUUsage(appNames)
-
+    currentactiviy :=L.GetCurrentActivity(appNames)
 	var valsss string
 	currentTime := time.Now()
 	cpuUsage = ""
 	cpuDeviations = ""
 	cpuTime = ""
 	cpuUsage = L.AppCPUUsage(appNames)
-	cpuDeviations = "Mainactivity"
+	cpuDeviations = currentactiviy
 	cpuTime = currentTime.Format("3:4:5 pm")
 
 	valsss = "Total CPU Useage : " + res2
-	return valsss
+
+	var info = CPUInfo{
+		CPU_metric:   valsss,
+		Cpu_Activity: currentactiviy,
+	}
+
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println("ccccc"+string(out))
+	return string(out)
 
 }
 
