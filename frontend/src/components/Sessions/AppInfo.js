@@ -607,7 +607,8 @@ class AppData extends React.Component {
     console.log(this.props.location.state.value);
     if (!this.props.location.state.user.backClick) {
       return (
-        <div style={{ position: "relative" }}>
+        // <div style={{ position: "relative" }}>
+        <div>
           <div className="appInfo">
             <LoginHeader />
 
@@ -666,7 +667,7 @@ class AppData extends React.Component {
               <img src={timer} alt="" className="timerImg" />
             </div>
 
-            <div className="container">
+            <div className="cont">
               <div class="left">
                 <div>
                   <DeviceInfo
