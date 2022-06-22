@@ -92,7 +92,6 @@ type CPUInfo struct {
 	Cpu_Activity string `json:"cpu_activity"`
 }
 
-
 type BaseInfo struct {
 	StartTime      string `json:"start_time"`
 	RecordDuration string `json:"total_duration"`
@@ -377,7 +376,7 @@ func stopScan(appInfoData string, valData string) (val string) {
 // 1. cpu metric
 func cpuMetric(appNames string) (val string) {
 	res2 := L.AppCPUUsage(appNames)
-    currentactiviy :=L.GetCurrentActivity(appNames)
+	currentactiviy := L.GetCurrentActivity(appNames)
 	var valsss string
 	currentTime := time.Now()
 	cpuUsage = ""
@@ -399,7 +398,7 @@ func cpuMetric(appNames string) (val string) {
 		return fmt.Sprintf("error while marshalling data: %v", err)
 	}
 
-	fmt.Println("ccccc"+string(out))
+	fmt.Println("ccccc" + string(out))
 	return string(out)
 
 }
@@ -583,6 +582,15 @@ func appPowerMetric(appNames string) (val string) {
 
 	return valsss
 
+}
+
+// screenshot
+func screenshot(appNames string) (val string) {
+	res := L.captureScreen(appNames)
+	var valsss string
+	valsss = "Screenshots : " + res
+
+	return valsss
 }
 
 // 9. CPU architecture
@@ -891,6 +899,7 @@ func main() {
 	app.Bind(AvgMedianFPS)
 	app.Bind(AvgFPSStablity)
 	app.Bind(Peakmomery)
+	app.Bind(screenshot)
 
 	app.Run()
 

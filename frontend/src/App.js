@@ -54,7 +54,7 @@ function App() {
 
       {/* <Route exact path="/home" component={BasicInfo} /> */}
 
-      {/* <Heloo></Heloo> */}
+      <Heloo></Heloo>
     </div>
   );
 }
