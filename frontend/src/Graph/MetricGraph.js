@@ -32,6 +32,9 @@ function MetricGraph(props) {
               {
                 x: props.metTime,
                 y: props.metValues,
+                hovertemplate: "<b>%{text}</b>",
+                text: props.activity,
+                showLegend: false,
                 type: "scatter",
                 mode: "line",
 
@@ -83,7 +86,7 @@ function MetricGraph(props) {
 
               plot_height: 300,
             }}
-            config={{ staticPlot: true }}
+            config={{ displayModeBar: false }}
           />
           <div style={{ marginLeft: "48%", padding: "2%" }}>{props.text}</div>
         </Paper>

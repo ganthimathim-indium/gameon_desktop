@@ -137,6 +137,7 @@ class AppData extends React.Component {
       timerClock: "",
       sessionTitle: "",
       totalTime: "",
+      cpu_activity: [],
     };
   }
 
@@ -284,15 +285,29 @@ class AppData extends React.Component {
               timeValues: [...this.state.timeValues, time],
             });
           }
+
+          window.backend
+            .screenshot("com.android.chrome")
+            .then((result) => console.log(result, "screen"));
+
           window.backend
             .cpuMetric(this.props.location.state.value)
             .then((result) => {
-              let results = result.substr(18);
-              this.setState({ cpuUsage: results });
+              let results = JSON.parse(result);
+              console.log(results, "hello");
+              console.log(results.cpu_metric, "cpppppppppppppuuuuuuuuu");
+              this.setState({
+                cpuUsage: results.cpu_metric,
+              });
+
               console.log(this.state.cpuUsage, "cpu");
               if (this.state.cpuValues.length < 8) {
                 this.setState({
-                  cpuValues: [...this.state.cpuValues, results],
+                  cpuValues: [...this.state.cpuValues, results.cpu_metric],
+                  cpu_activity: [
+                    ...this.state.cpu_activity,
+                    results.cpu_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
                 console.log(time, "timeeeeeeeeeeeeeeeeee");
@@ -300,7 +315,12 @@ class AppData extends React.Component {
                 this.state.cpuValues.shift();
                 // this.state.timeValues.shift();
                 this.setState({
-                  cpuValues: [...this.state.cpuValues, results],
+                  cpuValues: [...this.state.cpuValues, results.cpu_metric],
+                  cpu_activity: [
+                    ...this.state.cpu_activity,
+                    results.cpu_activity,
+                  ],
+
                   // timeValues: [...this.state.timeValues, time],
                 });
               }
@@ -749,6 +769,7 @@ class AppData extends React.Component {
                       metValues={this.state.cpuValues}
                       text="CPU Usage"
                       unit="%"
+                      activity={this.state.cpu_activity}
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
