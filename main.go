@@ -584,6 +584,15 @@ func appPowerMetric(appNames string) (val string) {
 
 }
 
+// screenshot
+func screenshot(appNames string) (val string) {
+	res := L.captureScreen(appNames)
+	var valsss string
+	valsss = "Screenshots : " + res
+
+	return valsss
+}
+
 // 9. CPU architecture
 func cpuArch(appNames string) (val string) {
 	L.AndroidCPUArch(appNames)
@@ -890,6 +899,7 @@ func main() {
 	app.Bind(AvgMedianFPS)
 	app.Bind(AvgFPSStablity)
 	app.Bind(Peakmomery)
+	app.Bind(screenshot)
 
 	app.Run()
 

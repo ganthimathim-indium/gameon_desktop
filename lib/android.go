@@ -3,11 +3,13 @@ package lib
 import (
 	"fmt"
 	"math"
+	"os"
 	"os/exec"
 	"runtime"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // AppNameNew gets list of devices connected
@@ -738,6 +740,90 @@ func AppPeakMemoryUsage(packageName string) (val string) {
 	}
 	return fmt.Sprintf("%.2f", (u*float64(total))/float64(100)) // this is in Kb
 }
+
+
+
+
+
+// getFilename names file with current time, seconds accurate
+
+func getFilename() string {
+
+
+
+	layout := "2006-01-02 15:04:05"
+	
+	
+	
+	t := time.Now()
+	
+	fmt.Println(time.Now())
+	
+	s := t.Format(layout)
+	
+	s = strings.Replace(s, " ", "-", -1)
+	
+	s = strings.Replace(s, ":", "-", -1)
+	
+	return "Img-" + s
+	
+	}
+	
+	
+	
+	// captureScreen captures current screen in phone and pulls it to current working directory
+	
+	func captureScreen(packageName string) (val string) {
+	
+	var err error
+	
+	val = "0"
+	
+	defer func() {
+	
+	if r := recover(); r != nil {
+	
+	var ok bool
+	
+	err, ok = r.(runtime.Error)
+	
+	if ok {
+	
+	fmt.Printf("captureScreen error: %v\n", r)
+	
+	}
+	
+	}
+	
+	}()
+	
+	
+	
+	filePath := fmt.Sprintf("/mnt/sdcard/%s.png", getFilename())
+	
+	dest, _ := os.Getwd()
+	
+	_ = string(run("shell", fmt.Sprintf("screencap -p %s", filePath)))
+	
+	cmd := exec.Command(fmt.Sprintf("adb pull %s %s", filePath, dest))
+	
+	stdout, err := cmd.Output()
+	
+	if err != nil {
+	
+	return fmt.Sprintf("error in running shell command: %v", err)
+	
+	}
+	
+	if !strings.Contains(string(stdout), "0 skipped") {
+	
+	return fmt.Sprintf(string(stdout))
+	
+	}
+	
+	return
+	
+	}
 
 // run forms the shell command by joining passed arguments,
 // executes it

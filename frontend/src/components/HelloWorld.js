@@ -32,7 +32,10 @@ function HelloWorld() {
   const handleOpenModal = () => {
     setShowModal(true);
 
-    	window.backend.cpuMetric("com.android.chrome").then((result) => setResult(result));
+    window.backend.screenshot("com.android.chrome").then((result) => setResult(result));
+
+
+    //	window.backend.cpuMetric("com.android.chrome").then((result) => setResult(result));
     // window.backend.memoryMetric("com.android.chrome").then((result) => setResult(result));
     // window.backend.gpuMetric("com.android.chrome").then((result) => setResult(result));
     //window.backend.uploadData("com.android.chrome").then((result) => setResult(result));
