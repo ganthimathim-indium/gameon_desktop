@@ -286,9 +286,9 @@ class AppData extends React.Component {
             });
           }
 
-          window.backend
-            .screenshot("com.android.chrome")
-            .then((result) => console.log(result, "screen"));
+          // window.backend
+          //   .screenshot("com.android.chrome")
+          //   .then((result) => console.log(result, "screen"));
 
           window.backend
             .cpuMetric(this.props.location.state.value)

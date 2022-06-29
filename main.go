@@ -585,13 +585,13 @@ func appPowerMetric(appNames string) (val string) {
 }
 
 // screenshot
-func screenshot(appNames string) (val string) {
-	res := L.captureScreen(appNames)
-	var valsss string
-	valsss = "Screenshots : " + res
+// func screenshot(appNames string) (val string) {
+// 	res := L.captureScreen(appNames)
+// 	var valsss string
+// 	valsss = "Screenshots : " + res
 
-	return valsss
-}
+// 	return valsss
+// }
 
 // 9. CPU architecture
 func cpuArch(appNames string) (val string) {
@@ -899,7 +899,7 @@ func main() {
 	app.Bind(AvgMedianFPS)
 	app.Bind(AvgFPSStablity)
 	app.Bind(Peakmomery)
-	app.Bind(screenshot)
+	// app.Bind(screenshot)
 
 	app.Run()
 
