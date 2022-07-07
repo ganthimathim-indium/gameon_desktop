@@ -12,7 +12,6 @@ import (
 	"io/ioutil"
 	"log"
 	"math"
-	"net/http"
 	"regexp"
 	"strconv"
 	"time"
@@ -594,7 +593,6 @@ func screenshot(appNames string) (val string) {
 	var valsss string
 	valsss = res
 
-
 	bytes, err := ioutil.ReadFile(valsss)
 	if err != nil {
 		log.Fatal(err)
@@ -603,23 +601,22 @@ func screenshot(appNames string) (val string) {
 	var base64Encoding string
 
 	// Determine the content type of the image file
-	mimeType := http.DetectContentType(bytes)
+	//mimeType := http.DetectContentType(bytes)
 
 	// Prepend the appropriate URI scheme header depending
 	// on the MIME type
-	switch mimeType {
-	case "image/jpeg":
-		base64Encoding += "data:image/jpeg;base64,"
-	case "image/png":
-		base64Encoding += "data:image/png;base64,"
-	}
+	// switch mimeType {
+	// case "image/jpeg":
+	// 	base64Encoding += "data:image/jpeg;base64,"
+	// case "image/png":
+	// 	base64Encoding += "data:image/png;base64,"
+	// }
 
 	// Append the base64 encoded output
 	base64Encoding += toBase64(bytes)
 
 	// Print the full base64 representation of the image
 	fmt.Println(base64Encoding)
-
 
 	return base64Encoding
 }
