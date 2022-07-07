@@ -86,13 +86,54 @@ type AppInfo struct {
 }
 
 type FpsInfo struct {
-	Median_fps   string `json:"median_fps"`
-	Fps_stablity string `json:"fps_stablity"`
+	Median_fps      string `json:"median_fps"`
+	Fps_stablity    string `json:"fps_stablity"`
+	Avgfps_Activity string `json:"avgfps_activity"`
 }
 
 type CPUInfo struct {
 	CPU_metric   string `json:"cpu_metric"`
 	Cpu_Activity string `json:"cpu_activity"`
+}
+
+type GPUInfo struct {
+	GPU_metric   string `json:"gpu_metric"`
+	GPU_Activity string `json:"gpu_activity"`
+}
+
+type MemoryInfo struct {
+	Memory_metric   string `json:"memory_metric"`
+	Memory_Activity string `json:"memory_activity"`
+}
+
+type UploadInfo struct {
+	Upload_metric   string `json:"upload_metric"`
+	Upload_Activity string `json:"upload_activity"`
+}
+
+type DownloadInfo struct {
+	Download_metric   string `json:"download_metric"`
+	Download_Activity string `json:"download_activity"`
+}
+
+type PowerInfo struct {
+	Power_metric   string `json:"power_metric"`
+	Power_Activity string `json:"power_activity"`
+}
+
+type AppPowerInfo struct {
+	AppPower_metric   string `json:"Apppower_metric"`
+	AppPower_Activity string `json:"Apppower_activity"`
+}
+
+type FPSInfo struct {
+	FPS_metric   string `json:"fps_metric"`
+	FPS_Activity string `json:"fps_activity"`
+}
+
+type PearkmemInfo struct {
+	Pearkmem_metric   string `json:"peakmem_metric"`
+	Pearkmem_Activity string `json:"peakmem_activity"`
 }
 
 type BaseInfo struct {
@@ -410,7 +451,7 @@ func cpuMetric(appNames string) (val string) {
 func memoryMetric(appNames string) (val string) {
 	res2 := L.AppMemoryUsage(appNames)
 
-	var valsss string
+	//var valsss string
 	var valsss1 string
 
 	var valss string
@@ -421,19 +462,31 @@ func memoryMetric(appNames string) (val string) {
 	}
 
 	fmt.Println(intVar)
-	valsss = fmt.Sprintf("Total Memory Usage : %v ", kBToMB(intVar))
+	//valsss = fmt.Sprintf("Total Memory Usage : %v ", kBToMB(intVar))
 	valsss1 = fmt.Sprintf("%v", kBToMB(intVar))
+	currentactiviy := L.GetCurrentActivity(appNames)
 
 	memoryUsage = ""
 	memoryDeviations = ""
 	memoryTime = ""
 	memoryUsage = valsss1
-	memoryDeviations = "Mainactivity"
+	memoryDeviations = currentactiviy
 	currentTime := time.Now()
 
 	memoryTime = currentTime.Format("3:4:5 pm")
 
-	return valsss
+	var info = MemoryInfo{
+		Memory_metric:   valsss1,
+		Memory_Activity: currentactiviy,
+	}
+
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println("ccccc" + string(out))
+	return string(out)
 }
 
 // 3. gpuMetric
@@ -461,44 +514,70 @@ func memoryMetric(appNames string) (val string) {
 func gpuMetric(appNames string) (val string) {
 	//L.AppGPUUsage(appNames)
 	res2 := L.AppGPUUsage(appNames)
+	currentactiviy := L.GetCurrentActivity(appNames)
 
 	gpuMetricUsage = ""
 	gpuMetricDeviations = ""
 	gpuMetricTime = ""
 	gpuMetricUsage = res2
-	gpuMetricDeviations = "Mainactivity"
+	gpuMetricDeviations = currentactiviy
 	currentTime := time.Now()
 
 	gpuMetricTime = currentTime.Format("3:4:5 pm")
 
-	value := "Total Gpu Usage : " + res2
-	return value
+	//value := "Total Gpu Usage : " + res2
+
+	var info = GPUInfo{
+		GPU_metric:   res2,
+		GPU_Activity: currentactiviy,
+	}
+
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println("ccccc" + string(out))
+	return string(out)
+
 }
 
 // 4. upload data
 func uploadData(appName string) (val string) {
 	res2 := L.AndroidUploadedData(appName)
 
-	var valsss string
+	//var valsss string
 
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total Data Uploaded : %.2f", bytesToMB(intVar)/1024)
+	//valsss = fmt.Sprintf("Total Data Uploaded : %.2f", bytesToMB(intVar)/1024)
 
 	var valsss1 string
 
 	valsss1 = fmt.Sprintf("%.2f", bytesToMB(intVar)/1024)
+	currentactiviy := L.GetCurrentActivity(appName)
 
 	uploadDataUsage = ""
 	uploadDataDeviations = ""
 	uploadDataTime = ""
 	uploadDataUsage = valsss1
-	uploadDataDeviations = "Mainactivity"
+	uploadDataDeviations = currentactiviy
 	currentTime := time.Now()
 
 	uploadDataTime = currentTime.Format("3:4:5 pm")
 
-	return valsss
+	var info = UploadInfo{
+		Upload_metric:   valsss1,
+		Upload_Activity: currentactiviy,
+	}
+
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println("ccccc" + string(out))
+	return string(out)
 
 }
 
@@ -506,10 +585,11 @@ func uploadData(appName string) (val string) {
 func downloadedData(appName string) (val string) {
 	res2 := L.AndroidDownloadedData(appName)
 
-	var valsss string
+	//var valsss string
 	intVar, _ := strconv.Atoi(res2)
 
-	valsss = fmt.Sprintf("Total Download data : %.2f", bytesToMB(intVar)/1024)
+	//valsss = fmt.Sprintf("Total Download data : %.2f", bytesToMB(intVar)/1024)
+	currentactiviy := L.GetCurrentActivity(appName)
 
 	var valsss1 string
 
@@ -519,12 +599,23 @@ func downloadedData(appName string) (val string) {
 	downloadDataDeviations = ""
 	downloadDataTime = ""
 	downloadDataUsage = valsss1
-	downloadDataDeviations = "Mainactivity"
+	downloadDataDeviations = currentactiviy
 	currentTime := time.Now()
 
 	downloadDataTime = currentTime.Format("3:4:5 pm")
 
-	return valsss
+	var info = DownloadInfo{
+		Download_metric:   valsss1,
+		Download_Activity: currentactiviy,
+	}
+
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println("ccccc" + string(out))
+	return string(out)
 }
 
 // 6. cpu cores
@@ -550,20 +641,30 @@ func cpuCores(appNames string) (val string) {
 func powerMetric(appNames string) (val string) {
 	res2 := L.Battery(appNames)
 
-	var valsss string
-	valsss = "Total Battery Useage : " + res2
+	//valsss = "Total Battery Useage : " + res2
+	currentactiviy := L.GetCurrentActivity(appNames)
 
 	powerUsage = ""
 	powerDeviations = ""
 	powerTime = ""
 	powerUsage = res2
-	powerDeviations = "Mainactivity"
+	powerDeviations = currentactiviy
 	currentTime := time.Now()
 
 	powerTime = currentTime.Format("3:4:5 pm")
 
-	return valsss
+	var info = PowerInfo{
+		Power_metric:   res2,
+		Power_Activity: currentactiviy,
+	}
 
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println("ccccc" + string(out))
+	return string(out)
 }
 
 // 8 App power metric
@@ -571,19 +672,30 @@ func appPowerMetric(appNames string) (val string) {
 	L.AppPowerUsage(appNames)
 	res2 := L.AppPowerUsage(appNames)
 	fmt.Println("App usage" + res2)
-	var valsss string
-	valsss = "Total App Useage : " + res2
+	//valsss = "Total App Useage : " + res2
+	currentactiviy := L.GetCurrentActivity(appNames)
 
 	appPowerUsage = ""
 	appPowerDeviations = ""
 	appPowerTime = ""
 	appPowerUsage = res2
-	appPowerDeviations = "Mainactivity"
+	appPowerDeviations = currentactiviy
 	currentTime := time.Now()
 
 	appPowerTime = currentTime.Format("3:4:5 pm")
 
-	return valsss
+	var info = AppPowerInfo{
+		AppPower_metric:   res2,
+		AppPower_Activity: currentactiviy,
+	}
+
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println("ccccc" + string(out))
+	return string(out)
 
 }
 
@@ -640,7 +752,6 @@ func cpuArch(appNames string) (val string) {
 func AvgFPSStablity(appName string) (val string) {
 	// res2 := L.AndroidFPSStablity(appName)
 	res2 := L.AndroidMedianFPS(appName)
-	var valsss string
 
 	intVal, _ := strconv.Atoi(res2)
 	// var frames = "0"
@@ -657,24 +768,35 @@ func AvgFPSStablity(appName string) (val string) {
 
 	}
 
-	valsss = "Avg. FPS Stablity : " + res2
+	//valsss = "Avg. FPS Stablity : " + res2
+	currentactiviy := L.GetCurrentActivity(appName)
 
 	StablityFpsAppUsage1 = ""
 	StablityFpsAppDeviation1 = ""
 	StablityFpsTime1 = ""
 	StablityFpsAppUsage1 = res2
-	StablityFpsAppDeviation1 = "Mainactivity"
+	StablityFpsAppDeviation1 = currentactiviy
 	currentTime := time.Now()
 
 	StablityFpsTime1 = currentTime.Format("3:4:5 pm")
 
-	return valsss
+	var info = FPSInfo{
+		FPS_metric:   res2,
+		FPS_Activity: currentactiviy,
+	}
+
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println("ccccc" + string(out))
+	return string(out)
 
 }
 
 func Peakmomery(appName string) (val string) {
 	res2 := L.AppPeakMemoryUsage(appName)
-	var valsss string
 
 	var valsss1 string
 	b2, _ := strconv.ParseFloat(res2, 64)
@@ -684,20 +806,32 @@ func Peakmomery(appName string) (val string) {
 
 	fmt.Println(intVar)
 
-	valsss = fmt.Sprintf("Avg. Peak Memory Useage Value : %v ", kBToMB(intVar))
+	//valsss = fmt.Sprintf("Avg. Peak Memory Useage Value : %v ", kBToMB(intVar))
 
 	valsss1 = fmt.Sprintf("%v", kBToMB(intVar))
+	currentactiviy := L.GetCurrentActivity(appName)
 
 	PeakMemoryAppUsage1 = ""
 	PeakMemoryAppDeviation1 = ""
 	PeakMemoryAppTime1 = ""
 	PeakMemoryAppUsage1 = valsss1
-	PeakMemoryAppDeviation1 = "Mainactivity"
+	PeakMemoryAppDeviation1 = currentactiviy
 	currentTime := time.Now()
 
 	PeakMemoryAppTime1 = currentTime.Format("3:4:5 pm")
 
-	return valsss
+	var info = PearkmemInfo{
+		Pearkmem_metric:   valsss1,
+		Pearkmem_Activity: currentactiviy,
+	}
+
+	out, err := json.Marshal(info)
+	if err != nil {
+		return fmt.Sprintf("error while marshalling data: %v", err)
+	}
+
+	fmt.Println("ccccc" + string(out))
+	return string(out)
 
 }
 
@@ -723,12 +857,13 @@ func AvgMedianFPS(appName string) (val string) {
 	}
 
 	//valsss11 = "Avg. FPS Stablity : " + res21
+	currentactiviy := L.GetCurrentActivity(appName)
 
 	StablityFpsAppUsage1 = ""
 	StablityFpsAppDeviation1 = ""
 	StablityFpsTime1 = ""
 	StablityFpsAppUsage1 = valsss11
-	StablityFpsAppDeviation1 = "Mainactivity"
+	StablityFpsAppDeviation1 = currentactiviy
 	currentTime1 := time.Now()
 
 	StablityFpsTime1 = currentTime1.Format("3:4:5 pm")
@@ -741,7 +876,7 @@ func AvgMedianFPS(appName string) (val string) {
 	avgMedianFPSDeviations = ""
 	avgMedianFPSTime = ""
 	avgMedianFPSUsage = res21
-	avgMedianFPSDeviations = "Mainactivity"
+	avgMedianFPSDeviations = currentactiviy
 	currentTime := time.Now()
 
 	avgMedianFPSTime = currentTime.Format("3:4:5 pm")
@@ -765,8 +900,9 @@ func AvgMedianFPS(appName string) (val string) {
 	//valsss = "Avg. Median FPS Usage : " + res21
 
 	var info = FpsInfo{
-		Median_fps:   res21,
-		Fps_stablity: valsss11,
+		Median_fps:      res21,
+		Fps_stablity:    valsss11,
+		Avgfps_Activity: currentactiviy,
 	}
 
 	out, err := json.Marshal(info)

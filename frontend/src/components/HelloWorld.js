@@ -32,27 +32,27 @@ function HelloWorld() {
   const handleOpenModal = () => {
     setShowModal(true);
 
-    window.backend.screenshot("com.android.chrome").then((result) => setResult(result));
+    // window.backend.screenshot("com.android.chrome").then((result) => setResult(result));
 
 
-    //	window.backend.cpuMetric("com.android.chrome").then((result) => setResult(result));
+    //window.backend.cpuMetric("com.android.chrome").then((result) => setResult(result));
     // window.backend.memoryMetric("com.android.chrome").then((result) => setResult(result));
-    // window.backend.gpuMetric("com.android.chrome").then((result) => setResult(result));
-    //window.backend.uploadData("com.android.chrome").then((result) => setResult(result));
+    //window.backend.gpuMetric("com.android.chrome").then((result) => setResult(result));
+    // window.backend.uploadData("com.android.chrome").then((result) => setResult(result));
     //window.backend.downloadedData("com.android.chrome").then((result) => setResult(result));
-    //window.backend.AndroidCPUCores1("com.android.chrome").then((result) => setResult(result));
-    //window.backend.powerMetric("com.android.chrome").then((result) => setResult(result));
-    //  window.backend.appPowerMetric("com.android.chrome").then((result) => setResult(result));
-    //window.backend.cpuArch("com.android.chrome").then((result) => setResult(result));
-    // window.backend.AvgMedianFPS("com.action.survival.craft.rpg").then((result) => setResult(result));
+    // window.backend.AndroidCPUCores1("com.android.chrome").then((result) => setResult(result));
+    // window.backend.powerMetric("com.android.chrome").then((result) => setResult(result));
+    // window.backend.appPowerMetric("com.android.chrome").then((result) => setResult(result));
+    // window.backend.cpuArch("com.android.chrome").then((result) => setResult(result));
+    //window.backend.AvgMedianFPS("com.action.survival.craft.rpg").then((result) => setResult(result));
 
-    //   window.backend.cpuCores("com.action.survival.craft.rpg").then((result) => setResult(result));
+    window.backend.cpuCores("com.action.survival.craft.rpg").then((result) => setResult(result));
 
 
     //	window.backend.checkdevice().then((result) => setResult(result));
     // window.backend.Peakmomery("com.android.chrome").then((result) => setResult(result));
     //  window.backend.AvgFPSStablity("com.king.candycrushsaga").then((result) => setResult(result));
-  //  window.backend.AvgMedianFPS("com.king.candycrushsaga").then((result) => setResult(result));
+    //  window.backend.AvgMedianFPS("com.king.candycrushsaga").then((result) => setResult(result));
 
 
 
