@@ -418,7 +418,6 @@ func AppCPUUsage(packageName string) (val string) {
 	return result
 }
 
-
 // GetCurrentActivity returns the current activity on screen
 
 func GetCurrentActivity(packageName string) (val string) {
@@ -436,22 +435,19 @@ func GetCurrentActivity(packageName string) (val string) {
 	}()
 	fmt.Println(err)
 
-
 	var result string
-	
+
 	str := string(run("shell", "dumpsys window | grep mCurrentFocus"))
-	
+
 	data := strings.Split(str, ".")
-	
+
 	result = data[len(data)-1]
-	
+
 	result = strings.Replace(result, "}", "", -1)
-	
-	
-	
+
 	return result
-	
-	}
+
+}
 
 // AndroidMedianFPS calcuates
 func AndroidMedianFPS(packageName string) (val string) {
@@ -741,89 +737,78 @@ func AppPeakMemoryUsage(packageName string) (val string) {
 	return fmt.Sprintf("%.2f", (u*float64(total))/float64(100)) // this is in Kb
 }
 
-
-
-
-
 // getFilename names file with current time, seconds accurate
 
 func getFilename() string {
 
-
-
 	layout := "2006-01-02 15:04:05"
-	
-	
-	
+
 	t := time.Now()
-	
+
 	fmt.Println(time.Now())
-	
+
 	s := t.Format(layout)
-	
+
 	s = strings.Replace(s, " ", "-", -1)
-	
+
 	s = strings.Replace(s, ":", "-", -1)
-	
+
 	return "Img-" + s
-	
-	}
-	
-	
-	
-	// captureScreen captures current screen in phone and pulls it to current working directory
-	
-	func captureScreen(packageName string) (val string) {
-	
+
+}
+
+// captureScreen captures current screen in phone and pulls it to current working directory
+
+func CaptureScreen(packageName string) (val string) {
+
 	var err error
-	
+
 	val = "0"
-	
+
 	defer func() {
-	
-	if r := recover(); r != nil {
-	
-	var ok bool
-	
-	err, ok = r.(runtime.Error)
-	
-	if ok {
-	
-	fmt.Printf("captureScreen error: %v\n", r)
-	
-	}
-	
-	}
-	
+
+		if r := recover(); r != nil {
+
+			var ok bool
+
+			err, ok = r.(runtime.Error)
+
+			if ok {
+
+				fmt.Printf("captureScreen error: %v\n", r)
+
+			}
+
+		}
+
 	}()
-	
-	
-	
-	filePath := fmt.Sprintf("/mnt/sdcard/%s.png", getFilename())
-	
+
+	filePath := fmt.Sprintf("/sdcard/%s.png", getFilename())
+
 	dest, _ := os.Getwd()
-	
+	dest = dest + fmt.Sprintf("\\img\\%s.png", getFilename())
+
 	_ = string(run("shell", fmt.Sprintf("screencap -p %s", filePath)))
-	
-	cmd := exec.Command(fmt.Sprintf("adb pull %s %s", filePath, dest))
-	
+
+	cmd := exec.Command("adb", "pull", filePath, dest)
+
 	stdout, err := cmd.Output()
-	
+
 	if err != nil {
-	
-	return fmt.Sprintf("error in running shell command: %v", err)
-	
+
+		return fmt.Sprintf("error in running shell command: %v", err)
+
 	}
-	
+
 	if !strings.Contains(string(stdout), "0 skipped") {
-	
-	return fmt.Sprintf(string(stdout))
-	
+
+		return dest
+
 	}
-	
-	return
-	
-	}
+
+	return  dest
+
+}
 
 // run forms the shell command by joining passed arguments,
 // executes it

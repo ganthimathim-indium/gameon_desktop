@@ -3,12 +3,16 @@ package main
 import (
 	"bufio"
 	_ "embed"
+	"encoding/base64"
 	"encoding/json"
 	"flag"
 	"fmt"
 	apidata "gameongo/api"
 	L "gameongo/lib"
+	"io/ioutil"
+	"log"
 	"math"
+	"net/http"
 	"regexp"
 	"strconv"
 	"time"
@@ -584,14 +588,45 @@ func appPowerMetric(appNames string) (val string) {
 
 }
 
-// screenshot
-// func screenshot(appNames string) (val string) {
-// 	res := L.captureScreen(appNames)
-// 	var valsss string
-// 	valsss = "Screenshots : " + res
+//screenshot
+func screenshot(appNames string) (val string) {
+	res := L.CaptureScreen(appNames)
+	var valsss string
+	valsss = res
 
-// 	return valsss
-// }
+
+	bytes, err := ioutil.ReadFile(valsss)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var base64Encoding string
+
+	// Determine the content type of the image file
+	mimeType := http.DetectContentType(bytes)
+
+	// Prepend the appropriate URI scheme header depending
+	// on the MIME type
+	switch mimeType {
+	case "image/jpeg":
+		base64Encoding += "data:image/jpeg;base64,"
+	case "image/png":
+		base64Encoding += "data:image/png;base64,"
+	}
+
+	// Append the base64 encoded output
+	base64Encoding += toBase64(bytes)
+
+	// Print the full base64 representation of the image
+	fmt.Println(base64Encoding)
+
+
+	return base64Encoding
+}
+
+func toBase64(b []byte) string {
+	return base64.StdEncoding.EncodeToString(b)
+}
 
 // 9. CPU architecture
 func cpuArch(appNames string) (val string) {
@@ -899,7 +934,7 @@ func main() {
 	app.Bind(AvgMedianFPS)
 	app.Bind(AvgFPSStablity)
 	app.Bind(Peakmomery)
-	// app.Bind(screenshot)
+	app.Bind(screenshot)
 
 	app.Run()
 
